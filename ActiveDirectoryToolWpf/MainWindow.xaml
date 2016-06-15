@@ -33,9 +33,9 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Button x:Name="GetUsersButton" Content="Get Users" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="GetUsersButton_Click"/>
-                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="103"/>
-                <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0" VerticalAlignment="Top" Width="75"/>
-                <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Width="103"/>
+                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="103" IsEnabled="False"/>
+                <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+                <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Width="103" IsEnabled="False"/>
             </Grid>
             <Grid Grid.Row="1">
                 <DataGrid x:Name="DataGrid" 
