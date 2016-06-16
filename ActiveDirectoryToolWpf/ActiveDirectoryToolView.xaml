@@ -1,11 +1,11 @@
-﻿<Window x:Class="ActiveDirectoryToolWpf.MainWindow"
+﻿<Window x:Class="ActiveDirectoryToolWpf.ActiveDirectoryToolView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ActiveDirectoryToolWpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="576" Width="1024" MinHeight="576" MinWidth="1024">
+        Title="ActiveDirectoryToolView" Height="576" Width="1024" MinHeight="576" MinWidth="1024">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -33,7 +33,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Button x:Name="GetUsersButton" Content="Get Users" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="GetUsersButton_Click"/>
-                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="103" IsEnabled="False"/>
+                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="103" Click="GetUsersGroupsButton_Click"/>
                 <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
                 <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Width="103" IsEnabled="False"/>
             </Grid>

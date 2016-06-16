@@ -1,32 +1,33 @@
-﻿using System;
+﻿using PrimitiveExtensions;
+using System;
 using System.Collections.Generic;
 
 namespace ActiveDirectoryToolWpf
 {
     public class ActiveDirectoryScope : IEquatable<ActiveDirectoryScope>
     {
-        public List<ActiveDirectoryScope> Children { get; set; }
-        internal string Name { get; set; }
-        internal string Path { get; set; }
-
-        internal string Domain
-        {
-            get
-            {
-                return Path.Substring(Path.IndexOf("DC=", StringComparison.Ordinal))
-                        .Replace("DC=", string.Empty)
-                        .Replace(",", ".");
-            }
-        }
+        private const string DomainComponentPrefix = "DC=";
+        private const char Comma = ',';
+        private const char Period = '.';
+        private const string LdapProtocolPrefix = "LDAP://";
 
         internal ActiveDirectoryScope()
         {
             Children = new List<ActiveDirectoryScope>();
         }
 
+        public List<ActiveDirectoryScope> Children { get; set; }
+        internal string Name { get; set; }
+        internal string Path { get; set; }
+        internal string Context => Path.Remove(LdapProtocolPrefix);
+
+        internal string Domain => Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)
+            .Remove(DomainComponentPrefix)
+            .Replace(Comma, Period);
+
         public bool Equals(ActiveDirectoryScope other)
         {
-            return Name.Equals(other.Name);
+            return Name == other.Name;
         }
 
         public override string ToString()
@@ -54,7 +55,7 @@ namespace ActiveDirectoryToolWpf
                     parent = parent.Children.Find(
                         item => item.Name.Equals(level));
                 }
-                else if (level.Equals(organizationalUnit.Split[lastLevel]))
+                else if (level == organizationalUnit.Split[lastLevel])
                 {
                     parent.Children.Add(new ActiveDirectoryScope
                     {
