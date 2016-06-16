@@ -4,9 +4,6 @@ using System.Windows;
 
 namespace ActiveDirectoryToolWpf
 {
-    /// <summary>
-    /// Interaction logic for ActiveDirectoryToolView.xaml
-    /// </summary>
     public partial class ActiveDirectoryToolView : IActiveDirectoryToolView
     {
         public ActiveDirectoryToolView()
@@ -18,16 +15,20 @@ namespace ActiveDirectoryToolWpf
             DataGrid.EnableRowVirtualization = true;
         }
 
+        public ActiveDirectoryToolViewModel ViewModel { get; }
+
         public event Action GetUsersClicked;
+
         public event Action GetUsersGroupsClicked;
+
         public event Action GetDirectReportsClicked;
+
         public event Action GetComputersClicked;
+
         public event Action GetGroupsClicked;
 
         public ActiveDirectoryScope Scope =>
-                            TreeView.SelectedItem as ActiveDirectoryScope;
-
-        public ActiveDirectoryToolViewModel ViewModel { get; }
+            TreeView.SelectedItem as ActiveDirectoryScope;
 
         public void SetDataGridData(DataView dataView)
         {
@@ -46,14 +47,20 @@ namespace ActiveDirectoryToolWpf
 
         private void GetUsersButton_Click(object sender, RoutedEventArgs e)
         {
-            if(Scope != null)
+            if (Scope != null)
                 GetUsersClicked?.Invoke();
         }
 
         private void GetUsersGroupsButton_Click(object sender, RoutedEventArgs e)
         {
-            if(Scope != null)
+            if (Scope != null)
                 GetUsersGroupsClicked?.Invoke();
+        }
+
+        private void GetDirectReports_Click(object sender, RoutedEventArgs e)
+        {
+            if (Scope != null)
+                GetDirectReportsClicked?.Invoke();
         }
     }
 }

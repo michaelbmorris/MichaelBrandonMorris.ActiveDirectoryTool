@@ -62,21 +62,33 @@ namespace ActiveDirectoryToolWpf
             return user.GetPropertyAsString(Department);
         }
 
-        internal static IEnumerable<string> GetDirectReportDistinguishedNames(
+        internal static string[] GetDirectReportDistinguishedNames(
             this UserPrincipal user)
         {
-            return (IEnumerable<string>)user.GetProperty(DirectReports);
+            var directReportsDistinguishedNames =
+                user.GetProperty(DirectReports);
+            if (directReportsDistinguishedNames != null)
+            {
+                return Array.ConvertAll(
+                (object[])user.GetProperty(DirectReports), x => x.ToString());
+            }
+
+            return null;
         }
 
         internal static IEnumerable<UserPrincipal> GetDirectReports(
             this UserPrincipal user)
         {
+            var directReportDistinguishedNames =
+                user.GetDirectReportDistinguishedNames();
+            if(directReportDistinguishedNames != null)
             return user.GetDirectReportDistinguishedNames()
                 .Select(directReportDistinguishedName =>
-                UserPrincipal.FindByIdentity(
-                    user.Context,
-                    IdentityType.DistinguishedName,
-                    directReportDistinguishedName)).ToList();
+                    UserPrincipal.FindByIdentity(
+                        user.Context,
+                        IdentityType.DistinguishedName,
+                        directReportDistinguishedName)).ToList();
+            return null;
         }
 
         internal static string GetDivision(this UserPrincipal user)
@@ -162,7 +174,7 @@ namespace ActiveDirectoryToolWpf
         internal static bool IsActive(this UserPrincipal user)
         {
             return !Convert.ToBoolean(
-                (int)user.GetProperty(UserAccountControl) & 0x0002);
+                (int) user.GetProperty(UserAccountControl) & 0x0002);
         }
     }
 }

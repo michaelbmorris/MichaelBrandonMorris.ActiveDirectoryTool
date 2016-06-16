@@ -8,19 +8,19 @@
         Title="ActiveDirectoryToolView" Height="576" Width="1024" MinHeight="576" MinWidth="1024">
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="25*"/>
-            <ColumnDefinition Width="75*"/>
+            <ColumnDefinition Width="25*" />
+            <ColumnDefinition Width="75*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0">
             <Grid Grid.Column="0">
                 <TreeView x:Name="TreeView"
-                  ItemsSource="{Binding Path=Children}">
+                          ItemsSource="{Binding Path=Children}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Path=Children}">
-                            <TextBlock Text="{Binding}"/>
+                            <TextBlock Text="{Binding}" />
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
@@ -28,24 +28,28 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="42px"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="42px" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Button x:Name="GetUsersButton" Content="Get Users" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="GetUsersButton_Click"/>
-                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left" Margin="90,10,0,0" VerticalAlignment="Top" Width="103" Click="GetUsersGroupsButton_Click"/>
-                <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-                <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left" Margin="278,10,0,0" VerticalAlignment="Top" Width="103" IsEnabled="False"/>
+                <Button x:Name="GetUsersButton" Content="Get Users" HorizontalAlignment="Left" Margin="10,10,0,0"
+                        VerticalAlignment="Top" Width="75" Click="GetUsersButton_Click" />
+                <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left"
+                        Margin="90,10,0,0" VerticalAlignment="Top" Width="103" Click="GetUsersGroupsButton_Click" />
+                <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0"
+                        VerticalAlignment="Top" Width="75" IsEnabled="False" />
+                <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left"
+                        Margin="278,10,0,0" VerticalAlignment="Top" Width="103" Click="GetDirectReports_Click" />
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid x:Name="DataGrid" 
-                          AutoGenerateColumns="True" 
-                          HorizontalAlignment="Left" 
-                          Margin="10,10,0,0" 
-                          VerticalAlignment="Top" 
-                          RenderTransformOrigin="2.25,-3.615" 
+                <DataGrid x:Name="DataGrid"
+                          AutoGenerateColumns="True"
+                          HorizontalAlignment="Left"
+                          Margin="10,10,0,0"
+                          VerticalAlignment="Top"
+                          RenderTransformOrigin="2.25,-3.615"
                           MaxHeight="9001" MaxWidth="90000000"
-                          ItemsSource="{Binding IsAsync=True}" MinHeight="484" MinWidth="742"/>
+                          ItemsSource="{Binding IsAsync=True}" MinHeight="484" MinWidth="742" />
             </Grid>
         </Grid>
     </Grid>

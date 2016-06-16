@@ -1,6 +1,4 @@
-﻿using PrimitiveExtensions;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
 
@@ -20,12 +18,12 @@ namespace ActiveDirectoryToolWpf
 
     public class ActiveDirectorySearcher
     {
-        private ActiveDirectoryScope Scope { get; }
-
         public ActiveDirectorySearcher(ActiveDirectoryScope scope)
         {
             Scope = scope;
         }
+
+        private ActiveDirectoryScope Scope { get; }
 
         private PrincipalContext PrincipalContext => new PrincipalContext(
             ContextType.Domain, Scope.Domain, Scope.Context);
@@ -54,11 +52,12 @@ namespace ActiveDirectoryToolWpf
         {
             return users.Select(user => new DirectReports
             {
-                User = user, Reports = user.GetDirectReports()
+                User = user,
+                Reports = user.GetDirectReports()
             }).ToList();
         }
 
-        public static IEnumerable<DirectReports> GetDiretReportsFromContext(
+        public static IEnumerable<DirectReports> GetDirectReportsFromContext(
             PrincipalContext context)
         {
             return GetDirectReportsFromUsers(GetUsersFromContext(context));
@@ -94,7 +93,8 @@ namespace ActiveDirectoryToolWpf
         {
             return users.Select(user => new UserGroups
             {
-                User = user, Groups = user.GetGroups().OfType<GroupPrincipal>().ToList()
+                User = user,
+                Groups = user.GetGroups().OfType<GroupPrincipal>().ToList()
             }).ToList();
         }
 
@@ -117,8 +117,12 @@ namespace ActiveDirectoryToolWpf
 
         public IEnumerable<UserGroups> GetUsersGroups()
         {
-            return GetUserGroupsFromUsers(GetUsersFromContext(
-                PrincipalContext));
+            return GetUserGroupsFromContext(PrincipalContext);
+        }
+
+        public IEnumerable<DirectReports> GetDirectReports()
+        {
+            return GetDirectReportsFromContext(PrincipalContext);
         }
 
         public static IEnumerable<UserPrincipal> GetUsersFromGroup(

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Diagnostics;
+﻿using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Threading;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -39,23 +34,32 @@ namespace ActiveDirectoryToolWpf
             ActiveDirectoryAttribute.UserDistinguishedName
         };
 
-        private readonly ActiveDirectoryAttribute[] _defaultUserGroupsAttributes =
+        private readonly ActiveDirectoryAttribute[]
+            _defaultUserGroupsAttributes =
         {
             ActiveDirectoryAttribute.UserSamAccountName,
-            ActiveDirectoryAttribute.GroupSamAccountName, 
-            ActiveDirectoryAttribute.UserName, 
+            ActiveDirectoryAttribute.GroupSamAccountName,
+            ActiveDirectoryAttribute.UserName,
             ActiveDirectoryAttribute.UserDistinguishedName
         };
 
+        private readonly ActiveDirectoryAttribute[]
+            _defaultDirectReportsAttributes =
+        {
+            ActiveDirectoryAttribute.UserDisplayName,
+            ActiveDirectoryAttribute.UserSamAccountName,
+        };
+
         private readonly IActiveDirectoryToolView _view;
-        private ActiveDirectorySearcher _searcher;
         private DataPreparer _dataPreparer;
+        private ActiveDirectorySearcher _searcher;
 
         public ActiveDirectoryToolViewModel(IActiveDirectoryToolView view)
         {
             _view = view;
             _view.GetUsersClicked += OnGetUsers;
             _view.GetUsersGroupsClicked += OnGetUsersGroups;
+            _view.GetDirectReportsClicked += OnGetDirectReports;
         }
 
         private void OnGetUsers()
@@ -77,6 +81,18 @@ namespace ActiveDirectoryToolWpf
             {
                 Data = _searcher.GetUsersGroups(),
                 Attributes = _defaultUserGroupsAttributes.ToList()
+            };
+            _view.SetDataGridData(
+                _dataPreparer.GetResults().ToDataTable().AsDataView());
+        }
+
+        private void OnGetDirectReports()
+        {
+            _searcher = new ActiveDirectorySearcher(_view.Scope);
+            _dataPreparer = new DataPreparer()
+            {
+                Data = _searcher.GetDirectReports(),
+                Attributes = _defaultDirectReportsAttributes.ToList()
             };
             _view.SetDataGridData(
                 _dataPreparer.GetResults().ToDataTable().AsDataView());

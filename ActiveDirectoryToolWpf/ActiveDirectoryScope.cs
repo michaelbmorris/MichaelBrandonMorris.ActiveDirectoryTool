@@ -1,6 +1,6 @@
-﻿using PrimitiveExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using PrimitiveExtensions;
 
 namespace ActiveDirectoryToolWpf
 {

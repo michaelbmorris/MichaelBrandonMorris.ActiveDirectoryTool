@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Design.Serialization;
-using System.DirectoryServices;
+﻿using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
-using System.Linq;
 
 namespace ActiveDirectoryToolWpf
 {
     public class ActiveDirectoryScopeFetcher
     {
-        public ActiveDirectoryScope Scope { get; set; }
-
         internal ActiveDirectoryScopeFetcher()
         {
             var rootPrincipalContext = new PrincipalContext(
@@ -25,6 +18,8 @@ namespace ActiveDirectoryToolWpf
             };
             FetchScopeList();
         }
+
+        public ActiveDirectoryScope Scope { get; set; }
 
         private void FetchScopeList()
         {
@@ -41,7 +36,7 @@ namespace ActiveDirectoryToolWpf
                     });
                 }
             }
-            Scope.Children.Sort((a,b) => a.Name.CompareTo(b.Name));
+            Scope.Children.Sort((a, b) => a.Name.CompareTo(b.Name));
         }
     }
 }

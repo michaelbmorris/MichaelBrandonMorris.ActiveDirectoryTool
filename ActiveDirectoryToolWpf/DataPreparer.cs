@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
@@ -10,87 +9,77 @@ namespace ActiveDirectoryToolWpf
 {
     public enum ActiveDirectoryAttribute
     {
-        UserAccountExpirationDate,
-        UserAccountLockoutTime,
-        UserAllowReversiblePasswordEncryption,
         Assistant,
-        UserBadLogonCount,
-        UserCertificates,
         City,
         Comment,
         Company,
-        UserContext,
-        UserContextType,
+        ComputerGuid,
+        ComputerHomeDirectory,
+        ComputerHomeDrive,
+        ComputerName,
+        ComputerSid,
+        ComputerUserPrincipalName,
         Country,
-        UserDelegationPermitted,
         Department,
-        UserDescription,
-        UserDisplayName,
-        UserDistinguishedName,
         Division,
         EmailAddress,
         EmployeeId,
-        UserEnabled,
         Fax,
         GenerationalSuffix,
         GivenName,
-        UserGuid,
-        PrincipalGuid,
         GroupGuid,
-        ComputerGuid,
-        AuthenticableGuid,
+        GroupName,
+        GroupSamAccountName,
+        GroupSid,
+        GroupUserPrincipalName,
         HomeAddress,
-        UserHomeDirectory,
-        ComputerHomeDirectory,
-        AuthenticableHomeDirectory,
-        UserHomeDrive,
-        ComputerHomeDrive,
-        AuthenticableHomeDrive,
         HomePhone,
         Initials,
-        IsActive,
         IsAccountLockedOut,
-        UserLastBadPasswordAttempt,
-        UserLastLogon,
-        UserLastPasswordSet,
+        IsActive,
         ManagedBy,
         Manager,
         MiddleName,
         Mobile,
-        UserName,
-        PrincipalName,
-        ComputerName,
-        AuthenticableName,
-        GroupName,
         Notes,
         Pager,
+        ReversiblePasswordEncryption,
+        Sip,
+        State,
+        StreetAddress,
+        Surname,
+        Title,
+        UserAccountControl,
+        UserAccountExpirationDate,
+        UserAccountLockoutTime,
+        UserAllowReversiblePasswordEncryption,
+        UserBadLogonCount,
+        UserCertificates,
+        UserContext,
+        UserContextType,
+        UserDelegationPermitted,
+        UserDescription,
+        UserDisplayName,
+        UserDistinguishedName,
+        UserEnabled,
+        UserGuid,
+        UserHomeDirectory,
+        UserHomeDrive,
+        UserLastBadPasswordAttempt,
+        UserLastLogon,
+        UserLastPasswordSet,
+        UserName,
         UserPasswordNeverExpires,
         UserPasswordNotRequired,
         UserPermittedLogonTimes,
         UserPermittedWorkstations,
-        ReversiblePasswordEncryption,
         UserSamAccountName,
-        GroupSamAccountName,
         UserScriptPath,
         UserSid,
-        PrincipalSid,
-        ComputerSid,
-        GroupSid,
-        AuthenticableSid,
-        Sip,
-        SmartcardLogonRequired,
-        State,
-        StreetAddress,
+        UserSmartcardLogonRequired,
         UserStructuralObjectClass,
-        Surname,
-        Title,
-        UserAccountControl,
         UserUserCannotChangePassword,
         UserUserPrincipalName,
-        PrincipalUserPrincipalName,
-        GroupUserPrincipalName,
-        ComputerUserPrincipalName,
-        AuthenticableUserPrincipalName,
         VoiceTelephoneNumber,
         Voip
     }
@@ -141,30 +130,32 @@ namespace ActiveDirectoryToolWpf
                         groupPrincipal = group;
                         dynamic result = new ExpandoObject();
                         AddPropertiesToResult(
-                            null,
-                            null,
-                            groupPrincipal,
-                            null,
-                            userPrincipal,
-                            result);
+                            null, groupPrincipal, null, userPrincipal, result);
                         results.Add(result);
                     }
-
                 }
                 else if (data is DirectReports)
                 {
-
+                    var directReports = data as DirectReports;
+                    userPrincipal = directReports.User;
+                    foreach (var directReport in directReports.Reports)
+                    {
+                        dynamic result = new ExpandoObject();
+                        AddPropertiesToResult(
+                            null, null, null, userPrincipal, result);
+                        AddPropertiesToResult(
+                            null, null, null, directReport, result);
+                        results.Add(result);
+                    }
                 }
                 else
                 {
-                    var authenticablePrincipal = data as AuthenticablePrincipal;
                     var computerPrincipal = data as ComputerPrincipal;
                     groupPrincipal = data as GroupPrincipal;
                     var principal = data as Principal;
                     userPrincipal = data as UserPrincipal;
                     dynamic result = new ExpandoObject();
                     AddPropertiesToResult(
-                        authenticablePrincipal,
                         computerPrincipal,
                         groupPrincipal,
                         principal,
@@ -177,7 +168,6 @@ namespace ActiveDirectoryToolWpf
         }
 
         private void AddPropertiesToResult(
-            AuthenticablePrincipal authenticablePrincipal,
             ComputerPrincipal computerPrincipal,
             GroupPrincipal groupPrincipal,
             Principal principal,
@@ -211,7 +201,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserAllowReversiblePasswordEncryption =
                                 userPrincipal
-                                .AllowReversiblePasswordEncryption;
+                                    .AllowReversiblePasswordEncryption;
                         }
 
                         break;
@@ -275,7 +265,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserContext = userPrincipal.Context;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.UserContextType:
@@ -283,7 +273,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserContextType = userPrincipal.ContextType;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.Country:
@@ -318,7 +308,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserDescription = userPrincipal.Description;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.UserDisplayName:
@@ -326,7 +316,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserDisplayName = userPrincipal.DisplayName;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.UserDistinguishedName:
@@ -335,7 +325,7 @@ namespace ActiveDirectoryToolWpf
                             result.UserDistinguishedName =
                                 userPrincipal.DistinguishedName;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.Division:
@@ -406,7 +396,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.Guid = userPrincipal.Guid;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.HomeAddress:
@@ -477,7 +467,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserLastBadPasswordAttempt =
                                 userPrincipal
-                                .LastBadPasswordAttempt;
+                                    .LastBadPasswordAttempt;
                         }
 
                         break;
@@ -541,7 +531,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserName = userPrincipal.Name;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.Notes:
@@ -567,7 +557,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserPasswordNeverExpires =
                                 userPrincipal
-                                .PasswordNeverExpires;
+                                    .PasswordNeverExpires;
                         }
 
                         break;
@@ -595,13 +585,13 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserPermittedWorkstations =
                                 userPrincipal
-                                .PermittedWorkstations;
+                                    .PermittedWorkstations;
                         }
 
                         break;
 
                     case ActiveDirectoryAttribute
-                    .ReversiblePasswordEncryption:
+                        .ReversiblePasswordEncryption:
                         break;
 
                     case ActiveDirectoryAttribute.UserSamAccountName:
@@ -636,7 +626,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserSid = userPrincipal.Sid;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.Sip:
@@ -648,12 +638,12 @@ namespace ActiveDirectoryToolWpf
 
                         break;
 
-                    case ActiveDirectoryAttribute.SmartcardLogonRequired:
-                        if (authenticablePrincipal != null)
+                    case ActiveDirectoryAttribute.UserSmartcardLogonRequired:
+                        if (userPrincipal != null)
                         {
-                            result.SmartcardLogonRequired =
-                                authenticablePrincipal
-                                .SmartcardLogonRequired;
+                            result.UserSmartcardLogonRequired =
+                                userPrincipal
+                                    .SmartcardLogonRequired;
                         }
 
                         break;
@@ -682,7 +672,7 @@ namespace ActiveDirectoryToolWpf
                             result.UserStructuralObjectClass =
                                 userPrincipal.StructuralObjectClass;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.Surname:
@@ -717,7 +707,7 @@ namespace ActiveDirectoryToolWpf
                         {
                             result.UserUserCannotChangePassword =
                                 userPrincipal
-                                .UserCannotChangePassword;
+                                    .UserCannotChangePassword;
                         }
 
                         break;
@@ -728,7 +718,7 @@ namespace ActiveDirectoryToolWpf
                             result.UserUserPrincipalName =
                                 userPrincipal.UserPrincipalName;
                         }
-                        
+
                         break;
 
                     case ActiveDirectoryAttribute.VoiceTelephoneNumber:
