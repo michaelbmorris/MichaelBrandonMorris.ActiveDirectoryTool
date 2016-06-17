@@ -6,10 +6,10 @@ namespace ActiveDirectoryToolWpf
 {
     public class ActiveDirectoryScope : IEquatable<ActiveDirectoryScope>
     {
-        private const string DomainComponentPrefix = "DC=";
         private const char Comma = ',';
-        private const char Period = '.';
+        private const string DomainComponentPrefix = "DC=";
         private const string LdapProtocolPrefix = "LDAP://";
+        private const char Period = '.';
 
         internal ActiveDirectoryScope()
         {
@@ -17,13 +17,15 @@ namespace ActiveDirectoryToolWpf
         }
 
         public List<ActiveDirectoryScope> Children { get; set; }
-        internal string Name { get; set; }
-        internal string Path { get; set; }
         internal string Context => Path.Remove(LdapProtocolPrefix);
 
-        internal string Domain => Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)
-            .Remove(DomainComponentPrefix)
-            .Replace(Comma, Period);
+        internal string Domain
+            => Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)
+                .Remove(DomainComponentPrefix)
+                .Replace(Comma, Period);
+
+        internal string Name { get; set; }
+        internal string Path { get; set; }
 
         public bool Equals(ActiveDirectoryScope other)
         {

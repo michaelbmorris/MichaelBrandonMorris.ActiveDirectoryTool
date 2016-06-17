@@ -4,71 +4,160 @@ using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
+using static ActiveDirectoryToolWpf.ActiveDirectoryAttribute;
 
 namespace ActiveDirectoryToolWpf
 {
     public enum ActiveDirectoryAttribute
     {
-        Assistant,
-        City,
-        Comment,
-        Company,
+        ComputerAccountExpirationDate,
+        ComputerAccountLockoutTime,
+        ComputerAllowReversiblePasswordEncryption,
+        ComputerBadLogonCount,
+        ComputerCertificates,
+        ComputerContext,
+        ComputerContextType,
+        ComputerDelegationPermitted,
+        ComputerDescription,
+        ComputerDisplayName,
+        ComputerDistinguishedName,
+        ComputerEnabled,
         ComputerGuid,
         ComputerHomeDirectory,
         ComputerHomeDrive,
+        ComputerLastBadPasswordAttempt,
+        ComputerLastLogon,
+        ComputerLastPasswordSet,
         ComputerName,
+        ComputerPasswordNeverExpires,
+        ComputerPasswordNotRequired,
+        ComputerPermittedLogonTimes,
+        ComputerPermittedWorkstations,
+        ComputerSamAccountName,
+        ComputerScriptPath,
+        ComputerServicePrincipalNames,
         ComputerSid,
+        ComputerSmartcardLogonRequired,
+        ComputerStructuralObjectClass,
+        ComputerUserCannotChangePassword,
         ComputerUserPrincipalName,
-        Country,
-        Department,
-        Division,
-        EmailAddress,
-        EmployeeId,
-        Fax,
-        GenerationalSuffix,
-        GivenName,
+        DirectReportUserAccountControl,
+        DirectReportAccountExpirationDate,
+        DirectReportAccountLockoutTime,
+        DirectReportAllowReversiblePasswordEncryption,
+        DirectReportAssistant,
+        DirectReportBadLogonCount,
+        DirectReportCertificates,
+        DirectReportCity,
+        DirectReportComment,
+        DirectReportCompany,
+        DirectReportContext,
+        DirectReportContextType,
+        DirectReportCountry,
+        DirectReportDelegationPermitted,
+        DirectReportDepartment,
+        DirectReportDescription,
+        DirectReportDisplayName,
+        DirectReportDistinguishedName,
+        DirectReportDivision,
+        DirectReportEmailAddress,
+        DirectReportEmployeeId,
+        DirectReportEnabled,
+        DirectReportFax,
+        DirectReportSuffix,
+        DirectReportGivenName,
+        DirectReportGuid,
+        DirectReportHomeAddress,
+        DirectReportHomeDirectory,
+        DirectReportHomeDrive,
+        DirectReportHomePhone,
+        DirectReportInitials,
+        DirectReportIsAccountLockedOut,
+        DirectReportIsActive,
+        DirectReportLastBadPasswordAttempt,
+        DirectReportLastLogon,
+        DirectReportLastPasswordSet,
+        DirectReportManager,
+        DirectReportMiddleName,
+        DirectReportMobile,
+        DirectReportName,
+        DirectReportNotes,
+        DirectReportPager,
+        DirectReportPasswordNeverExpires,
+        DirectReportPasswordNotRequired,
+        DirectReportPermittedLogonTimes,
+        DirectReportPermittedWorkstations,
+        DirectReportSamAccountName,
+        DirectReportScriptPath,
+        DirectReportSid,
+        DirectReportSip,
+        DirectReportSmartcardLogonRequired,
+        DirectReportState,
+        DirectReportStreetAddress,
+        DirectReportStructuralObjectClass,
+        DirectReportSurname,
+        DirectReportTitle,
+        DirectReportUserCannotChangePassword,
+        DirectReportUserPrincipalName,
+        DirectReportVoiceTelephoneNumber,
+        DirectReportVoip,
+        GroupContext,
+        GroupContextType,
+        GroupDescription,
+        GroupDisplayName,
+        GroupDistinguishedName,
         GroupGuid,
+        GroupIsSecurityGroup,
+        GroupManagedBy,
+        GroupMembers,
         GroupName,
         GroupSamAccountName,
+        GroupScope,
         GroupSid,
+        GroupStructuralObjectClass,
         GroupUserPrincipalName,
-        HomeAddress,
-        HomePhone,
-        Initials,
-        IsAccountLockedOut,
-        IsActive,
-        ManagedBy,
-        Manager,
-        MiddleName,
-        Mobile,
-        Notes,
-        Pager,
-        ReversiblePasswordEncryption,
-        Sip,
-        State,
-        StreetAddress,
-        Surname,
-        Title,
-        UserAccountControl,
+        UserUserAccountControl,
         UserAccountExpirationDate,
         UserAccountLockoutTime,
         UserAllowReversiblePasswordEncryption,
+        UserAssistant,
         UserBadLogonCount,
         UserCertificates,
+        UserCity,
+        UserComment,
+        UserCompany,
         UserContext,
         UserContextType,
+        UserCountry,
         UserDelegationPermitted,
+        UserDepartment,
         UserDescription,
         UserDisplayName,
         UserDistinguishedName,
+        UserDivision,
+        UserEmailAddress,
+        UserEmployeeId,
         UserEnabled,
+        UserFax,
+        UserSuffix,
+        UserGivenName,
         UserGuid,
+        UserHomeAddress,
         UserHomeDirectory,
         UserHomeDrive,
+        UserHomePhone,
+        UserInitials,
+        UserIsAccountLockedOut,
+        UserIsActive,
         UserLastBadPasswordAttempt,
         UserLastLogon,
         UserLastPasswordSet,
+        UserManager,
+        UserMiddleName,
+        UserMobile,
         UserName,
+        UserNotes,
+        UserPager,
         UserPasswordNeverExpires,
         UserPasswordNotRequired,
         UserPermittedLogonTimes,
@@ -76,12 +165,17 @@ namespace ActiveDirectoryToolWpf
         UserSamAccountName,
         UserScriptPath,
         UserSid,
+        UserSip,
         UserSmartcardLogonRequired,
+        UserState,
+        UserStreetAddress,
         UserStructuralObjectClass,
+        UserSurname,
+        UserTitle,
         UserUserCannotChangePassword,
         UserUserPrincipalName,
-        VoiceTelephoneNumber,
-        Voip
+        UserVoiceTelephoneNumber,
+        UserVoip
     }
 
     internal static class Extensions
@@ -129,618 +223,535 @@ namespace ActiveDirectoryToolWpf
                     {
                         groupPrincipal = group;
                         dynamic result = new ExpandoObject();
-                        AddPropertiesToResult(
+                        AddAttributesToResult(
                             null, groupPrincipal, null, userPrincipal, result);
                         results.Add(result);
                     }
+                    userGroups.Dispose();
                 }
                 else if (data is DirectReports)
                 {
                     var directReports = data as DirectReports;
+                    if (directReports.Reports == null) continue;
                     userPrincipal = directReports.User;
                     foreach (var directReport in directReports.Reports)
                     {
                         dynamic result = new ExpandoObject();
-                        AddPropertiesToResult(
-                            null, null, null, userPrincipal, result);
-                        AddPropertiesToResult(
-                            null, null, null, directReport, result);
+                        AddAttributesToResult(
+                            null, null, directReport, userPrincipal, result);
                         results.Add(result);
                     }
+                    directReports.Dispose();
                 }
                 else
                 {
                     var computerPrincipal = data as ComputerPrincipal;
                     groupPrincipal = data as GroupPrincipal;
-                    var principal = data as Principal;
                     userPrincipal = data as UserPrincipal;
                     dynamic result = new ExpandoObject();
-                    AddPropertiesToResult(
+                    AddAttributesToResult(
                         computerPrincipal,
                         groupPrincipal,
-                        principal,
+                        null,
                         userPrincipal,
                         result);
                     results.Add(result);
+                    var principal = data as Principal;
+                    principal?.Dispose();
                 }
             }
             return results;
         }
 
-        private void AddPropertiesToResult(
+        private static bool AddComputerAttributeToResult(
+            ComputerPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [ComputerAccountExpirationDate] = () =>
+                        result.ComputerAccountExpirationDate =
+                            principal.AccountExpirationDate,
+                    [ComputerAccountLockoutTime] = () =>
+                        result.ComputerAccountLockoutTime =
+                            principal.AccountLockoutTime,
+                    [ComputerAllowReversiblePasswordEncryption] = () =>
+                        result.ComputerAllowReversiblePasswordEncryption =
+                            principal.AllowReversiblePasswordEncryption,
+                    [ComputerBadLogonCount] = () =>
+                        result.ComputerBadLogonCount = principal.BadLogonCount,
+                    [ComputerCertificates] = () =>
+                        result.ComputerCertificates = principal.Certificates,
+                    [ComputerContext] = () =>
+                        result.ComputerContext = principal.Context,
+                    [ComputerContextType] = () =>
+                        result.ComputerContextType = principal.ContextType,
+                    [ComputerDelegationPermitted] = () =>
+                        result.ComputerDelegationPermitted =
+                            principal.DelegationPermitted,
+                    [ComputerDescription] = () =>
+                        result.ComputerDescription = principal.Description,
+                    [ComputerDisplayName] = () =>
+                        result.ComputerDisplayName = principal.DisplayName,
+                    [ComputerDistinguishedName] = () =>
+                        result.ComputerDistinguishedName =
+                            principal.DistinguishedName,
+                    [ComputerEnabled] = () =>
+                        result.ComputerEnabled = principal.Enabled,
+                    [ComputerGuid] = () => result.ComputerGuid =
+                        principal.Guid,
+                    [ComputerHomeDirectory] = () =>
+                        result.ComputerHomeDirectory = principal.HomeDirectory,
+                    [ComputerHomeDrive] = () =>
+                        result.ComputerHomeDrive = principal.HomeDrive,
+                    [ComputerLastBadPasswordAttempt] = () =>
+                        result.ComputerLastBadPasswordAttempt =
+                            principal.LastBadPasswordAttempt,
+                    [ComputerLastLogon] = () =>
+                        result.ComputerLastLogon = principal.LastLogon,
+                    [ComputerLastPasswordSet] = () =>
+                        result.LastPasswordSet = principal.LastPasswordSet,
+                    [ComputerName] = () => result.ComputerName =
+                        principal.Name,
+                    [ComputerPasswordNeverExpires] = () =>
+                        result.ComputerPasswordNeverExpires =
+                            principal.PasswordNeverExpires,
+                    [ComputerPasswordNotRequired] = () =>
+                        result.ComputerPasswordNotRequired =
+                            principal.PasswordNotRequired,
+                    [ComputerPermittedLogonTimes] = () =>
+                        result.ComputerPermittedLogonTimes =
+                            principal.PermittedLogonTimes,
+                    [ComputerPermittedWorkstations] = () =>
+                        result.ComputerPermittedWorkstations =
+                            principal.PermittedWorkstations,
+                    [ComputerSamAccountName] = () =>
+                        result.ComputerSamAccountName =
+                            principal.SamAccountName,
+                    [ComputerScriptPath] = () =>
+                        result.ComputerScriptPath = principal.ScriptPath,
+                    [ComputerServicePrincipalNames] = () =>
+                        result.ComputerServicePrincipalNames =
+                            principal.ServicePrincipalNames,
+                    [ComputerSid] = () => result.ComputerSid = principal.Sid,
+                    [ComputerSmartcardLogonRequired] = () =>
+                        result.ComputerSmartcardLogonRequired =
+                            principal.SmartcardLogonRequired,
+                    [ComputerStructuralObjectClass] = () =>
+                        result.ComputerStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [ComputerUserCannotChangePassword] = () =>
+                        result.ComputerUserCannotChangePassword =
+                            principal.UserCannotChangePassword,
+                    [ComputerUserPrincipalName] = () =>
+                        result.ComputerUserPrincipalName =
+                            principal.UserPrincipalName
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return false;
+            attributeMapping[attribute]();
+            return true;
+        }
+
+        private static bool AddDirectReportAttributeToResult(
+            UserPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [DirectReportUserAccountControl] = () =>
+                        result.DirectReportAccountControl =
+                            principal.GetUserAccountControl(),
+                    [DirectReportAccountExpirationDate] = () =>
+                        result.DirectReportAccountExpirationDate =
+                            principal.AccountExpirationDate,
+                    [DirectReportAccountLockoutTime] = () =>
+                        result.DirectReportAccountLockoutTime =
+                            principal.AccountLockoutTime,
+                    [DirectReportAllowReversiblePasswordEncryption] = () =>
+                        result.DirectReportAllowReversiblePasswordEncryption =
+                            principal.AllowReversiblePasswordEncryption,
+                    [DirectReportAssistant] = () =>
+                        result.DirectReportAssistant =
+                            principal.GetAssistant(),
+                    [DirectReportBadLogonCount] = () =>
+                        result.DirectReportBadLogonCount =
+                            principal.BadLogonCount,
+                    [DirectReportCertificates] = () =>
+                        result.DirectReportCertificates =
+                            principal.Certificates,
+                    [DirectReportCity] = () =>
+                        result.DirectReportCity = principal.GetCity(),
+                    [DirectReportComment] = () =>
+                        result.DirectReportComment = principal.GetComment(),
+                    [DirectReportCompany] = () =>
+                        result.DirectReportCompany = principal.GetCompany(),
+                    [DirectReportContext] = () =>
+                        result.DirectReportContext = principal.Context,
+                    [DirectReportContextType] = () =>
+                        result.DirectReportContextType = principal.ContextType,
+                    [DirectReportCountry] = () =>
+                        result.DirectReportCountry = principal.GetCountry(),
+                    [DirectReportDelegationPermitted] = () =>
+                        result.DirectReportDelegationPermitted =
+                            principal.DelegationPermitted,
+                    [DirectReportDepartment] = () =>
+                        result.DirectReportDepartment =
+                            principal.GetDepartment(),
+                    [DirectReportDescription] = () =>
+                        result.DirectReportDescription = principal.Description,
+                    [DirectReportDisplayName] = () =>
+                        result.DirectReportDisplayName = principal.DisplayName,
+                    [DirectReportDistinguishedName] = () =>
+                        result.DirectReportDistinguishedName =
+                            principal.DistinguishedName,
+                    [DirectReportDivision] = () =>
+                        result.DirectReportDivision = principal.GetDivision(),
+                    [DirectReportEmailAddress] = () =>
+                        result.DirectReportEmailAddress =
+                            principal.EmailAddress,
+                    [DirectReportEmployeeId] = () =>
+                        result.DirectReportEmployeeId = principal.EmployeeId,
+                    [DirectReportEnabled] = () =>
+                        result.DirectReportEnabled = principal.Enabled,
+                    [DirectReportFax] = () =>
+                        result.DirectReportFax = principal.GetFax(),
+                    [DirectReportSuffix] = () =>
+                        result.DirectReportSuffix = principal.GetSuffix(),
+                    [DirectReportGivenName] = () =>
+                        result.DirectReportGivenName = principal.GivenName,
+                    [DirectReportGuid] = () =>
+                        result.DirectReportGuid = principal.Guid,
+                    [DirectReportHomeAddress] = () =>
+                        result.DirectReportHomeAddress =
+                            principal.GetHomeAddress(),
+                    [DirectReportHomeDirectory] = () =>
+                        result.DirectReportHomeDirectory =
+                            principal.HomeDirectory,
+                    [DirectReportHomeDrive] = () =>
+                        result.DirectReportHomeDrive = principal.HomeDrive,
+                    [DirectReportHomePhone] = () =>
+                        result.DirectReportHomePhone =
+                            principal.GetHomePhone(),
+                    [DirectReportInitials] = () =>
+                        result.DirectReportInitials = principal.GetInitials(),
+                    [DirectReportIsAccountLockedOut] = () =>
+                        result.DirectReportIsAccountLockedOut =
+                            principal.IsAccountLockedOut(),
+                    [DirectReportIsActive] = () =>
+                        result.DirectReportIsActive = principal.IsActive(),
+                    [DirectReportLastBadPasswordAttempt] = () =>
+                        result.DirectReportLastBadPasswordAttempt =
+                            principal.LastBadPasswordAttempt,
+                    [DirectReportLastLogon] = () =>
+                        result.DirectReportLastLogon = principal.LastLogon,
+                    [DirectReportLastPasswordSet] = () =>
+                        result.DirectReportLastPasswordSet =
+                            principal.LastPasswordSet,
+                    [DirectReportManager] = () =>
+                        result.DirectReportManager = principal.GetManager(),
+                    [DirectReportMiddleName] = () =>
+                        result.DirectReportMiddleName = principal.MiddleName,
+                    [DirectReportMobile] = () =>
+                        result.DirectReportMobile = principal.GetMobile(),
+                    [DirectReportName] = () =>
+                        result.DirectReportName = principal.Name,
+                    [DirectReportNotes] = () =>
+                        result.DirectReportNotes = principal.GetNotes(),
+                    [DirectReportPager] = () =>
+                        result.DirectReportPager = principal.GetPager(),
+                    [DirectReportPasswordNeverExpires] = () =>
+                        result.DirectReportPasswordNeverExpires =
+                            principal.PasswordNeverExpires,
+                    [DirectReportPasswordNotRequired] = () =>
+                        result.DirectReportPasswordNotRequired =
+                            principal.PasswordNotRequired,
+                    [DirectReportPermittedLogonTimes] = () =>
+                        result.DirectReportPermittedLogonTimes =
+                            principal.PermittedLogonTimes,
+                    [DirectReportPermittedWorkstations] = () =>
+                        result.DirectReportPermittedWorkstations =
+                            principal.PermittedWorkstations,
+                    [DirectReportSamAccountName] = () =>
+                        result.DirectReportSamAccountName =
+                            principal.SamAccountName,
+                    [DirectReportScriptPath] = () =>
+                        result.DirectReportScriptPath = principal.ScriptPath,
+                    [DirectReportSid] = () =>
+                        result.DirectReportSid = principal.Sid,
+                    [DirectReportSip] = () =>
+                        result.DirectReportSip = principal.GetSip(),
+                    [DirectReportSmartcardLogonRequired] = () =>
+                        result.DirectReportSmartcardLogonRequired =
+                            principal.SmartcardLogonRequired,
+                    [DirectReportState] = () =>
+                        result.DirectReportState = principal.GetState(),
+                    [DirectReportStreetAddress] = () =>
+                        result.DirectReportStreetAddress =
+                            principal.GetStreetAddress(),
+                    [DirectReportStructuralObjectClass] = () =>
+                        result.DirectReportStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [DirectReportSurname] = () =>
+                        result.DirectReportSurname = principal.Surname,
+                    [DirectReportTitle] = () =>
+                        result.DirectReportTitle = principal.GetTitle(),
+                    [DirectReportUserCannotChangePassword] = () =>
+                        result.DirectReportUserCannotChangePassword =
+                            principal.UserCannotChangePassword,
+                    [DirectReportUserPrincipalName] = () =>
+                        result.DirectReportUserPrincipalName =
+                            principal.UserPrincipalName,
+                    [DirectReportVoiceTelephoneNumber] = () =>
+                        result.DirectReportVoiceTelephoneNumber =
+                            principal.VoiceTelephoneNumber,
+                    [DirectReportVoip] = () =>
+                        result.DirectReportVoip = principal.GetVoip()
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return false;
+            attributeMapping[attribute]();
+            return true;
+        }
+
+        private static bool AddGroupAttributeToResult(
+            GroupPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [GroupContext] =
+                        () => result.GroupContext = principal.Context,
+                    [GroupContextType] = () =>
+                        result.GroupContextType = principal.ContextType,
+                    [GroupDescription] = () =>
+                        result.GroupDescription = principal.Description,
+                    [GroupDisplayName] = () =>
+                        result.GroupDisplayName = principal.DisplayName,
+                    [GroupDistinguishedName] = () =>
+                        result.GroupDistinguishedName =
+                            principal.DistinguishedName,
+                    [GroupGuid] = () => result.GroupGuid = principal.Guid,
+                    [GroupIsSecurityGroup] = () =>
+                        result.GroupIsSecurityGroup =
+                            principal.IsSecurityGroup,
+                    [GroupManagedBy] = () =>
+                        result.GroupManagedBy = principal.GetManagedBy(),
+                    [GroupName] = () => result.GroupName = principal.Name,
+                    [GroupSamAccountName] = () =>
+                        result.GroupSamAccountName = principal.SamAccountName,
+                    [ActiveDirectoryAttribute.GroupScope] = () =>
+                        result.GroupScope = principal.GroupScope,
+                    [GroupSid] = () => result.GroupSid = principal.Sid,
+                    [GroupStructuralObjectClass] = () =>
+                        result.GroupStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [GroupUserPrincipalName] = () =>
+                        result.GroupUserPrincipalName =
+                            principal.UserPrincipalName,
+                    [GroupMembers] =
+                        () => result.GroupMembers = principal.Members
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return false;
+            attributeMapping[attribute]();
+            return true;
+        }
+
+        private static void AddUserAttributeToResult(
+            UserPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [UserUserAccountControl] = () =>
+                        result.UserAccountControl =
+                            principal.GetUserAccountControl(),
+                    [UserAccountExpirationDate] = () =>
+                        result.UserAccountExpirationDate =
+                            principal.AccountExpirationDate,
+                    [UserAccountLockoutTime] = () =>
+                        result.UserAccountLockoutTime =
+                            principal.AccountLockoutTime,
+                    [UserAllowReversiblePasswordEncryption] = () =>
+                        result.UserAllowReversiblePasswordEncryption =
+                            principal.AllowReversiblePasswordEncryption,
+                    [UserAssistant] = () =>
+                        result.UserAssistant = principal.GetAssistant(),
+                    [UserBadLogonCount] = () =>
+                        result.UserBadLogonCount = principal.BadLogonCount,
+                    [UserCertificates] = () =>
+                        result.UserCertificates = principal.Certificates,
+                    [UserCity] = () =>
+                        result.UserCity = principal.GetCity(),
+                    [UserComment] = () =>
+                        result.UserComment = principal.GetComment(),
+                    [UserCompany] = () =>
+                        result.UserCompany = principal.GetCompany(),
+                    [UserContext] = () =>
+                        result.UserContext = principal.Context,
+                    [UserContextType] = () =>
+                        result.UserContextType = principal.ContextType,
+                    [UserCountry] = () =>
+                        result.UserCountry = principal.GetCountry(),
+                    [UserDelegationPermitted] = () =>
+                        result.UserDelegationPermitted =
+                            principal.DelegationPermitted,
+                    [UserDepartment] = () =>
+                        result.UserDepartment = principal.GetDepartment(),
+                    [UserDescription] = () =>
+                        result.UserDescription = principal.Description,
+                    [UserDisplayName] = () =>
+                        result.UserDisplayName = principal.DisplayName,
+                    [UserDistinguishedName] = () =>
+                        result.UserDistinguishedName =
+                            principal.DistinguishedName,
+                    [UserDivision] = () =>
+                        result.UserDivision = principal.GetDivision(),
+                    [UserEmailAddress] = () =>
+                        result.UserEmailAddress = principal.EmailAddress,
+                    [UserEmployeeId] = () =>
+                        result.UserEmployeeId = principal.EmployeeId,
+                    [UserEnabled] = () =>
+                        result.UserEnabled = principal.Enabled,
+                    [UserFax] = () =>
+                        result.UserFax = principal.GetFax(),
+                    [UserSuffix] = () =>
+                        result.UserSuffix = principal.GetSuffix(),
+                    [UserGivenName] = () =>
+                        result.UserGivenName = principal.GivenName,
+                    [UserGuid] = () =>
+                        result.UserGuid = principal.Guid,
+                    [UserHomeAddress] = () =>
+                        result.UserHomeAddress = principal.GetHomeAddress(),
+                    [UserHomeDirectory] = () =>
+                        result.UserHomeDirectory = principal.HomeDirectory,
+                    [UserHomeDrive] = () =>
+                        result.UserHomeDrive = principal.HomeDrive,
+                    [UserHomePhone] = () =>
+                        result.UserHomePhone = principal.GetHomePhone(),
+                    [UserInitials] = () =>
+                        result.UserInitials = principal.GetInitials(),
+                    [UserIsAccountLockedOut] = () =>
+                        result.UserIsAccountLockedOut =
+                            principal.IsAccountLockedOut(),
+                    [UserIsActive] = () =>
+                        result.UserIsActive = principal.IsActive(),
+                    [UserLastBadPasswordAttempt] = () =>
+                        result.UserLastBadPasswordAttempt =
+                            principal.LastBadPasswordAttempt,
+                    [UserLastLogon] = () =>
+                        result.UserLastLogon = principal.LastLogon,
+                    [UserLastPasswordSet] = () =>
+                        result.UserLastPasswordSet = principal.LastPasswordSet,
+                    [UserManager] = () =>
+                        result.UserManager = principal.GetManager(),
+                    [UserMiddleName] = () =>
+                        result.UserMiddleName = principal.MiddleName,
+                    [UserMobile] = () =>
+                        result.UserMobile = principal.GetMobile(),
+                    [UserName] = () =>
+                        result.UserName = principal.Name,
+                    [UserNotes] = () =>
+                        result.UserNotes = principal.GetNotes(),
+                    [UserPager] = () =>
+                        result.UserPager = principal.GetPager(),
+                    [UserPasswordNeverExpires] = () =>
+                        result.UserPasswordNeverExpires =
+                            principal.PasswordNeverExpires,
+                    [UserPasswordNotRequired] = () =>
+                        result.UserPasswordNotRequired =
+                            principal.PasswordNotRequired,
+                    [UserPermittedLogonTimes] = () =>
+                        result.UserPermittedLogonTimes =
+                            principal.PermittedLogonTimes,
+                    [UserPermittedWorkstations] = () =>
+                        result.UserPermittedWorkstations =
+                            principal.PermittedWorkstations,
+                    [UserSamAccountName] = () =>
+                        result.UserSamAccountName = principal.SamAccountName,
+                    [UserScriptPath] = () =>
+                        result.UserScriptPath = principal.ScriptPath,
+                    [UserSid] = () =>
+                        result.UserSid = principal.Sid,
+                    [UserSip] = () =>
+                        result.UserSip = principal.GetSip(),
+                    [UserSmartcardLogonRequired] = () =>
+                        result.UserSmartcardLogonRequired =
+                            principal.SmartcardLogonRequired,
+                    [UserState] = () =>
+                        result.UserState = principal.GetState(),
+                    [UserStreetAddress] = () =>
+                        result.UserStreetAddress =
+                            principal.GetStreetAddress(),
+                    [UserStructuralObjectClass] = () =>
+                        result.UserStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [UserSurname] = () =>
+                        result.UserSurname = principal.Surname,
+                    [UserTitle] = () =>
+                        result.UserTitle = principal.GetTitle(),
+                    [UserUserCannotChangePassword] = () =>
+                        result.UserUserCannotChangePassword =
+                            principal.UserCannotChangePassword,
+                    [UserUserPrincipalName] = () =>
+                        result.UserUserPrincipalName =
+                            principal.UserPrincipalName,
+                    [UserVoiceTelephoneNumber] = () =>
+                        result.UserVoiceTelephoneNumber =
+                            principal.VoiceTelephoneNumber,
+                    [UserVoip] = () =>
+                        result.UserVoip = principal.GetVoip()
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return;
+            attributeMapping[attribute]();
+        }
+
+        private void AddAttributesToResult(
             ComputerPrincipal computerPrincipal,
             GroupPrincipal groupPrincipal,
-            Principal principal,
+            UserPrincipal directReportUserPrincipal,
             UserPrincipal userPrincipal,
             dynamic result)
         {
             foreach (var attribute in Attributes)
             {
-                switch (attribute)
+                if (computerPrincipal != null)
                 {
-                    case ActiveDirectoryAttribute.UserAccountExpirationDate:
-                        if (userPrincipal != null)
-                        {
-                            result.UserAccountExpirationDate =
-                                userPrincipal.AccountExpirationDate;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserAccountLockoutTime:
-                        if (userPrincipal != null)
-                        {
-                            result.UserAccountELockoutTime =
-                                userPrincipal.AccountLockoutTime;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserAllowReversiblePasswordEncryption:
-                        if (userPrincipal != null)
-                        {
-                            result.UserAllowReversiblePasswordEncryption =
-                                userPrincipal
-                                    .AllowReversiblePasswordEncryption;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Assistant:
-                        if (userPrincipal != null)
-                        {
-                            result.Assistant =
-                                userPrincipal.GetAssistant();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserBadLogonCount:
-                        if (userPrincipal != null)
-                        {
-                            result.UserBadLogonCount =
-                                userPrincipal.BadLogonCount;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserCertificates:
-                        if (userPrincipal != null)
-                        {
-                            result.UserCertificates =
-                                userPrincipal.Certificates;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.City:
-                        if (userPrincipal != null)
-                        {
-                            result.City =
-                                userPrincipal.GetCity();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Comment:
-                        if (userPrincipal != null)
-                        {
-                            result.Comment =
-                                userPrincipal.GetComment();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Company:
-                        if (userPrincipal != null)
-                        {
-                            result.Company =
-                                userPrincipal.GetCompany();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserContext:
-                        if (userPrincipal != null)
-                        {
-                            result.UserContext = userPrincipal.Context;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserContextType:
-                        if (userPrincipal != null)
-                        {
-                            result.UserContextType = userPrincipal.ContextType;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Country:
-                        if (userPrincipal != null)
-                        {
-                            result.Country =
-                                userPrincipal.GetCountry();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserDelegationPermitted:
-                        if (userPrincipal != null)
-                        {
-                            result.UserDelegationPermitted =
-                                userPrincipal.DelegationPermitted;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Department:
-                        if (userPrincipal != null)
-                        {
-                            result.Department =
-                                userPrincipal.GetDepartment();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserDescription:
-                        if (userPrincipal != null)
-                        {
-                            result.UserDescription = userPrincipal.Description;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserDisplayName:
-                        if (userPrincipal != null)
-                        {
-                            result.UserDisplayName = userPrincipal.DisplayName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserDistinguishedName:
-                        if (userPrincipal != null)
-                        {
-                            result.UserDistinguishedName =
-                                userPrincipal.DistinguishedName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Division:
-                        if (userPrincipal != null)
-                        {
-                            result.Division =
-                                userPrincipal.GetDivision();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.EmailAddress:
-                        if (userPrincipal != null)
-                        {
-                            result.EmailAddress =
-                                userPrincipal.EmailAddress;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.EmployeeId:
-                        if (userPrincipal != null)
-                        {
-                            result.EmployeeId =
-                                userPrincipal.EmployeeId;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserEnabled:
-                        if (userPrincipal != null)
-                        {
-                            result.UserEnabled =
-                                userPrincipal.Enabled;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Fax:
-                        if (userPrincipal != null)
-                        {
-                            result.Fax =
-                                userPrincipal.GetFax();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.GenerationalSuffix:
-                        if (userPrincipal != null)
-                        {
-                            result.Suffix =
-                                userPrincipal.GetSuffix();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.GivenName:
-                        if (userPrincipal != null)
-                        {
-                            result.GivenName =
-                                userPrincipal.GivenName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserGuid:
-                        if (userPrincipal != null)
-                        {
-                            result.Guid = userPrincipal.Guid;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.HomeAddress:
-                        if (userPrincipal != null)
-                        {
-                            result.HomeAddress =
-                                userPrincipal.GetHomeAddress();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserHomeDirectory:
-                        if (userPrincipal != null)
-                        {
-                            result.UserHomeDirectory =
-                                userPrincipal.HomeDirectory;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserHomeDrive:
-                        if (userPrincipal != null)
-                        {
-                            result.UserHomeDrive =
-                                userPrincipal.HomeDrive;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.HomePhone:
-                        if (userPrincipal != null)
-                        {
-                            result.HomePhone =
-                                userPrincipal.GetHomePhone();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Initials:
-                        if (userPrincipal != null)
-                        {
-                            result.Initials =
-                                userPrincipal.GetInitials();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.IsActive:
-                        if (userPrincipal != null)
-                        {
-                            result.IsActive =
-                                userPrincipal.IsActive();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.IsAccountLockedOut:
-                        if (userPrincipal != null)
-                        {
-                            result.IsAccountLockedOut =
-                                userPrincipal.IsAccountLockedOut();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserLastBadPasswordAttempt:
-                        if (userPrincipal != null)
-                        {
-                            result.UserLastBadPasswordAttempt =
-                                userPrincipal
-                                    .LastBadPasswordAttempt;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserLastLogon:
-                        if (userPrincipal != null)
-                        {
-                            result.UserLastLogon =
-                                userPrincipal.LastLogon;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserLastPasswordSet:
-                        if (userPrincipal != null)
-                        {
-                            result.UserLastPasswordSet =
-                                userPrincipal.LastPasswordSet;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.ManagedBy:
-                        if (groupPrincipal != null)
-                        {
-                            result.ManagedBy =
-                                groupPrincipal.GetManagedBy();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Manager:
-                        if (userPrincipal != null)
-                        {
-                            result.Manager =
-                                userPrincipal.GetManager();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.MiddleName:
-                        if (userPrincipal != null)
-                        {
-                            result.MiddleName =
-                                userPrincipal.MiddleName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Mobile:
-                        if (userPrincipal != null)
-                        {
-                            result.Mobile =
-                                userPrincipal.GetMobile();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserName:
-                        if (userPrincipal != null)
-                        {
-                            result.UserName = userPrincipal.Name;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Notes:
-                        if (userPrincipal != null)
-                        {
-                            result.Notes =
-                                userPrincipal.GetNotes();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Pager:
-                        if (userPrincipal != null)
-                        {
-                            result.Pager =
-                                userPrincipal.GetPager();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserPasswordNeverExpires:
-                        if (userPrincipal != null)
-                        {
-                            result.UserPasswordNeverExpires =
-                                userPrincipal
-                                    .PasswordNeverExpires;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserPasswordNotRequired:
-                        if (userPrincipal != null)
-                        {
-                            result.UserPasswordNotRequired =
-                                userPrincipal.PasswordNotRequired;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserPermittedLogonTimes:
-                        if (userPrincipal != null)
-                        {
-                            result.UserPermittedLogonTimes =
-                                userPrincipal.PermittedLogonTimes;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserPermittedWorkstations:
-                        if (userPrincipal != null)
-                        {
-                            result.UserPermittedWorkstations =
-                                userPrincipal
-                                    .PermittedWorkstations;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute
-                        .ReversiblePasswordEncryption:
-                        break;
-
-                    case ActiveDirectoryAttribute.UserSamAccountName:
-                        if (userPrincipal != null)
-                        {
-                            result.UserSamAccountName =
-                                userPrincipal.SamAccountName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.GroupSamAccountName:
-                        if (groupPrincipal != null)
-                        {
-                            result.GroupSamAccountName =
-                                groupPrincipal.SamAccountName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserScriptPath:
-                        if (userPrincipal != null)
-                        {
-                            result.UserScriptPath =
-                                userPrincipal.ScriptPath;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserSid:
-                        if (userPrincipal != null)
-                        {
-                            result.UserSid = userPrincipal.Sid;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Sip:
-                        if (userPrincipal != null)
-                        {
-                            result.Sip =
-                                userPrincipal.GetSip();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserSmartcardLogonRequired:
-                        if (userPrincipal != null)
-                        {
-                            result.UserSmartcardLogonRequired =
-                                userPrincipal
-                                    .SmartcardLogonRequired;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.State:
-                        if (userPrincipal != null)
-                        {
-                            result.State =
-                                userPrincipal.GetState();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.StreetAddress:
-                        if (userPrincipal != null)
-                        {
-                            result.Assistant =
-                                userPrincipal.GetStreetAddress();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserStructuralObjectClass:
-                        if (userPrincipal != null)
-                        {
-                            result.UserStructuralObjectClass =
-                                userPrincipal.StructuralObjectClass;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Surname:
-                        if (userPrincipal != null)
-                        {
-                            result.Surname =
-                                userPrincipal.Surname;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Title:
-                        if (userPrincipal != null)
-                        {
-                            result.Title =
-                                userPrincipal.GetTitle();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserAccountControl:
-                        if (userPrincipal != null)
-                        {
-                            result.UserAccountControl =
-                                userPrincipal.GetUserAccountControl();
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserUserCannotChangePassword:
-                        if (userPrincipal != null)
-                        {
-                            result.UserUserCannotChangePassword =
-                                userPrincipal
-                                    .UserCannotChangePassword;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.UserUserPrincipalName:
-                        if (userPrincipal != null)
-                        {
-                            result.UserUserPrincipalName =
-                                userPrincipal.UserPrincipalName;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.VoiceTelephoneNumber:
-                        if (userPrincipal != null)
-                        {
-                            result.VoiceTelephoneNumber =
-                                userPrincipal.VoiceTelephoneNumber;
-                        }
-
-                        break;
-
-                    case ActiveDirectoryAttribute.Voip:
-                        if (userPrincipal != null)
-                        {
-                            result.Voip =
-                                userPrincipal.GetVoip();
-                        }
-
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    if (AddComputerAttributeToResult(
+                        computerPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
+                }
+                if (directReportUserPrincipal != null)
+                {
+                    if (AddDirectReportAttributeToResult(
+                        directReportUserPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
+                }
+                if (groupPrincipal != null)
+                {
+                    if (AddGroupAttributeToResult(
+                        groupPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
+                }
+                if (userPrincipal != null)
+                {
+                    AddUserAttributeToResult(userPrincipal, attribute, result);
                 }
             }
         }

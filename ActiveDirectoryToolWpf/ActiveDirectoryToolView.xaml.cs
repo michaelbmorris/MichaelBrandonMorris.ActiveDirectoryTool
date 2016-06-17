@@ -4,6 +4,15 @@ using System.Windows;
 
 namespace ActiveDirectoryToolWpf
 {
+    public enum QueryType
+    {
+        Users,
+        Groups,
+        UserGroups,
+        DirectReports,
+        Computers
+    }
+
     public partial class ActiveDirectoryToolView : IActiveDirectoryToolView
     {
         public ActiveDirectoryToolView()
@@ -15,17 +24,19 @@ namespace ActiveDirectoryToolWpf
             DataGrid.EnableRowVirtualization = true;
         }
 
+        private QueryType _lastQueryType;
+
         public ActiveDirectoryToolViewModel ViewModel { get; }
+
+        public event Action GetComputersClicked;
+
+        public event Action GetDirectReportsClicked;
+
+        public event Action GetGroupsClicked;
 
         public event Action GetUsersClicked;
 
         public event Action GetUsersGroupsClicked;
-
-        public event Action GetDirectReportsClicked;
-
-        public event Action GetComputersClicked;
-
-        public event Action GetGroupsClicked;
 
         public ActiveDirectoryScope Scope =>
             TreeView.SelectedItem as ActiveDirectoryScope;
@@ -45,22 +56,44 @@ namespace ActiveDirectoryToolWpf
             IsEnabled = !IsEnabled;
         }
 
+        private void GetDirectReports_Click(object sender, RoutedEventArgs e)
+        {
+            if (Scope != null)
+                GetDirectReportsClicked?.Invoke();
+            _lastQueryType = QueryType.DirectReports;
+        }
+
+        private void GetGroupsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Scope != null)
+                GetGroupsClicked?.Invoke();
+            _lastQueryType = QueryType.Groups;
+        }
+
         private void GetUsersButton_Click(object sender, RoutedEventArgs e)
         {
             if (Scope != null)
                 GetUsersClicked?.Invoke();
+            _lastQueryType = QueryType.Users;
         }
 
         private void GetUsersGroupsButton_Click(object sender, RoutedEventArgs e)
         {
             if (Scope != null)
                 GetUsersGroupsClicked?.Invoke();
+            _lastQueryType = QueryType.UserGroups;
         }
 
-        private void GetDirectReports_Click(object sender, RoutedEventArgs e)
+        private void WriteToFile__Click(object sender, RoutedEventArgs e)
         {
-            if (Scope != null)
-                GetDirectReportsClicked?.Invoke();
+            if (DataGrid.Items.Count <= 0) return;
+            var fileWriter = new DataFileWriter
+            {
+                Data = DataGrid,
+                Scope = Scope.Context,
+                QueryType = _lastQueryType
+            };
+            fileWriter.WriteToCsv();
         }
     }
 }

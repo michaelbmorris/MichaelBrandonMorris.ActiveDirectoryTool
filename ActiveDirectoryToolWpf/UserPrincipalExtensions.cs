@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using PrimitiveExtensions;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -32,149 +33,148 @@ namespace ActiveDirectoryToolWpf
         public const string UserAccountControl = "userAccountControl";
         public const string Voip = "ipPhone";
 
-        internal static string GetAssistant(this UserPrincipal user)
+        public static string GetAssistant(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Assistant);
         }
 
-        internal static string GetCity(this UserPrincipal user)
+        public static string GetCity(this UserPrincipal user)
         {
             return user.GetPropertyAsString(City);
         }
 
-        internal static string GetComment(this UserPrincipal user)
+        public static string GetComment(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Comment);
         }
 
-        internal static string GetCompany(this UserPrincipal user)
+        public static string GetCompany(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Company);
         }
 
-        internal static string GetCountry(this UserPrincipal user)
+        public static string GetCountry(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Country);
         }
 
-        internal static string GetDepartment(this UserPrincipal user)
+        public static string GetDepartment(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Department);
         }
 
-        internal static string[] GetDirectReportDistinguishedNames(
-            this UserPrincipal user)
-        {
-            var directReportsDistinguishedNames =
-                user.GetProperty(DirectReports);
-            if (directReportsDistinguishedNames != null)
-            {
-                return Array.ConvertAll(
-                (object[])user.GetProperty(DirectReports), x => x.ToString());
-            }
-
-            return null;
-        }
-
-        internal static IEnumerable<UserPrincipal> GetDirectReports(
+        public static IEnumerable<UserPrincipal> GetDirectReports(
             this UserPrincipal user)
         {
             var directReportDistinguishedNames =
                 user.GetDirectReportDistinguishedNames();
-            if(directReportDistinguishedNames != null)
-            return user.GetDirectReportDistinguishedNames()
-                .Select(directReportDistinguishedName =>
-                    UserPrincipal.FindByIdentity(
-                        user.Context,
-                        IdentityType.DistinguishedName,
-                        directReportDistinguishedName)).ToList();
+            if (directReportDistinguishedNames != null)
+                return user.GetDirectReportDistinguishedNames()
+                    .Select(directReportDistinguishedName =>
+                        UserPrincipal.FindByIdentity(
+                            user.Context,
+                            IdentityType.DistinguishedName,
+                            directReportDistinguishedName)).ToList();
             return null;
         }
 
-        internal static string GetDivision(this UserPrincipal user)
+        public static string GetDivision(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Division);
         }
 
-        internal static string GetFax(this UserPrincipal user)
+        public static string GetFax(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Fax);
         }
 
-        internal static string GetHomeAddress(this UserPrincipal user)
+        public static string GetHomeAddress(this UserPrincipal user)
         {
             return user.GetPropertyAsString(HomeAddress);
         }
 
-        internal static string GetHomePhone(this UserPrincipal user)
+        public static string GetHomePhone(this UserPrincipal user)
         {
             return user.GetPropertyAsString(HomePhone);
         }
 
-        internal static string GetInitials(this UserPrincipal user)
+        public static string GetInitials(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Initials);
         }
 
-        internal static string GetManager(this UserPrincipal user)
+        public static string GetManager(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Manager);
         }
 
-        internal static string GetMobile(this UserPrincipal user)
+        public static string GetMobile(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Mobile);
         }
 
-        internal static string GetNotes(this UserPrincipal user)
+        public static string GetNotes(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Notes);
         }
 
-        internal static string GetPager(this UserPrincipal user)
+        public static string GetPager(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Pager);
         }
 
-        internal static string GetSip(this UserPrincipal user)
+        public static string GetSip(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Sip);
         }
 
-        internal static string GetState(this UserPrincipal user)
+        public static string GetState(this UserPrincipal user)
         {
             return user.GetPropertyAsString(State);
         }
 
-        internal static string GetStreetAddress(this UserPrincipal user)
+        public static string GetStreetAddress(this UserPrincipal user)
         {
             return user.GetPropertyAsString(StreetAddress);
         }
 
-        internal static string GetSuffix(this UserPrincipal user)
+        public static string GetSuffix(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Suffix);
         }
 
-        internal static string GetTitle(this UserPrincipal user)
+        public static string GetTitle(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Title);
         }
 
-        internal static string GetUserAccountControl(this UserPrincipal user)
+        public static string GetUserAccountControl(this UserPrincipal user)
         {
             return user.GetPropertyAsString(UserAccountControl);
         }
 
-        internal static string GetVoip(this UserPrincipal user)
+        public static string GetVoip(this UserPrincipal user)
         {
             return user.GetPropertyAsString(Voip);
         }
 
-        internal static bool IsActive(this UserPrincipal user)
+        public static bool IsActive(this UserPrincipal user)
         {
             return !Convert.ToBoolean(
-                (int) user.GetProperty(UserAccountControl) & 0x0002);
+                (int) user.GetProperty(UserAccountControl).Value & 0x0002);
+        }
+
+        internal static IEnumerable<string> GetDirectReportDistinguishedNames(
+            this UserPrincipal user)
+        {
+            return
+                user.GetProperty(DirectReports)
+                    .Cast<string>()
+                    .Where(
+                        directReportDistinguishedName =>
+                            !directReportDistinguishedName
+                                .IsNullOrWhiteSpace())
+                    .ToList();
         }
     }
 }

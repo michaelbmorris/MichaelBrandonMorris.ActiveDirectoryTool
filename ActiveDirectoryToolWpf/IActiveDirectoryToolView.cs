@@ -6,20 +6,13 @@ namespace ActiveDirectoryToolWpf
     public interface IActiveDirectoryToolView
     {
         ActiveDirectoryScope Scope { get; }
-        event Action GetUsersClicked;
-
-        event Action GetUsersGroupsClicked;
-
-        event Action GetDirectReportsClicked;
-
         event Action GetComputersClicked;
-
+        event Action GetDirectReportsClicked;
         event Action GetGroupsClicked;
-
+        event Action GetUsersClicked;
+        event Action GetUsersGroupsClicked;
         void SetDataGridData(DataView dataView);
-
         void ShowMessage(string message);
-
         void ToggleEnabled();
     }
 }

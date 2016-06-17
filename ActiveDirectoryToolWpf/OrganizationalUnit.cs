@@ -4,10 +4,10 @@ namespace ActiveDirectoryToolWpf
 {
     internal class OrganizationalUnit
     {
-        private const string DomainComponentPrefix = ",DC=";
-        private const string OrganizationalUnitPrefix = "OU=";
-        private const string LdapProtocol = "LDAP://";
         private const char Comma = ',';
+        private const string DomainComponentPrefix = ",DC=";
+        private const string LdapProtocol = "LDAP://";
+        private const string OrganizationalUnitPrefix = "OU=";
         private const int StringStartIndex = 0;
 
         internal string Path { get; set; }

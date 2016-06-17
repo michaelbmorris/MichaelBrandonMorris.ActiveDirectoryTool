@@ -37,9 +37,10 @@
                 <Button x:Name="GetUsersGroupsButton" Content="Get Users' Groups" HorizontalAlignment="Left"
                         Margin="90,10,0,0" VerticalAlignment="Top" Width="103" Click="GetUsersGroupsButton_Click" />
                 <Button x:Name="GetGroupsButton" Content="Get Groups" HorizontalAlignment="Left" Margin="198,10,0,0"
-                        VerticalAlignment="Top" Width="75" IsEnabled="False" />
+                        VerticalAlignment="Top" Width="75" Click="GetGroupsButton_Click" />
                 <Button x:Name="GetDirectReports" Content="Get Direct Reports" HorizontalAlignment="Left"
                         Margin="278,10,0,0" VerticalAlignment="Top" Width="103" Click="GetDirectReports_Click" />
+                <Button x:Name="WriteToFile_" Content="Write to File" HorizontalAlignment="Left" Margin="677,10,0,0" VerticalAlignment="Top" Width="75" Click="WriteToFile__Click"/>
             </Grid>
             <Grid Grid.Row="1">
                 <DataGrid x:Name="DataGrid"
