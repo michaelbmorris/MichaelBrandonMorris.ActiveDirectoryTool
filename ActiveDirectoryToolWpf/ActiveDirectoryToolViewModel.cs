@@ -1,5 +1,8 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
+using System.Dynamic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -73,52 +76,92 @@ namespace ActiveDirectoryToolWpf
             _view.GetGroupsClicked += OnGetGroups;
         }
 
-        private void OnGetDirectReports()
+        private async void OnGetDirectReports()
         {
+            _view.SetDataGridData(null);
+            _view.ToggleProgressBarVisibility();
             _searcher = new ActiveDirectorySearcher(_view.Scope);
-            _dataPreparer = new DataPreparer
+            List<ExpandoObject> data = null;
+            _view.ToggleEnabled();
+            await Task.Run(() =>
             {
-                Data = _searcher.GetDirectReports(),
-                Attributes = _defaultDirectReportsAttributes.ToList()
-            };
-            _view.SetDataGridData(
-                _dataPreparer.GetResults().ToDataTable().AsDataView());
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _searcher.GetDirectReports(),
+                    Attributes = _defaultDirectReportsAttributes.ToList()
+                };
+                data = _dataPreparer.GetResults();
+            });
+
+            _view.ToggleProgressBarVisibility();
+            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            _view.ToggleEnabled();
         }
 
-        private void OnGetGroups()
+        private async void OnGetGroups()
         {
+            _view.SetDataGridData(null);
+            _view.ToggleProgressBarVisibility();
             _searcher = new ActiveDirectorySearcher(_view.Scope);
-            _dataPreparer = new DataPreparer
+            List<ExpandoObject> data = null;
+            _view.ToggleEnabled();
+            await Task.Run(() =>
             {
-                Data = _searcher.GetGroups(),
-                Attributes = _defaultGroupAttributes.ToList()
-            };
-            _view.SetDataGridData(
-                _dataPreparer.GetResults().ToDataTable().AsDataView());
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _searcher.GetGroups(),
+                    Attributes = _defaultGroupAttributes.ToList()
+                };
+                data = _dataPreparer.GetResults();
+            });
+
+            _view.ToggleProgressBarVisibility();
+            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            _view.ToggleEnabled();
         }
 
-        private void OnGetUsers()
+        private async void OnGetUsers()
         {
+            _view.SetDataGridData(null);
+            _view.ToggleProgressBarVisibility();
             _searcher = new ActiveDirectorySearcher(_view.Scope);
-            _dataPreparer = new DataPreparer
+            List<ExpandoObject> data = null;
+            _view.ToggleEnabled();
+            await Task.Run(() =>
             {
-                Data = _searcher.GetUsers(),
-                Attributes = _defaultUserAttributes.ToList()
-            };
-            _view.SetDataGridData(
-                _dataPreparer.GetResults().ToDataTable().AsDataView());
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _searcher.GetUsers(),
+                    Attributes = _defaultUserAttributes.ToList()
+                };
+                data = _dataPreparer.GetResults();
+            });
+
+            _view.ToggleProgressBarVisibility();
+            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            _view.ToggleEnabled();
         }
 
-        private void OnGetUsersGroups()
+        private async void OnGetUsersGroups()
         {
+            _view.SetDataGridData(null);
+            _view.ToggleProgressBarVisibility();
             _searcher = new ActiveDirectorySearcher(_view.Scope);
-            _dataPreparer = new DataPreparer
+            List<ExpandoObject> data = null;
+            _view.ToggleEnabled();
+            await Task.Run(() =>
             {
-                Data = _searcher.GetUsersGroups(),
-                Attributes = _defaultUserGroupsAttributes.ToList()
-            };
-            _view.SetDataGridData(
-                _dataPreparer.GetResults().ToDataTable().AsDataView());
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _searcher.GetUsersGroups(),
+                    Attributes = _defaultUserGroupsAttributes.ToList()
+                };
+                data = _dataPreparer.GetResults();
+            });
+
+            _view.ToggleProgressBarVisibility();
+            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            _view.ToggleEnabled();
         }
     }
 }

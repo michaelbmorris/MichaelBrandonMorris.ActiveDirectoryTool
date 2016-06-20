@@ -14,5 +14,6 @@ namespace ActiveDirectoryToolWpf
         void SetDataGridData(DataView dataView);
         void ShowMessage(string message);
         void ToggleEnabled();
+        void ToggleProgressBarVisibility();
     }
 }

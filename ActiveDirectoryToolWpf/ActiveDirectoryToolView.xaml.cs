@@ -15,19 +15,19 @@ namespace ActiveDirectoryToolWpf
 
     public partial class ActiveDirectoryToolView : IActiveDirectoryToolView
     {
+        private QueryType _lastQueryType;
+
         public ActiveDirectoryToolView()
         {
             ViewModel = new ActiveDirectoryToolViewModel(this);
             DataContext = new ActiveDirectoryScopeFetcher().Scope;
             InitializeComponent();
+            ProgressBar.Visibility = Visibility.Hidden;
             DataGrid.EnableColumnVirtualization = true;
             DataGrid.EnableRowVirtualization = true;
         }
 
-        private QueryType _lastQueryType;
-
         public ActiveDirectoryToolViewModel ViewModel { get; }
-
         public event Action GetComputersClicked;
 
         public event Action GetDirectReportsClicked;
@@ -56,6 +56,14 @@ namespace ActiveDirectoryToolWpf
             IsEnabled = !IsEnabled;
         }
 
+        public void ToggleProgressBarVisibility()
+        {
+            ProgressBar.Visibility =
+                ProgressBar.Visibility == Visibility.Visible
+                    ? Visibility.Hidden
+                    : Visibility.Visible;
+        }
+
         private void GetDirectReports_Click(object sender, RoutedEventArgs e)
         {
             if (Scope != null)
@@ -77,7 +85,8 @@ namespace ActiveDirectoryToolWpf
             _lastQueryType = QueryType.Users;
         }
 
-        private void GetUsersGroupsButton_Click(object sender, RoutedEventArgs e)
+        private void GetUsersGroupsButton_Click(object sender,
+            RoutedEventArgs e)
         {
             if (Scope != null)
                 GetUsersGroupsClicked?.Invoke();
