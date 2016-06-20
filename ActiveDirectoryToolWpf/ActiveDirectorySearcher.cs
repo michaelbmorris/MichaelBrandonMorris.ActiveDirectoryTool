@@ -72,13 +72,13 @@ namespace ActiveDirectoryToolWpf
             return groups;
         }
 
-        public static IEnumerable<UserGroups> GetUserGroupsFromContext(
+        public static IEnumerable<UserGroups> GetUsersGroupsFromContext(
             PrincipalContext context)
         {
-            return GetUserGroupsFromUsers(GetUsersFromContext(context));
+            return GetUsersGroupsFromUsers(GetUsersFromContext(context));
         }
 
-        public static IEnumerable<UserGroups> GetUserGroupsFromUsers(
+        public static IEnumerable<UserGroups> GetUsersGroupsFromUsers(
             IEnumerable<UserPrincipal> users)
         {
             var userGroups = new List<UserGroups>();
@@ -120,6 +120,22 @@ namespace ActiveDirectoryToolWpf
             return group.GetMembers().OfType<UserPrincipal>().ToList();
         }
 
+        public static IEnumerable<UserPrincipal> GetUsersFromGroups(
+            IEnumerable<GroupPrincipal> groups)
+        {
+            var users = new List<UserPrincipal>();
+            foreach (var group in groups)
+            {
+                users.AddRange(GetUsersFromGroup(group));
+            }
+            return users;
+        }
+
+        public IEnumerable<ComputerPrincipal> GetComputers()
+        {
+            return GetComputersFromContext(PrincipalContext);
+        }
+
         public IEnumerable<DirectReports> GetDirectReports()
         {
             return GetDirectReportsFromContext(PrincipalContext);
@@ -137,7 +153,7 @@ namespace ActiveDirectoryToolWpf
 
         public IEnumerable<UserGroups> GetUsersGroups()
         {
-            return GetUserGroupsFromContext(PrincipalContext);
+            return GetUsersGroupsFromContext(PrincipalContext);
         }
     }
 

@@ -68,6 +68,8 @@ namespace ActiveDirectoryToolWpf
         {
             if (Scope != null)
                 GetDirectReportsClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
             _lastQueryType = QueryType.DirectReports;
         }
 
@@ -75,6 +77,8 @@ namespace ActiveDirectoryToolWpf
         {
             if (Scope != null)
                 GetGroupsClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
             _lastQueryType = QueryType.Groups;
         }
 
@@ -82,6 +86,8 @@ namespace ActiveDirectoryToolWpf
         {
             if (Scope != null)
                 GetUsersClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
             _lastQueryType = QueryType.Users;
         }
 
@@ -90,6 +96,8 @@ namespace ActiveDirectoryToolWpf
         {
             if (Scope != null)
                 GetUsersGroupsClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
             _lastQueryType = QueryType.UserGroups;
         }
 
@@ -103,6 +111,15 @@ namespace ActiveDirectoryToolWpf
                 QueryType = _lastQueryType
             };
             ShowMessage("Wrote data to " + fileWriter.WriteToCsv());
+        }
+
+        private void GetComputers_Click(object sender, RoutedEventArgs e)
+        {
+            if (Scope != null)
+                GetComputersClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
+            _lastQueryType = QueryType.Computers;
         }
     }
 }

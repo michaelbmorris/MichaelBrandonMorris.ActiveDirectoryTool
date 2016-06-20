@@ -9,6 +9,14 @@ namespace ActiveDirectoryToolWpf
     public class ActiveDirectoryToolViewModel
     {
         private readonly ActiveDirectoryAttribute[]
+            _defaultComputerAttributes =
+            {
+                ActiveDirectoryAttribute.ComputerName,
+                ActiveDirectoryAttribute.ComputerDescription,
+                ActiveDirectoryAttribute.ComputerDistinguishedName
+            };
+
+        private readonly ActiveDirectoryAttribute[]
             _defaultDirectReportsAttributes =
             {
                 ActiveDirectoryAttribute.UserDisplayName,
@@ -70,10 +78,33 @@ namespace ActiveDirectoryToolWpf
         public ActiveDirectoryToolViewModel(IActiveDirectoryToolView view)
         {
             _view = view;
-            _view.GetUsersClicked += OnGetUsers;
-            _view.GetUsersGroupsClicked += OnGetUsersGroups;
+            _view.GetComputersClicked += OnGetComputers;
             _view.GetDirectReportsClicked += OnGetDirectReports;
             _view.GetGroupsClicked += OnGetGroups;
+            _view.GetUsersClicked += OnGetUsers;
+            _view.GetUsersGroupsClicked += OnGetUsersGroups;
+        }
+
+        private async void OnGetComputers()
+        {
+            _view.SetDataGridData(null);
+            _view.ToggleProgressBarVisibility();
+            _searcher = new ActiveDirectorySearcher(_view.Scope);
+            List<ExpandoObject> data = null;
+            _view.ToggleEnabled();
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _searcher.GetComputers(),
+                    Attributes = _defaultComputerAttributes.ToList()
+                };
+                data = _dataPreparer.GetResults();
+            });
+
+            _view.ToggleProgressBarVisibility();
+            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            _view.ToggleEnabled();
         }
 
         private async void OnGetDirectReports()
