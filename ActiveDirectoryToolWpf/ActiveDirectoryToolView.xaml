@@ -89,7 +89,7 @@
                           MaxHeight="9001" MaxWidth="9001"
                           ItemsSource="{Binding IsAsync=True}"
                           MinHeight="484"
-                          MinWidth="742" />
+                          MinWidth="742" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" />
                 <ProgressBar x:Name="ProgressBar"
                              HorizontalAlignment="Left"
                              Height="10"

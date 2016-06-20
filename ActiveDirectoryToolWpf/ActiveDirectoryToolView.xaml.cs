@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
+using PrimitiveExtensions;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -63,6 +65,12 @@ namespace ActiveDirectoryToolWpf
                 ProgressBar.Visibility == Visibility.Visible
                     ? Visibility.Hidden
                     : Visibility.Visible;
+        }
+
+        private void DataGrid_AutoGeneratingColumn(
+            object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Header = e.Column.Header.ToString().SpaceCamelCase();
         }
 
         private void GetComputers_Click(object sender, RoutedEventArgs e)
