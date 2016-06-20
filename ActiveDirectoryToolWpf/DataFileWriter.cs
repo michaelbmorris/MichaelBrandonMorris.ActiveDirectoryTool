@@ -20,7 +20,7 @@ namespace ActiveDirectoryToolWpf
         public QueryType QueryType { get; set; }
         public string Scope { get; set; }
 
-        public void WriteToCsv()
+        public string WriteToCsv()
         {
             Data.SelectAllCells();
             Data.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
@@ -29,13 +29,15 @@ namespace ActiveDirectoryToolWpf
             var result = (string) Clipboard.GetData(
                 DataFormats.CommaSeparatedValue);
             Clipboard.Clear();
-            var fileName = Scope.Remove("OU=") + QueryType +
-                           DateTime.Now.ToString(DateTimeFormat) + ".csv";
+            var fileName = Scope.Remove("OU=").Remove("DC=").Replace(',','-')
+                + "--" + QueryType + '-' +
+                DateTime.Now.ToString(DateTimeFormat) + ".csv";
             using (var writer = new StreamWriter(
                 Path.Combine(_outputPath, fileName)))
             {
                 writer.WriteLine(result);
             }
+            return fileName;
         }
     }
 }

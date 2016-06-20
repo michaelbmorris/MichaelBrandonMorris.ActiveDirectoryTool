@@ -102,7 +102,7 @@ namespace ActiveDirectoryToolWpf
                 Scope = Scope.Context,
                 QueryType = _lastQueryType
             };
-            fileWriter.WriteToCsv();
+            ShowMessage("Wrote data to " + fileWriter.WriteToCsv());
         }
     }
 }
