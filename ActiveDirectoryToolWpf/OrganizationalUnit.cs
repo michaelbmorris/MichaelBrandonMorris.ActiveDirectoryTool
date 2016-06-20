@@ -2,7 +2,7 @@
 
 namespace ActiveDirectoryToolWpf
 {
-    internal class OrganizationalUnit
+    public class OrganizationalUnit
     {
         private const char Comma = ',';
         private const string DomainComponentPrefix = ",DC=";
@@ -10,22 +10,19 @@ namespace ActiveDirectoryToolWpf
         private const string OrganizationalUnitPrefix = "OU=";
         private const int StringStartIndex = 0;
 
-        internal string Path { get; set; }
+        public string Path { get; set; }
 
-        internal string[] Split
+        public string[] Split()
         {
-            get
-            {
-                var namesOnly = Path.Replace(LdapProtocol, string.Empty)
-                    .Replace(OrganizationalUnitPrefix, string.Empty);
-                var firstDomainComponentIndex = namesOnly.IndexOf(
-                    DomainComponentPrefix, StringComparison.Ordinal);
-                namesOnly = namesOnly.Substring(
-                    StringStartIndex, firstDomainComponentIndex);
-                var split = namesOnly.Split(Comma);
-                Array.Reverse(split);
-                return split;
-            }
+            var namesOnly = Path.Replace(LdapProtocol, string.Empty)
+                .Replace(OrganizationalUnitPrefix, string.Empty);
+            var firstDomainComponentIndex = namesOnly.IndexOf(
+                DomainComponentPrefix, StringComparison.Ordinal);
+            namesOnly = namesOnly.Substring(
+                StringStartIndex, firstDomainComponentIndex);
+            var split = namesOnly.Split(Comma);
+            Array.Reverse(split);
+            return split;
         }
     }
 }

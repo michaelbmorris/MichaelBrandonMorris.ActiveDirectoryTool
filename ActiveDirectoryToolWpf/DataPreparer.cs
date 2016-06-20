@@ -183,13 +183,10 @@ namespace ActiveDirectoryToolWpf
         public static DataTable ToDataTable(this IEnumerable<dynamic> items)
         {
             var data = items.ToArray();
-            if (!data.Any())
-            {
-                return null;
-            }
-
+            if (data.Length == 0) return null;
             var dataTable = new DataTable();
-            foreach (var key in ((IDictionary<string, object>) data[0]).Keys)
+            foreach (
+                var key in ((IDictionary<string, object>) data[0]).Keys)
             {
                 dataTable.Columns.Add(key);
             }

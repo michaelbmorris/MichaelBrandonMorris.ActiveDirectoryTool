@@ -28,6 +28,7 @@ namespace ActiveDirectoryToolWpf
         }
 
         public ActiveDirectoryToolViewModel ViewModel { get; }
+
         public event Action GetComputersClicked;
 
         public event Action GetDirectReportsClicked;
@@ -62,6 +63,15 @@ namespace ActiveDirectoryToolWpf
                 ProgressBar.Visibility == Visibility.Visible
                     ? Visibility.Hidden
                     : Visibility.Visible;
+        }
+
+        private void GetComputers_Click(object sender, RoutedEventArgs e)
+        {
+            if (Scope != null)
+                GetComputersClicked?.Invoke();
+            else
+                ShowMessage("Please select an Organizational Unit.");
+            _lastQueryType = QueryType.Computers;
         }
 
         private void GetDirectReports_Click(object sender, RoutedEventArgs e)
@@ -111,15 +121,6 @@ namespace ActiveDirectoryToolWpf
                 QueryType = _lastQueryType
             };
             ShowMessage("Wrote data to " + fileWriter.WriteToCsv());
-        }
-
-        private void GetComputers_Click(object sender, RoutedEventArgs e)
-        {
-            if (Scope != null)
-                GetComputersClicked?.Invoke();
-            else
-                ShowMessage("Please select an Organizational Unit.");
-            _lastQueryType = QueryType.Computers;
         }
     }
 }

@@ -39,31 +39,31 @@ namespace ActiveDirectoryToolWpf
 
         internal void AddDirectoryScope(OrganizationalUnit organizationalUnit)
         {
-            if (organizationalUnit.Split == null ||
-                organizationalUnit.Split.Length < 1)
+            var organizationalUnitLevels = organizationalUnit.Split();
+            if (organizationalUnitLevels == null ||
+                organizationalUnitLevels.Length < 1)
             {
                 throw new ArgumentException(
                     "The organizational units array is null or empty!");
             }
+
             var parent = this;
-            foreach (var level in organizationalUnit.Split)
+            var lastLevelIndex = organizationalUnitLevels.Length - 1;
+            foreach (var level in organizationalUnitLevels)
             {
-                var lastLevel = organizationalUnit.Split.Length - 1;
-                if (parent.Children.Contains(new ActiveDirectoryScope
+                var scope = new ActiveDirectoryScope
                 {
                     Name = level
-                }))
+                };
+                if (parent.Children.Contains(scope))
                 {
                     parent = parent.Children.Find(
                         item => item.Name.Equals(level));
                 }
-                else if (level == organizationalUnit.Split[lastLevel])
+                else if (level == organizationalUnitLevels[lastLevelIndex])
                 {
-                    parent.Children.Add(new ActiveDirectoryScope
-                    {
-                        Name = level,
-                        Path = organizationalUnit.Path
-                    });
+                    scope.Path = organizationalUnit.Path;
+                    parent.Children.Add(scope);
                 }
             }
         }
