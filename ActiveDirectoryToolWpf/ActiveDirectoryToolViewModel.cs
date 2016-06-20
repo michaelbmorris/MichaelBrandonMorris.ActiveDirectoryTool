@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 using System.Linq;
@@ -103,7 +104,15 @@ namespace ActiveDirectoryToolWpf
             });
 
             _view.ToggleProgressBarVisibility();
-            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            try
+            {
+                _view.SetDataGridData(data.ToDataTable().AsDataView());
+            }
+            catch (ArgumentNullException)
+            {
+                _view.ShowMessage("No results found!");
+            }
+            
             _view.ToggleEnabled();
         }
 
@@ -125,7 +134,15 @@ namespace ActiveDirectoryToolWpf
             });
 
             _view.ToggleProgressBarVisibility();
-            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            try
+            {
+                _view.SetDataGridData(data.ToDataTable().AsDataView());
+            }
+            catch (ArgumentNullException)
+            {
+                _view.ShowMessage("No results found!");
+            }
+
             _view.ToggleEnabled();
         }
 
@@ -147,7 +164,15 @@ namespace ActiveDirectoryToolWpf
             });
 
             _view.ToggleProgressBarVisibility();
-            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            try
+            {
+                _view.SetDataGridData(data.ToDataTable().AsDataView());
+            }
+            catch (ArgumentNullException)
+            {
+                _view.ShowMessage("No results found!");
+            }
+
             _view.ToggleEnabled();
         }
 
@@ -169,7 +194,15 @@ namespace ActiveDirectoryToolWpf
             });
 
             _view.ToggleProgressBarVisibility();
-            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            try
+            {
+                _view.SetDataGridData(data.ToDataTable().AsDataView());
+            }
+            catch (ArgumentNullException)
+            {
+                _view.ShowMessage("No results found!");
+            }
+
             _view.ToggleEnabled();
         }
 
@@ -191,7 +224,15 @@ namespace ActiveDirectoryToolWpf
             });
 
             _view.ToggleProgressBarVisibility();
-            _view.SetDataGridData(data.ToDataTable().AsDataView());
+            try
+            {
+                _view.SetDataGridData(data.ToDataTable().AsDataView());
+            }
+            catch (ArgumentNullException)
+            {
+                _view.ShowMessage("No results found!");
+            }
+
             _view.ToggleEnabled();
         }
     }
