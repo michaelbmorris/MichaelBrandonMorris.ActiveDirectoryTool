@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ActiveDirectoryToolWpf"
         mc:Ignorable="d"
-        Title="ActiveDirectoryToolView"
+        Title="Active Directory Tool"
         Height="576"
         Width="1024"
         MinHeight="576"
