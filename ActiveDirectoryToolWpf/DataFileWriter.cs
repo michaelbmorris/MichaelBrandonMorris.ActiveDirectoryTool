@@ -29,15 +29,15 @@ namespace ActiveDirectoryToolWpf
             var result = (string) Clipboard.GetData(
                 DataFormats.CommaSeparatedValue);
             Clipboard.Clear();
-            var fileName = Scope.Remove("OU=").Remove("DC=").Replace(',','-')
-                + "--" + QueryType + '-' +
-                DateTime.Now.ToString(DateTimeFormat) + ".csv";
-            using (var writer = new StreamWriter(
-                Path.Combine(_outputPath, fileName)))
+            var fileName = Scope.Remove("OU=").Remove("DC=").Replace(',', '-')
+                           + "--" + QueryType + '-' +
+                           DateTime.Now.ToString(DateTimeFormat) + ".csv";
+            var fullFileName = Path.Combine(_outputPath, fileName);
+            using (var writer = new StreamWriter(fullFileName))
             {
                 writer.WriteLine(result);
             }
-            return fileName;
+            return fullFileName;
         }
     }
 }

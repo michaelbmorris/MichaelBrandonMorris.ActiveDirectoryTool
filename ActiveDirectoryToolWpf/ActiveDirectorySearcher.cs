@@ -46,11 +46,17 @@ namespace ActiveDirectoryToolWpf
         public static IEnumerable<DirectReports> GetDirectReportsFromUsers(
             IEnumerable<UserPrincipal> users)
         {
-            return users.Select(user => new DirectReports
+            return users.Select(GetDirectReportsFromUser).ToList();
+        }
+
+        public static DirectReports GetDirectReportsFromUser(
+            UserPrincipal user)
+        {
+            return new DirectReports
             {
                 User = user,
                 Reports = user.GetDirectReports()
-            }).ToList();
+            };
         }
 
         public static IEnumerable<GroupPrincipal> GetGroupsFromContext(
@@ -81,25 +87,25 @@ namespace ActiveDirectoryToolWpf
         public static IEnumerable<UserGroups> GetUsersGroupsFromUsers(
             IEnumerable<UserPrincipal> users)
         {
-            var userGroups = new List<UserGroups>();
-            foreach (var user in users)
+            return users.Select(GetUserGroupsFromUser).ToList();
+        }
+
+        public static UserGroups GetUserGroupsFromUser(UserPrincipal user)
+        {
+            var groups = new List<GroupPrincipal>();
+            try
             {
-                var groups = new List<GroupPrincipal>();
-                try
-                {
-                    groups.AddRange(user.GetGroups().OfType<GroupPrincipal>());
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
-                }
-                userGroups.Add(new UserGroups
-                {
-                    User = user,
-                    Groups = groups
-                });
+                groups.AddRange(user.GetGroups().OfType<GroupPrincipal>());
             }
-            return userGroups;
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            return new UserGroups
+            {
+                User = user,
+                Groups = groups
+            };
         }
 
         public static IEnumerable<UserPrincipal> GetUsersFromContext(

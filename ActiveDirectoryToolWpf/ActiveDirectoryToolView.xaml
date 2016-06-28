@@ -71,32 +71,35 @@
                         Margin="677,10,0,0"
                         VerticalAlignment="Top"
                         Width="75"
-                        Click="WriteToFile__Click"/>
+                        Click="WriteToFile__Click" />
                 <Button x:Name="GetComputers"
                         Content="Get Computers Only"
                         HorizontalAlignment="Left"
                         Margin="520,10,0,0"
                         VerticalAlignment="Top"
-                        Width="130" Click="GetComputers_Click"/>
+                        Width="130" Click="GetComputers_Click" />
             </Grid>
             <Grid Grid.Row="1">
                 <DataGrid x:Name="DataGrid"
                           AutoGenerateColumns="True"
+                          AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
                           HorizontalAlignment="Left"
-                          Margin="10,10,0,0"
-                          VerticalAlignment="Top"
-                          RenderTransformOrigin="2.25,-3.615"
-                          MaxHeight="9001" MaxWidth="9001"
+                          IsReadOnly="True"
                           ItemsSource="{Binding IsAsync=True}"
+                          Margin="10,10,0,0"
+                          MaxHeight="9001"
+                          MaxWidth="9001"
                           MinHeight="484"
-                          MinWidth="742" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" />
+                          MinWidth="742"
+                          RenderTransformOrigin="2.25,-3.615"
+                          VerticalAlignment="Top" />
                 <ProgressBar x:Name="ProgressBar"
                              HorizontalAlignment="Left"
                              Height="10"
                              Margin="326,242,0,0"
                              VerticalAlignment="Top"
                              Width="100"
-                             IsIndeterminate="true"/>
+                             IsIndeterminate="true" />
             </Grid>
         </Grid>
     </Grid>
