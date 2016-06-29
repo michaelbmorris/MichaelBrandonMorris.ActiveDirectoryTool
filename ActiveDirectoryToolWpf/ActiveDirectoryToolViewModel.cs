@@ -16,16 +16,16 @@ namespace ActiveDirectoryToolWpf
             "No results found. Please ensure you are searching for the " +
             "correct principal type in the correct OU.";
 
-        private readonly ActiveDirectoryAttribute[]
-            _defaultComputerAttributes =
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultComputerAttributes =
             {
                 ActiveDirectoryAttribute.ComputerName,
                 ActiveDirectoryAttribute.ComputerDescription,
                 ActiveDirectoryAttribute.ComputerDistinguishedName
             };
 
-        private readonly ActiveDirectoryAttribute[]
-            _defaultDirectReportsAttributes =
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultDirectReportsAttributes =
             {
                 ActiveDirectoryAttribute.UserDisplayName,
                 ActiveDirectoryAttribute.UserSamAccountName,
@@ -35,16 +35,17 @@ namespace ActiveDirectoryToolWpf
                 ActiveDirectoryAttribute.DirectReportDistinguishedName
             };
 
-        private readonly ActiveDirectoryAttribute[] _defaultGroupAttributes =
-        {
-            ActiveDirectoryAttribute.GroupSamAccountName,
-            ActiveDirectoryAttribute.GroupManagedBy,
-            ActiveDirectoryAttribute.GroupDescription,
-            ActiveDirectoryAttribute.GroupDistinguishedName
-        };
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultGroupAttributes =
+            {
+                ActiveDirectoryAttribute.GroupSamAccountName,
+                ActiveDirectoryAttribute.GroupManagedBy,
+                ActiveDirectoryAttribute.GroupDescription,
+                ActiveDirectoryAttribute.GroupDistinguishedName
+            };
 
-        private readonly ActiveDirectoryAttribute[]
-            _defaultGroupUsersAttributes =
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultGroupUsersAttributes =
             {
                 ActiveDirectoryAttribute.UserSurname,
                 ActiveDirectoryAttribute.UserGivenName,
@@ -77,37 +78,38 @@ namespace ActiveDirectoryToolWpf
                 ActiveDirectoryAttribute.GroupDistinguishedName
             };
 
-        private readonly ActiveDirectoryAttribute[] _defaultUserAttributes =
-        {
-            ActiveDirectoryAttribute.UserSurname,
-            ActiveDirectoryAttribute.UserGivenName,
-            ActiveDirectoryAttribute.UserDisplayName,
-            ActiveDirectoryAttribute.UserSamAccountName,
-            ActiveDirectoryAttribute.UserIsActive,
-            ActiveDirectoryAttribute.UserIsAccountLockedOut,
-            ActiveDirectoryAttribute.UserDescription,
-            ActiveDirectoryAttribute.UserTitle,
-            ActiveDirectoryAttribute.UserCompany,
-            ActiveDirectoryAttribute.UserManager,
-            ActiveDirectoryAttribute.UserHomeDrive,
-            ActiveDirectoryAttribute.UserHomeDirectory,
-            ActiveDirectoryAttribute.UserScriptPath,
-            ActiveDirectoryAttribute.UserEmailAddress,
-            ActiveDirectoryAttribute.UserStreetAddress,
-            ActiveDirectoryAttribute.UserCity,
-            ActiveDirectoryAttribute.UserState,
-            ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
-            ActiveDirectoryAttribute.UserPager,
-            ActiveDirectoryAttribute.UserMobile,
-            ActiveDirectoryAttribute.UserFax,
-            ActiveDirectoryAttribute.UserVoip,
-            ActiveDirectoryAttribute.UserSip,
-            ActiveDirectoryAttribute.UserUserPrincipalName,
-            ActiveDirectoryAttribute.UserDistinguishedName
-        };
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultUserAttributes =
+            {
+                ActiveDirectoryAttribute.UserSurname,
+                ActiveDirectoryAttribute.UserGivenName,
+                ActiveDirectoryAttribute.UserDisplayName,
+                ActiveDirectoryAttribute.UserSamAccountName,
+                ActiveDirectoryAttribute.UserIsActive,
+                ActiveDirectoryAttribute.UserIsAccountLockedOut,
+                ActiveDirectoryAttribute.UserDescription,
+                ActiveDirectoryAttribute.UserTitle,
+                ActiveDirectoryAttribute.UserCompany,
+                ActiveDirectoryAttribute.UserManager,
+                ActiveDirectoryAttribute.UserHomeDrive,
+                ActiveDirectoryAttribute.UserHomeDirectory,
+                ActiveDirectoryAttribute.UserScriptPath,
+                ActiveDirectoryAttribute.UserEmailAddress,
+                ActiveDirectoryAttribute.UserStreetAddress,
+                ActiveDirectoryAttribute.UserCity,
+                ActiveDirectoryAttribute.UserState,
+                ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
+                ActiveDirectoryAttribute.UserPager,
+                ActiveDirectoryAttribute.UserMobile,
+                ActiveDirectoryAttribute.UserFax,
+                ActiveDirectoryAttribute.UserVoip,
+                ActiveDirectoryAttribute.UserSip,
+                ActiveDirectoryAttribute.UserUserPrincipalName,
+                ActiveDirectoryAttribute.UserDistinguishedName
+            };
 
-        private readonly ActiveDirectoryAttribute[]
-            _defaultUserGroupsAttributes =
+        private static readonly ActiveDirectoryAttribute[]
+            DefaultUserGroupsAttributes =
             {
                 ActiveDirectoryAttribute.UserSamAccountName,
                 ActiveDirectoryAttribute.GroupSamAccountName,
@@ -177,7 +179,7 @@ namespace ActiveDirectoryToolWpf
                 {
                     Data = ActiveDirectorySearcher.GetComputersFromGroup(
                         groupPrincipal),
-                    Attributes = _defaultComputerAttributes.ToList()
+                    Attributes = DefaultComputerAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -193,7 +195,7 @@ namespace ActiveDirectoryToolWpf
                 _dataPreparer = new DataPreparer
                 {
                     Data = _searcher.GetComputers(),
-                    Attributes = _defaultComputerAttributes.ToList()
+                    Attributes = DefaultComputerAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -209,7 +211,7 @@ namespace ActiveDirectoryToolWpf
                 _dataPreparer = new DataPreparer
                 {
                     Data = _searcher.GetDirectReports(),
-                    Attributes = _defaultDirectReportsAttributes.ToList()
+                    Attributes = DefaultDirectReportsAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -225,7 +227,7 @@ namespace ActiveDirectoryToolWpf
                 _dataPreparer = new DataPreparer
                 {
                     Data = _searcher.GetGroups(),
-                    Attributes = _defaultGroupAttributes.ToList()
+                    Attributes = DefaultGroupAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -246,7 +248,7 @@ namespace ActiveDirectoryToolWpf
                 {
                     Data = ActiveDirectorySearcher.GetUsersFromGroup(
                         groupPrincipal),
-                    Attributes = _defaultGroupUsersAttributes.ToList()
+                    Attributes = DefaultGroupUsersAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -270,7 +272,7 @@ namespace ActiveDirectoryToolWpf
                         ActiveDirectorySearcher.GetDirectReportsFromUser(
                             userPrincipal)
                     },
-                    Attributes = _defaultDirectReportsAttributes.ToList()
+                    Attributes = DefaultDirectReportsAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -294,7 +296,7 @@ namespace ActiveDirectoryToolWpf
                         ActiveDirectorySearcher.GetUserGroupsFromUser(
                             userPrincipal)
                     },
-                    Attributes = _defaultUserGroupsAttributes.ToList()
+                    Attributes = DefaultUserGroupsAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -310,7 +312,7 @@ namespace ActiveDirectoryToolWpf
                 _dataPreparer = new DataPreparer
                 {
                     Data = _searcher.GetUsers(),
-                    Attributes = _defaultUserAttributes.ToList()
+                    Attributes = DefaultUserAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -326,7 +328,7 @@ namespace ActiveDirectoryToolWpf
                 _dataPreparer = new DataPreparer
                 {
                     Data = _searcher.GetUsersGroups(),
-                    Attributes = _defaultUserGroupsAttributes.ToList()
+                    Attributes = DefaultUserGroupsAttributes.ToList()
                 };
                 _data = _dataPreparer.GetResults();
             });
@@ -351,8 +353,6 @@ namespace ActiveDirectoryToolWpf
             foreach (SearchResult result in results)
             {
                 var de = result.GetDirectoryEntry();
-                //Debug.WriteLine(de.SchemaClassName);
-                Debug.WriteLine(de.Properties["name"].Value);
             }
             FinishTask();
         }

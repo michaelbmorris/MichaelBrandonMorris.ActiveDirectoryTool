@@ -8,7 +8,7 @@ namespace ActiveDirectoryToolWpf
 
     public static class PrincipalExtensions
     {
-        private static readonly char[] _legalCharacters =
+        private static readonly char[] LegalCharacters =
         {
             ' ',
             '\\',
@@ -34,12 +34,13 @@ namespace ActiveDirectoryToolWpf
         {
             return principal.GetProperty(propertyName).Value == null
                 ? string.Empty
-                : new string(principal.GetProperty(propertyName).Value.ToString().Where(c => c.IsLetterOrDigit() || c.Equals(' ')).ToArray());
+                : principal.GetProperty(propertyName).ToString().Clean();
         }
 
         private static string Clean(this string s)
         {
-            return new string(s.Where(c => c.IsLetterOrDigit() || c.EqualsAny(_legalCharacters)).ToArray());
+            return new string(s.Where(c => c.IsLetterOrDigit() ||
+            c.EqualsAny(LegalCharacters)).ToArray());
         }
     }
 }
