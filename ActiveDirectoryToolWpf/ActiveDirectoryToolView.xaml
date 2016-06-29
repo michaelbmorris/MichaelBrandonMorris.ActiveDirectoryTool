@@ -126,13 +126,13 @@
                           HorizontalAlignment="Left"
                           IsReadOnly="True"
                           ItemsSource="{Binding IsAsync=True}"
-                          Margin="10,0,0,-22"
+                          Margin="10,0,0,0"
                           MaxHeight="9001"
                           MaxWidth="9001"
-                          MinHeight="484"
+                          MinHeight="464"
                           MinWidth="742"
                           RenderTransformOrigin="2.25,-3.615"
-                          VerticalAlignment="Top" Height="494" />
+                          VerticalAlignment="Top" />
                 <ProgressBar x:Name="ProgressBar"
                              HorizontalAlignment="Left"
                              Height="10"
