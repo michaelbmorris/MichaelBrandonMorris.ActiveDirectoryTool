@@ -71,8 +71,15 @@ namespace ActiveDirectoryToolWpf
             var groups = new HashSet<GroupPrincipal>();
             foreach (var user in users)
             {
-                groups.UnionWith(
+                try
+                {
+                    groups.UnionWith(
                     user.GetGroups().OfType<GroupPrincipal>().ToList());
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message);
+                }
             }
 
             return groups;
