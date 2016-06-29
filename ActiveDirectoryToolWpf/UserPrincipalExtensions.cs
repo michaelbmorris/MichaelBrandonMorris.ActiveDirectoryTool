@@ -135,7 +135,7 @@ namespace ActiveDirectoryToolWpf
 
         public static string GetStreetAddress(this UserPrincipal user)
         {
-            return user.GetPropertyAsString(StreetAddress);
+            return new string(user.GetPropertyAsString(StreetAddress).Where(c => c.IsLetterOrDigit() || c.Equals(' ')).ToArray());
         }
 
         public static string GetSuffix(this UserPrincipal user)
