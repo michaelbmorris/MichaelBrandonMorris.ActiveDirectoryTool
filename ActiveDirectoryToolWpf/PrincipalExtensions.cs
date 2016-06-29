@@ -14,7 +14,12 @@ namespace ActiveDirectoryToolWpf
             '\\',
             '/',
             ',',
-            '.'
+            '.',
+            ':',
+            ';',
+            '@',
+            '=',
+            '-'
         };
 
         public static DirectoryEntry GetAsDirectoryEntry(
@@ -29,12 +34,18 @@ namespace ActiveDirectoryToolWpf
             return principal.GetAsDirectoryEntry().Properties[propertyName];
         }
 
+        public static object GetPropertyValue(
+            this Principal principal, string propertyName)
+        {
+            return principal.GetProperty(propertyName).Value;
+        }
+
         public static string GetPropertyAsString(
             this Principal principal, string propertyName)
         {
-            return principal.GetProperty(propertyName).Value == null
+            return principal.GetPropertyValue(propertyName) == null
                 ? string.Empty
-                : principal.GetProperty(propertyName).ToString().Clean();
+                : principal.GetPropertyValue(propertyName).ToString().Clean();
         }
 
         private static string Clean(this string s)
