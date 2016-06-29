@@ -1,5 +1,7 @@
-﻿using System.DirectoryServices;
+﻿using PrimitiveExtensions;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
+using System.Linq;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -22,7 +24,12 @@ namespace ActiveDirectoryToolWpf
         {
             return principal.GetProperty(propertyName).Value == null
                 ? string.Empty
-                : principal.GetProperty(propertyName).Value.ToString();
+                : new string(principal.GetProperty(propertyName).Value.ToString().Where(c => c.IsLetterOrDigit() || c.Equals(' ')).ToArray());
+        }
+
+        private static string Clean(this string s)
+        {
+            return new string(s.Where(c => c.IsLetterOrDigit() || c.Equals(' ')).ToArray());
         }
     }
 }
