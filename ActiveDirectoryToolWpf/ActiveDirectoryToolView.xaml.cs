@@ -8,6 +8,7 @@ namespace ActiveDirectoryToolWpf
 {
     public enum QueryType
     {
+        Any,
         Users,
         Groups,
         UserGroups,
@@ -46,7 +47,7 @@ namespace ActiveDirectoryToolWpf
 
         private const string WroteDataMessage = "Wrote data to ";
 
-        private QueryType _lastQueryType;
+        public QueryType QueryType { get; set; }
 
         public ActiveDirectoryToolView()
         {
@@ -64,15 +65,18 @@ namespace ActiveDirectoryToolWpf
         public ActiveDirectoryScope Scope =>
             TreeView.SelectedItem as ActiveDirectoryScope;
 
-        public event Action GetComputersClicked;
-        public event Action GetDirectReportsClicked;
-        public event Action GetGroupsClicked;
-        public event Action GetUserGroupsClicked;
-        public event Action GetUsersClicked;
-        public event Action GetUsersGroupsClicked;
-        public event Action GetGroupUsersClicked;
-        public event Action GetUserDirectReportsClicked;
-        public event Action GetGroupComputersClicked;
+        public string SearchText { get; set; }
+
+        public event Action GetComputersButtonClicked;
+        public event Action GetDirectReportsButtonClicked;
+        public event Action GetGroupsButtonClicked;
+        public event Action GetUserGroupsMenuItemClicked;
+        public event Action GetUsersButtonClicked;
+        public event Action GetUsersGroupsButtonClicked;
+        public event Action GetGroupUsersMenuItemClicked;
+        public event Action GetUserDirectReportsMenuItemClicked;
+        public event Action GetGroupComputersMenuItemClicked;
+        public event Action SearchButtonClicked;
 
         public void SetDataGridData(DataView dataView)
         {
@@ -100,9 +104,9 @@ namespace ActiveDirectoryToolWpf
         public void GenerateContextMenu()
         {
             var contextMenu = new ContextMenu();
-            if (_lastQueryType == QueryType.Users ||
-                _lastQueryType == QueryType.DirectReports ||
-                _lastQueryType == QueryType.UserGroups)
+            if (QueryType == QueryType.Users ||
+                QueryType == QueryType.DirectReports ||
+                QueryType == QueryType.UserGroups)
             {
                 var getUserGroupsMenuItem = new MenuItem
                 {
@@ -121,8 +125,8 @@ namespace ActiveDirectoryToolWpf
                 contextMenu.Items.Add(getUserDirectReportsMenuItem);
             }
 
-            if (_lastQueryType == QueryType.Groups ||
-                _lastQueryType == QueryType.UserGroups)
+            if (QueryType == QueryType.Groups ||
+                QueryType == QueryType.UserGroups)
             {
                 var getGroupUsersMenuItem = new MenuItem
                 {
@@ -141,7 +145,7 @@ namespace ActiveDirectoryToolWpf
                 contextMenu.Items.Add(getGroupComputersMenuItem);
             }
 
-            if (_lastQueryType == QueryType.DirectReports)
+            if (QueryType == QueryType.DirectReports)
             {
                 var getDirectReportsUserGroupsMenuItem = new MenuItem
                 {
@@ -170,120 +174,155 @@ namespace ActiveDirectoryToolWpf
             e.Column.Header = e.Column.Header.ToString().SpaceCamelCase();
         }
 
-        private void GetComputers_Click(object sender, RoutedEventArgs e)
+        private void GetComputersButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _lastQueryType = QueryType.Computers;
+            QueryType = QueryType.Computers;
             if (Scope != null)
-                GetComputersClicked?.Invoke();
+                GetComputersButtonClicked?.Invoke();
             else
                 ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
         }
 
-        private void GetDirectReports_Click(object sender, RoutedEventArgs e)
+        private void GetDirectReportsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _lastQueryType = QueryType.DirectReports;
+            QueryType = QueryType.DirectReports;
             if (Scope != null)
-                GetDirectReportsClicked?.Invoke();
+                GetDirectReportsButtonClicked?.Invoke();
             else
                 ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
         }
 
-        private void GetGroupsButton_Click(object sender, RoutedEventArgs e)
+        private void GetGroupsButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _lastQueryType = QueryType.Groups;
+            QueryType = QueryType.Groups;
             if (Scope != null)
-                GetGroupsClicked?.Invoke();
+                GetGroupsButtonClicked?.Invoke();
             else
                 ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
         }
 
-        private void GetUsersButton_Click(object sender, RoutedEventArgs e)
+        private void GetUsersButton_OnClick(object sender, RoutedEventArgs e)
         {
-            _lastQueryType = QueryType.Users;
+            QueryType = QueryType.Users;
             if (Scope != null)
-                GetUsersClicked?.Invoke();
+                GetUsersButtonClicked?.Invoke();
             else
                 ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
         }
 
-        private void GetUsersGroupsButton_Click(object sender,
+        private void GetUsersGroupsButton_OnClick(object sender,
             RoutedEventArgs e)
         {
-            _lastQueryType = QueryType.UserGroups;
+            QueryType = QueryType.UserGroups;
             if (Scope != null)
-                GetUsersGroupsClicked?.Invoke();
+                GetUsersGroupsButtonClicked?.Invoke();
             else
                 ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
         }
 
-        private void WriteToFile__Click(object sender, RoutedEventArgs e)
+        private void WriteToFileButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (DataGrid.Items.Count <= 0) return;
             var fileWriter = new DataFileWriter
             {
                 Data = DataGrid,
                 Scope = Scope.Context,
-                QueryType = _lastQueryType
+                QueryType = QueryType
             };
             ShowMessage(WroteDataMessage + fileWriter.WriteToCsv());
         }
 
         private void GetUserGroupsMenuItem_Click(object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.UserGroups;
+            QueryType = QueryType.UserGroups;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[UserDistinguishedName].ToString();
-            GetUserGroupsClicked?.Invoke();
+            GetUserGroupsMenuItemClicked?.Invoke();
         }
 
         private void GetGroupUsersMenuItem_Click(object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.Users;
+            QueryType = QueryType.Users;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[GroupDistinguishedName].ToString();
-            GetGroupUsersClicked?.Invoke();
+            GetGroupUsersMenuItemClicked?.Invoke();
         }
 
         private void GetUserDirectReportsMenuItem_Click(
             object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.DirectReports;
+            QueryType = QueryType.DirectReports;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[UserDistinguishedName].ToString();
-            GetUserDirectReportsClicked?.Invoke();
+            GetUserDirectReportsMenuItemClicked?.Invoke();
         }
 
         private void GetDirectReportDirectReportsMenuItem_Click(
             object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.DirectReports;
+            QueryType = QueryType.DirectReports;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[DirectReportDistinguishedName].ToString();
-            GetUserDirectReportsClicked?.Invoke();
+            GetUserDirectReportsMenuItemClicked?.Invoke();
         }
 
         private void GetGroupComputersMenuItem_Click(
             object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.Computers;
+            QueryType = QueryType.Computers;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[GroupDistinguishedName].ToString();
-            GetGroupComputersClicked?.Invoke();
+            GetGroupComputersMenuItemClicked?.Invoke();
         }
 
         private void GetDirectReportUserGroupsMenuItem_Click(
             object sender, EventArgs e)
         {
-            _lastQueryType = QueryType.UserGroups;
+            QueryType = QueryType.UserGroups;
             var row = (DataRowView) DataGrid.SelectedItem;
             SelectedItemDistinguishedName =
                 row[DirectReportDistinguishedName].ToString();
-            GetUserGroupsClicked?.Invoke();
+            GetUserGroupsMenuItemClicked?.Invoke();
+        }
+
+        private void SearchButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (GroupRadioButton.IsChecked != null &&
+                GroupRadioButton.IsChecked.Value)
+            {
+                QueryType = QueryType.Groups;
+            }
+            else if (UserRadioButton.IsChecked != null &&
+                UserRadioButton.IsChecked.Value)
+            {
+                QueryType = QueryType.Users;
+            }
+            else if (ComputerRadioButton.IsChecked != null &&
+                ComputerRadioButton.IsChecked.Value)
+            {
+                QueryType = QueryType.Computers;
+            }
+            else
+            {
+                QueryType = QueryType.Any;
+            }
+            if(Scope == null)
+                ShowMessage(NoOrganizationalUnitSelectedErrorMessage);
+            else if(SearchText.IsNullOrWhiteSpace())
+                ShowMessage("Please enter a search query.");
+            else
+                SearchButtonClicked?.Invoke();
+
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchText = SearchTextBox.Text;
         }
     }
 }

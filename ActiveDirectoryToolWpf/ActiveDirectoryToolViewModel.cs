@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
@@ -122,15 +124,28 @@ namespace ActiveDirectoryToolWpf
         public ActiveDirectoryToolViewModel(IActiveDirectoryToolView view)
         {
             _view = view;
-            _view.GetComputersClicked += OnGetComputers;
-            _view.GetDirectReportsClicked += OnGetDirectReports;
-            _view.GetGroupsClicked += OnGetGroups;
-            _view.GetUsersClicked += OnGetUsers;
-            _view.GetUsersGroupsClicked += OnGetUsersGroups;
-            _view.GetUserGroupsClicked += OnGetUserGroups;
-            _view.GetGroupUsersClicked += OnGetGroupUsers;
-            _view.GetUserDirectReportsClicked += OnGetUserDirectReports;
-            _view.GetGroupComputersClicked += OnGetGroupComputers;
+            _view.GetComputersButtonClicked +=
+                OnGetComputersButtonClicked;
+            _view.GetDirectReportsButtonClicked +=
+                OnGetDirectReportsButtonClicked;
+
+            _view.GetGroupsButtonClicked += OnGetGroupsButtonClicked;
+            _view.GetUsersButtonClicked += OnGetUsersButtonClicked;
+            _view.GetUsersGroupsButtonClicked += OnGetUsersGroupsButtonClicked;
+
+            _view.GetUserGroupsMenuItemClicked +=
+                OnGetUserGroupsMenuItemClicked;
+
+            _view.GetGroupUsersMenuItemClicked +=
+                OnGetGroupUsersMenuItemClicked;
+
+            _view.GetUserDirectReportsMenuItemClicked +=
+                OnGetUserDirectReportsMenuItemClicked;
+
+            _view.GetGroupComputersMenuItemClicked +=
+                OnGetGroupComputersMenuItemClicked;
+
+            _view.SearchButtonClicked += OnSearchButtonClicked;
         }
 
         private void FinishTask()
@@ -149,7 +164,7 @@ namespace ActiveDirectoryToolWpf
             _view.ToggleEnabled();
         }
 
-        private async void OnGetGroupComputers()
+        private async void OnGetGroupComputersMenuItemClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -170,7 +185,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetComputers()
+        private async void OnGetComputersButtonClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -186,7 +201,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetDirectReports()
+        private async void OnGetDirectReportsButtonClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -202,7 +217,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetGroups()
+        private async void OnGetGroupsButtonClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -218,7 +233,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetGroupUsers()
+        private async void OnGetGroupUsersMenuItemClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -239,7 +254,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetUserDirectReports()
+        private async void OnGetUserDirectReportsMenuItemClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -263,7 +278,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetUserGroups()
+        private async void OnGetUserGroupsMenuItemClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -287,7 +302,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetUsers()
+        private async void OnGetUsersButtonClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -303,7 +318,7 @@ namespace ActiveDirectoryToolWpf
             FinishTask();
         }
 
-        private async void OnGetUsersGroups()
+        private async void OnGetUsersGroupsButtonClicked()
         {
             StartTask();
             await Task.Run(() =>
@@ -325,6 +340,21 @@ namespace ActiveDirectoryToolWpf
             _view.ToggleProgressBarVisibility();
             _searcher = new ActiveDirectorySearcher(_view.Scope);
             _view.ToggleEnabled();
+        }
+
+        private void OnSearchButtonClicked()
+        {
+            StartTask();
+            var directoryEntry = new DirectoryEntry("LDAP://" + _view.Scope.Context);
+            var directorySearcher = new DirectorySearcher(directoryEntry);
+            var results = directorySearcher.FindAll();
+            foreach (SearchResult result in results)
+            {
+                var de = result.GetDirectoryEntry();
+                //Debug.WriteLine(de.SchemaClassName);
+                Debug.WriteLine(de.Properties["name"].Value);
+            }
+            FinishTask();
         }
     }
 }

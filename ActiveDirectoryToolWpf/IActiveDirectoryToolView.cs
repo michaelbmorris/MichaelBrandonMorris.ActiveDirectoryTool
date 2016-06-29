@@ -7,15 +7,18 @@ namespace ActiveDirectoryToolWpf
     {
         ActiveDirectoryScope Scope { get; }
         string SelectedItemDistinguishedName { get; set; }
-        event Action GetComputersClicked;
-        event Action GetDirectReportsClicked;
-        event Action GetGroupComputersClicked;
-        event Action GetGroupsClicked;
-        event Action GetGroupUsersClicked;
-        event Action GetUserDirectReportsClicked;
-        event Action GetUserGroupsClicked;
-        event Action GetUsersClicked;
-        event Action GetUsersGroupsClicked;
+        string SearchText { get; set; }
+        QueryType QueryType { get; set; }
+        event Action GetComputersButtonClicked;
+        event Action GetDirectReportsButtonClicked;
+        event Action GetGroupComputersMenuItemClicked;
+        event Action GetGroupsButtonClicked;
+        event Action GetGroupUsersMenuItemClicked;
+        event Action GetUserDirectReportsMenuItemClicked;
+        event Action GetUserGroupsMenuItemClicked;
+        event Action GetUsersButtonClicked;
+        event Action GetUsersGroupsButtonClicked;
+        event Action SearchButtonClicked;
         void GenerateContextMenu();
         void SetDataGridData(DataView dataView);
         void ShowMessage(string message);
