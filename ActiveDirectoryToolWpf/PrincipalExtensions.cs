@@ -4,9 +4,19 @@ using System.DirectoryServices.AccountManagement;
 using System.Linq;
 
 namespace ActiveDirectoryToolWpf
-{
+{ 
+
     public static class PrincipalExtensions
     {
+        private static readonly char[] _legalCharacters =
+        {
+            ' ',
+            '\\',
+            '/',
+            ',',
+            '.'
+        };
+
         public static DirectoryEntry GetAsDirectoryEntry(
             this Principal principal)
         {
@@ -29,7 +39,7 @@ namespace ActiveDirectoryToolWpf
 
         private static string Clean(this string s)
         {
-            return new string(s.Where(c => c.IsLetterOrDigit() || c.Equals(' ')).ToArray());
+            return new string(s.Where(c => c.IsLetterOrDigit() || c.EqualsAny(_legalCharacters)).ToArray());
         }
     }
 }
