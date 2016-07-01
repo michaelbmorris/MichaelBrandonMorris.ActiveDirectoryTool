@@ -290,7 +290,7 @@ namespace ActiveDirectoryToolWpf
             GetUserGroupsMenuItemClicked?.Invoke();
         }
 
-        private void SearchButton_OnClick(object sender, RoutedEventArgs e)
+        /*private void SearchButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (GroupRadioButton.IsChecked != null &&
                 GroupRadioButton.IsChecked.Value)
@@ -318,11 +318,11 @@ namespace ActiveDirectoryToolWpf
             else
                 SearchButtonClicked?.Invoke();
 
-        }
+        }*/
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        /*private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             SearchText = SearchTextBox.Text;
-        }
+        }*/
     }
 }

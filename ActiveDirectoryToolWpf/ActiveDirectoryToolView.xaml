@@ -33,111 +33,102 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="42px" />
-                <RowDefinition Height="32px"/>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="42px" />
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Button x:Name="GetUsersButton"
-                        Content="Get Users Only"
-                        HorizontalAlignment="Left"
-                        Margin="10,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="100"
-                        Click="GetUsersButton_OnClick" />
-                <Button x:Name="GetUsersGroupsButton"
-                        Content="Get Users with Groups"
-                        HorizontalAlignment="Left"
-                        Margin="115,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="130"
-                        Click="GetUsersGroupsButton_OnClick" />
-                <Button x:Name="GetGroupsButton"
-                        Content="Get Groups Only"
-                        HorizontalAlignment="Left"
-                        Margin="250,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="100"
-                        Click="GetGroupsButton_OnClick" />
-                <Button x:Name="GetDirectReports"
-                        Content="Get Users with Direct Reports"
-                        HorizontalAlignment="Left"
-                        Margin="355,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="160"
-                        Click="GetDirectReportsButton_OnClick" />
-                <Button x:Name="WriteToFileButton"
-                        Content="Write to File"
-                        HorizontalAlignment="Left"
-                        Margin="677,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="75"
-                        Click="WriteToFileButton_OnClick" />
-                <Button x:Name="GetComputersButton"
-                        Content="Get Computers Only"
-                        HorizontalAlignment="Left"
-                        Margin="520,10,0,0"
-                        VerticalAlignment="Top"
-                        Width="130" Click="GetComputersButton_OnClick" />
+                <DockPanel LastChildFill="False">
+                    <Separator DockPanel.Dock="Bottom"/>
+                    <Button Content="Get Users Only"
+                            DockPanel.Dock="Left"
+                            Margin="5,10,0,5"
+                            Width="100"
+                            Click="GetUsersButton_OnClick" />
+                    <Button Content="Get Users with Groups"
+                            DockPanel.Dock="Left"
+                            Margin="5,10,0,5"
+                            Width="130"
+                            Click="GetUsersGroupsButton_OnClick" />
+                    <Button Content="Get Groups Only"
+                            DockPanel.Dock="Left"
+                            Margin="5,10,0,5"
+                            Width="100"
+                            Click="GetGroupsButton_OnClick" />
+                    <Button Content="Get Users with Direct Reports"
+                            DockPanel.Dock="Left"
+                            Margin="5,10,0,5"
+                            Width="160"
+                            Click="GetDirectReportsButton_OnClick" />
+                    <Button Content="Get Computers Only"
+                            DockPanel.Dock="Left"
+                            Margin="5,10,0,5"
+                            Width="130"
+                            Click="GetComputersButton_OnClick" />
+                    <Button Content="Write to File"
+                            DockPanel.Dock="Right"
+                            Margin="0,10,5,5"
+                            Width="75"
+                            Click="WriteToFileButton_OnClick" />
+                </DockPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <TextBox x:Name="SearchTextBox"
-                         HorizontalAlignment="Left"
-                         Height="23" Margin="10,0,0,0"
-                         TextWrapping="Wrap"
-                         VerticalAlignment="Top"
-                         Width="235" TextChanged="SearchTextBox_TextChanged" IsEnabled="False"/>
-                <RadioButton x:Name="UserRadioButton"
-                             GroupName="SearchRadioButtons"
-                             Content="User"
-                             HorizontalAlignment="Left"
-                             Margin="250,3,0,0"
-                             VerticalAlignment="Top" IsEnabled="False"/>
-                <RadioButton x:Name="GroupRadioButton"
-                             GroupName="SearchRadioButtons"
-                             Content="Group"
-                             HorizontalAlignment="Left"
-                             Margin="295,3,0,0"
-                             VerticalAlignment="Top" IsEnabled="False"/>
-                <RadioButton x:Name="ComputerRadioButton"
-                             GroupName="SearchRadioButtons"
-                             Content="Computer"
-                             HorizontalAlignment="Left"
-                             Margin="349,3,0,0"
-                             VerticalAlignment="Top" IsEnabled="False"/>
-                <RadioButton x:Name="AnyRadioButton"
-                             GroupName="SearchRadioButtons"
-                             Content="Any"
-                             HorizontalAlignment="Left"
-                             Margin="423,3,0,0"
-                             VerticalAlignment="Top" 
-                             IsChecked="True" IsEnabled="False"/>
-                <Button x:Name="SearchButton"
-                        Content="Search"
-                        Click="SearchButton_OnClick"
-                        HorizontalAlignment="Left"
-                        Margin="464,0,0,10"
-                        VerticalAlignment="Bottom"
-                        Width="75" IsEnabled="False"/>
+                <DockPanel LastChildFill="False">
+                    <Separator DockPanel.Dock="Bottom"/>
+                    <TextBox DockPanel.Dock="Left"
+                             Margin="5,10,0,5"
+                             TextWrapping="NoWrap"
+                             Width="235"
+                             IsEnabled="False" />
+                    <RadioButton DockPanel.Dock="Left"
+                                 GroupName="SearchRadioButtons"
+                                 Content="User"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,13,0,5"
+                                 VerticalAlignment="Top"
+                                 IsEnabled="False" />
+                    <RadioButton DockPanel.Dock="Left"
+                                 GroupName="SearchRadioButtons"
+                                 Content="Group"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,13,0,5"
+                                 VerticalAlignment="Top"
+                                 IsEnabled="False" />
+                    <RadioButton DockPanel.Dock="Left"
+                                 GroupName="SearchRadioButtons"
+                                 Content="Computer"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,13,0,5"
+                                 VerticalAlignment="Top" IsEnabled="False" />
+                    <RadioButton x:Name="AnyRadioButton"
+                                 DockPanel.Dock="Left"
+                                 GroupName="SearchRadioButtons"
+                                 Content="Any"
+                                 HorizontalAlignment="Left"
+                                 Margin="5,13,0,5"
+                                 VerticalAlignment="Top"
+                                 IsChecked="True" IsEnabled="False" />
+                    <Button DockPanel.Dock="Left"
+                            Content="Search"
+                            HorizontalAlignment="Left"
+                            Margin="5,10,0,5"
+                            VerticalAlignment="Bottom"
+                            Width="75" IsEnabled="False" />
+                </DockPanel>
             </Grid>
             <Grid Grid.Row="2">
-                <DataGrid x:Name="DataGrid"
+                <DockPanel>
+                    <DataGrid x:Name="DataGrid"
+                              DockPanel.Dock="Top"
                           AutoGenerateColumns="True"
                           AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
-                          HorizontalAlignment="Left"
                           IsReadOnly="True"
                           ItemsSource="{Binding IsAsync=True}"
-                          Margin="10,0,0,0"
-                          MaxHeight="9001"
-                          MaxWidth="9001"
-                          MinHeight="464"
-                          MinWidth="742"
-                          RenderTransformOrigin="2.25,-3.615"
-                          VerticalAlignment="Top" />
+                          Margin="5,10,5,0"/>
+                </DockPanel>
                 <ProgressBar x:Name="ProgressBar"
-                             HorizontalAlignment="Left"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"
                              Height="10"
-                             Margin="326,242,0,0"
-                             VerticalAlignment="Top"
                              Width="100"
                              IsIndeterminate="true" />
             </Grid>
