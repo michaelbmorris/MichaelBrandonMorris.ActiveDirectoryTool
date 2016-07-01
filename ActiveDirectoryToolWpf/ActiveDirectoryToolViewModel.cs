@@ -1,21 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ActiveDirectoryToolWpf
 {
-    public class ActiveDirectoryToolViewModel
+    public enum QueryType
     {
-        private const string NoResultsErrorMessage =
-            "No results found. Please ensure you are searching for the " +
-            "correct principal type in the correct OU.";
+        OrganizationalUnitComputers,
+        OrganizationalUnitGroups,
+        OrganizationalUnitUsers,
+        OrganizationalUnitUsersDirectReports,
+        OrganizationalUnitUsersGroups
+    }
 
+    public class ActiveDirectoryToolViewModel : INotifyPropertyChanged
+    {
         private static readonly ActiveDirectoryAttribute[]
             DefaultComputerAttributes =
             {
@@ -25,7 +33,7 @@ namespace ActiveDirectoryToolWpf
             };
 
         private static readonly ActiveDirectoryAttribute[]
-            DefaultDirectReportsAttributes =
+            DefaultUserDirectReportsAttributes =
             {
                 ActiveDirectoryAttribute.UserDisplayName,
                 ActiveDirectoryAttribute.UserSamAccountName,
@@ -118,243 +126,342 @@ namespace ActiveDirectoryToolWpf
                 ActiveDirectoryAttribute.GroupDistinguishedName
             };
 
-        private readonly IActiveDirectoryToolView _view;
-        private IEnumerable<ExpandoObject> _data;
+        private ActiveDirectorySearcher _activeDirectorySearcher;
+        private DataView _data;
         private DataPreparer _dataPreparer;
-        private ActiveDirectorySearcher _searcher;
 
-        public ActiveDirectoryToolViewModel(IActiveDirectoryToolView view)
+        private string _messageContent;
+
+        private Visibility _messageVisibility;
+        private Visibility _progressBarVisibility;
+
+        private QueryType _queryType;
+        private bool _viewIsEnabled;
+
+        public ActiveDirectoryToolViewModel()
         {
-            _view = view;
-            _view.GetComputersButtonClicked +=
-                OnGetComputersButtonClicked;
-            _view.GetDirectReportsButtonClicked +=
-                OnGetDirectReportsButtonClicked;
-
-            _view.GetGroupsButtonClicked += OnGetGroupsButtonClicked;
-            _view.GetUsersButtonClicked += OnGetUsersButtonClicked;
-            _view.GetUsersGroupsButtonClicked += OnGetUsersGroupsButtonClicked;
-
-            _view.GetUserGroupsMenuItemClicked +=
-                OnGetUserGroupsMenuItemClicked;
-
-            _view.GetGroupUsersMenuItemClicked +=
-                OnGetGroupUsersMenuItemClicked;
-
-            _view.GetUserDirectReportsMenuItemClicked +=
-                OnGetUserDirectReportsMenuItemClicked;
-
-            _view.GetGroupComputersMenuItemClicked +=
-                OnGetGroupComputersMenuItemClicked;
-
-            _view.SearchButtonClicked += OnSearchButtonClicked;
+            RootScope = new ActiveDirectoryScopeFetcher().Scope;
+            SetViewVariables();
         }
 
-        private void FinishTask()
+        public ActiveDirectoryScope CurrentScope
         {
-            _view.ToggleProgressBarVisibility();
-            try
+            get;
+            set;
+        }
+
+        public DataView Data
+        {
+            get { return _data; }
+            private set
             {
-                _view.SetDataGridData(_data.ToDataTable().AsDataView());
+                _data = value;
+                NotifyPropertyChanged();
             }
-            catch (ArgumentNullException)
+        }
+
+        public ICommand GetOuComputersCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand GetOuGroupsCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand GetOuUsersCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand GetOuUsersGroupsCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand GetOuUsersDirectReportsCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand WriteToFileCommand
+        {
+            get;
+            private set;
+        }
+
+        public string MessageContent
+        {
+            get { return _messageContent; }
+            set
             {
-                _view.ShowMessage(NoResultsErrorMessage);
+                _messageContent = value;
+                NotifyPropertyChanged();
             }
-
-            _view.GenerateContextMenu();
-            _view.ToggleEnabled();
         }
 
-        private async void OnGetGroupComputersMenuItemClicked()
+        public QueryType QueryType
         {
-            StartTask();
-            await Task.Run(() =>
+            get { return _queryType; }
+            set
             {
-                var principalContext = new PrincipalContext(
-                    ContextType.Domain);
-                var groupPrincipal = GroupPrincipal.FindByIdentity(
-                    principalContext, _view.SelectedItemDistinguishedName);
-                _dataPreparer = new DataPreparer
-                {
-                    Data = ActiveDirectorySearcher.GetComputersFromGroup(
-                        groupPrincipal),
-                    Attributes = DefaultComputerAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+                _queryType = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private async void OnGetComputersButtonClicked()
+        public Visibility MessageVisibility
         {
-            StartTask();
-            await Task.Run(() =>
+            get { return _messageVisibility; }
+            set
             {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _searcher.GetComputers(),
-                    Attributes = DefaultComputerAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+                _messageVisibility = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private async void OnGetDirectReportsButtonClicked()
+        public Visibility ProgressBarVisibility
         {
-            StartTask();
-            await Task.Run(() =>
+            get { return _progressBarVisibility; }
+            set
             {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _searcher.GetDirectReports(),
-                    Attributes = DefaultDirectReportsAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+                _progressBarVisibility = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private async void OnGetGroupsButtonClicked()
+        public ActiveDirectoryScope RootScope
         {
-            StartTask();
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _searcher.GetGroups(),
-                    Attributes = DefaultGroupAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+            get;
         }
 
-        private async void OnGetGroupUsersMenuItemClicked()
+        public bool ViewIsEnabled
         {
-            StartTask();
-            await Task.Run(() =>
+            get { return _viewIsEnabled; }
+            private set
             {
-                var principalContext = new PrincipalContext(
-                    ContextType.Domain);
-                var groupPrincipal = GroupPrincipal.FindByIdentity(
-                    principalContext, _view.SelectedItemDistinguishedName);
-                _dataPreparer = new DataPreparer
-                {
-                    Data = ActiveDirectorySearcher.GetUsersFromGroup(
-                        groupPrincipal),
-                    Attributes = DefaultGroupUsersAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+                _viewIsEnabled = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private async void OnGetUserDirectReportsMenuItemClicked()
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void StartOuTask()
         {
             StartTask();
-            await Task.Run(() =>
-            {
-                var principalContext = new PrincipalContext(
-                    ContextType.Domain);
-                var userPrincipal = UserPrincipal.FindByIdentity(
-                    principalContext, _view.SelectedItemDistinguishedName);
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetDirectReportsFromUser(
-                            userPrincipal)
-                    },
-                    Attributes = DefaultDirectReportsAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
-        }
-
-        private async void OnGetUserGroupsMenuItemClicked()
-        {
-            StartTask();
-            await Task.Run(() =>
-            {
-                var principalContext = new PrincipalContext(
-                    ContextType.Domain);
-                var userPrincipal = UserPrincipal.FindByIdentity(
-                    principalContext, _view.SelectedItemDistinguishedName);
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUserGroupsFromUser(
-                            userPrincipal)
-                    },
-                    Attributes = DefaultUserGroupsAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
-        }
-
-        private async void OnGetUsersButtonClicked()
-        {
-            StartTask();
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _searcher.GetUsers(),
-                    Attributes = DefaultUserAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
-        }
-
-        private async void OnGetUsersGroupsButtonClicked()
-        {
-            StartTask();
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _searcher.GetUsersGroups(),
-                    Attributes = DefaultUserGroupsAttributes.ToList()
-                };
-                _data = _dataPreparer.GetResults();
-            });
-
-            FinishTask();
+            _activeDirectorySearcher = new ActiveDirectorySearcher(
+                CurrentScope);
         }
 
         private void StartTask()
         {
-            _view.SetDataGridData(null);
-            _view.ToggleProgressBarVisibility();
-            _searcher = new ActiveDirectorySearcher(_view.Scope);
-            _view.ToggleEnabled();
+            HideMessage();
+            ViewIsEnabled = false;
+            ProgressBarVisibility = Visibility.Visible;
         }
 
-        private void OnSearchButtonClicked()
+        private void ShowMessage(string messageContent)
+        {
+            MessageContent = messageContent + "\n\nDouble-click to dismiss.";
+            MessageVisibility = Visibility.Visible;
+        }
+
+        private void HideMessage()
+        {
+            MessageContent = string.Empty;
+            MessageVisibility = Visibility.Hidden;
+        }
+
+        private void FinishTask()
+        {
+            ProgressBarVisibility = Visibility.Hidden;
+            ViewIsEnabled = true;
+        }
+
+        private async void GetOuComputersCommandExecute()
+        {
+            StartOuTask();
+            QueryType = QueryType.OrganizationalUnitComputers;
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _activeDirectorySearcher.GetOuComputers(),
+                    Attributes = DefaultComputerAttributes.ToList()
+                };
+                try
+                {
+                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
+                        .ToDataTable().AsDataView();
+                }
+                catch (ArgumentNullException)
+                {
+                    ShowMessage("No computers found in selected OU.");
+                }
+            });
+            FinishTask();
+        }
+
+        private async void GetOuGroupsCommandExecute()
+        {
+            StartOuTask();
+            QueryType = QueryType.OrganizationalUnitGroups;
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _activeDirectorySearcher.GetOuGroups(),
+                    Attributes = DefaultGroupAttributes.ToList()
+                };
+                try
+                {
+                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
+                        .ToDataTable().AsDataView();
+                }
+                catch (ArgumentNullException)
+                {
+                    ShowMessage("No groups found in selected OU.");
+                }
+            });
+            FinishTask();
+        }
+
+        private async void GetOuUsersCommandExecute()
+        {
+            StartOuTask();
+            QueryType = QueryType.OrganizationalUnitUsers;
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _activeDirectorySearcher.GetOuUsers(),
+                    Attributes = DefaultUserAttributes.ToList()
+                };
+                try
+                {
+                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
+                        .ToDataTable().AsDataView();
+                }
+                catch (ArgumentNullException)
+                {
+                    ShowMessage("No users found in selected OU.");
+                }
+            });
+            FinishTask();
+        }
+
+        private async void GetOuUsersDirectReportsCommandExecute()
+        {
+            StartOuTask();
+            QueryType = QueryType.OrganizationalUnitUsersDirectReports;
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _activeDirectorySearcher.GetOuUsersDirectReports(),
+                    Attributes = DefaultUserDirectReportsAttributes.ToList()
+                };
+                try
+                {
+                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
+                        .ToDataTable().AsDataView();
+                }
+                catch (ArgumentNullException)
+                {
+                    ShowMessage(
+                        "No users and/or direct reports found in selected OU.");
+                }
+            });
+            FinishTask();
+        }
+
+        private async void GetOuUsersGroupsCommandExecute()
+        {
+            StartOuTask();
+            QueryType = QueryType.OrganizationalUnitUsersGroups;
+            await Task.Run(() =>
+            {
+                _dataPreparer = new DataPreparer
+                {
+                    Data = _activeDirectorySearcher.GetOuUsersGroups(),
+                    Attributes = DefaultUserGroupsAttributes.ToList()
+                };
+                try
+                {
+                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
+                        .ToDataTable().AsDataView();
+                }
+                catch (ArgumentNullException)
+                {
+                    ShowMessage(
+                        "No users and/or groups found in selected OU.");
+                }
+            });
+            FinishTask();
+        }
+
+        private async void WriteToFileCommandExecute()
         {
             StartTask();
-            var directoryEntry = new DirectoryEntry("LDAP://" + _view.Scope.Context);
-            var directorySearcher = new DirectorySearcher(directoryEntry);
-            var results = directorySearcher.FindAll();
-            foreach (SearchResult result in results)
+            await Task.Run(() =>
             {
-                var de = result.GetDirectoryEntry();
-            }
+                var fileWriter = new DataFileWriter
+                {
+                    Data = Data,
+                    Scope = CurrentScope.Context,
+                    QueryType = QueryType
+                };
+                ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
+            });
             FinishTask();
+        }
+
+        private bool WriteToFileCommandCanExecute()
+        {
+            return (Data != null && Data.Count > 0);
+        }
+
+        private void NotifyPropertyChanged(
+            [CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(
+                this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private bool OuCommandCanExecute()
+        {
+            return CurrentScope != null;
+        }
+
+        private void SetUpCommands()
+        {
+            GetOuComputersCommand = new RelayCommand(
+                GetOuComputersCommandExecute, OuCommandCanExecute);
+            GetOuGroupsCommand = new RelayCommand(
+                GetOuGroupsCommandExecute, OuCommandCanExecute);
+            GetOuUsersCommand = new RelayCommand(
+                GetOuUsersCommandExecute, OuCommandCanExecute);
+            GetOuUsersDirectReportsCommand = new RelayCommand(
+                GetOuUsersDirectReportsCommandExecute, OuCommandCanExecute);
+            GetOuUsersGroupsCommand = new RelayCommand(
+                GetOuUsersGroupsCommandExecute, OuCommandCanExecute);
+            WriteToFileCommand = new RelayCommand(
+                WriteToFileCommandExecute, WriteToFileCommandCanExecute);
+        }
+
+        private void SetViewVariables()
+        {
+            ProgressBarVisibility = Visibility.Hidden;
+            MessageVisibility = Visibility.Hidden;
+            ViewIsEnabled = true;
+            SetUpCommands();
         }
     }
 }

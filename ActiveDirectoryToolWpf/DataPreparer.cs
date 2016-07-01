@@ -204,7 +204,7 @@ namespace ActiveDirectoryToolWpf
         internal List<ActiveDirectoryAttribute> Attributes { get; set; }
         internal IEnumerable<object> Data { get; set; }
 
-        internal List<ExpandoObject> GetResults()
+        internal IEnumerable<ExpandoObject> GetResults()
         {
             var results = new List<ExpandoObject>();
 

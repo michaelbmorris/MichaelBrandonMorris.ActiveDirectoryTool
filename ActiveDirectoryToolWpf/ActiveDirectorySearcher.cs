@@ -144,27 +144,27 @@ namespace ActiveDirectoryToolWpf
             return users;
         }
 
-        public IEnumerable<ComputerPrincipal> GetComputers()
+        public IEnumerable<ComputerPrincipal> GetOuComputers()
         {
             return GetComputersFromContext(PrincipalContext);
         }
 
-        public IEnumerable<DirectReports> GetDirectReports()
+        public IEnumerable<DirectReports> GetOuUsersDirectReports()
         {
             return GetDirectReportsFromContext(PrincipalContext);
         }
 
-        public IEnumerable<GroupPrincipal> GetGroups()
+        public IEnumerable<GroupPrincipal> GetOuGroups()
         {
             return GetGroupsFromContext(PrincipalContext);
         }
 
-        public IEnumerable<UserPrincipal> GetUsers()
+        public IEnumerable<UserPrincipal> GetOuUsers()
         {
             return GetUsersFromContext(PrincipalContext);
         }
 
-        public IEnumerable<UserGroups> GetUsersGroups()
+        public IEnumerable<UserGroups> GetOuUsersGroups()
         {
             return GetUsersGroupsFromContext(PrincipalContext);
         }

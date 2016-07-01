@@ -4,5 +4,6 @@
              xmlns:local="clr-namespace:ActiveDirectoryToolWpf"
              StartupUri="ActiveDirectoryToolView.xaml">
     <Application.Resources>
+        <local:ActiveDirectoryToolViewModel x:Key="MainViewModel"/>
     </Application.Resources>
 </Application>

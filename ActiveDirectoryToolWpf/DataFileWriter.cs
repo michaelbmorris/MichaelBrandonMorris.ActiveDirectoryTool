@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Linq;
+using System.Text;
 using PrimitiveExtensions;
 using static System.Environment;
 using static System.Environment.SpecialFolder;
@@ -17,27 +17,31 @@ namespace ActiveDirectoryToolWpf
         private readonly string _outputPath = Path.Combine(
             GetFolderPath(MyDocuments), "ActiveDirectoryTool");
 
-        public DataGrid Data { get; set; }
+        public DataView Data { get; set; }
         public QueryType QueryType { get; set; }
         public string Scope { get; set; }
 
         public string WriteToCsv()
         {
-            Data.SelectAllCells();
-            Data.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
-            ApplicationCommands.Copy.Execute(null, Data);
-            Data.UnselectAllCells();
-            var result = (string) Clipboard.GetData(
-                DataFormats.CommaSeparatedValue);
-            Clipboard.Clear();
             var fileName = Scope.Remove("OU=").Remove("DC=").Replace(',', '-')
                            + "--" + QueryType + '-' +
                            DateTime.Now.ToString(DateTimeFormat) + ".csv";
             var fullFileName = Path.Combine(_outputPath, fileName);
-            using (var writer = new StreamWriter(fullFileName))
+            var dataTable = Data.ToTable();
+            var stringBuilder = new StringBuilder();
+
+            var columnNames = dataTable.Columns.Cast<DataColumn>().Select(
+                column => column.ColumnName);
+            stringBuilder.AppendLine(string.Join(",", columnNames));
+
+            foreach (DataRow row in dataTable.Rows)
             {
-                writer.WriteLine(result);
+                var fields = row.ItemArray.Select(field => string.Concat(
+                        "\"", field.ToString().Replace("\"", "\"\""), "\""));
+                stringBuilder.AppendLine(string.Join(",", fields));
             }
+
+            File.WriteAllText(fullFileName, stringBuilder.ToString());
             Process.Start(fullFileName);
             return fullFileName;
         }
