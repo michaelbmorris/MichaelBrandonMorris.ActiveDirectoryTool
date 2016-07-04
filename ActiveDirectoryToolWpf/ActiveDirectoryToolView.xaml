@@ -17,8 +17,10 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Help">
-                <MenuItem Header="About"/>
-                <MenuItem Header="User Guide"/>
+                <MenuItem Header="About"
+                          Command="{Binding OpenAboutWindowCommand}" />
+                <MenuItem Header="User Guide"
+                          Command="{Binding OpenHelpWindowCommand}" />
             </MenuItem>
         </Menu>
         <Grid>
@@ -29,16 +31,16 @@
             <Grid Grid.Row="0">
                 <Grid Grid.Column="0">
                     <TreeView x:Name="TreeView"
-                          ItemsSource="{Binding RootScope.Children}">
+                              ItemsSource="{Binding RootScope.Children}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate
-                            ItemsSource="{Binding Children}">
+                                ItemsSource="{Binding Children}">
                                 <TextBlock Text="{Binding}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                         <i:Interaction.Behaviors>
                             <activeDirectoryToolWpf:BindableSelectedItemBehavior
-                            SelectedItem="{Binding CurrentScope, Mode=TwoWay}" />
+                                SelectedItem="{Binding CurrentScope, Mode=TwoWay}" />
                         </i:Interaction.Behaviors>
                     </TreeView>
                 </Grid>
@@ -52,95 +54,101 @@
                 <Grid Grid.Row="0">
                     <DockPanel LastChildFill="False">
                         <Label DockPanel.Dock="Top"
-                           Content="Organizational Unit Operations" />
+                               Content="Organizational Unit Operations" />
                         <Separator DockPanel.Dock="Bottom" />
                         <Button Content="Get Users"
-                            Command="{Binding GetOuUsersCommand}"
-                            DockPanel.Dock="Left"
-                            Margin="5,0,0,5" />
+                                Command="{Binding GetOuUsersCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
                         <Button Content="Get Users with Groups"
-                            Command="{Binding GetOuUsersGroupsCommand}"
-                            DockPanel.Dock="Left"
-                            Margin="5,0,0,5" />
+                                Command="{Binding GetOuUsersGroupsCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
                         <Button Content="Get Groups Only"
-                            Command="{Binding GetOuGroupsCommand}"
-                            DockPanel.Dock="Left"
-                            Margin="5,0,0,5" />
+                                Command="{Binding GetOuGroupsCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
                         <Button Content="Get Users with Direct Reports"
-                            Command="{Binding GetOuUsersDirectReportsCommand}"
-                            DockPanel.Dock="Left"
-                            Margin="5,0,0,5" />
+                                Command="{Binding GetOuUsersDirectReportsCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
                         <Button Content="Get Computers"
-                            Command="{Binding GetOuComputersCommand}"
-                            DockPanel.Dock="Left"
-                            Margin="5,0,0,5" />
+                                Command="{Binding GetOuComputersCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
                         <Button Content="Write to File"
-                            Command="{Binding WriteToFileCommand}"
-                            DockPanel.Dock="Right"
-                            Margin="0,0,5,5" />
+                                Command="{Binding WriteToFileCommand}"
+                                DockPanel.Dock="Right"
+                                Margin="0,0,5,5" />
                     </DockPanel>
                 </Grid>
                 <Grid Grid.Row="1">
                     <DockPanel LastChildFill="False">
                         <Label DockPanel.Dock="Top"
-                           Content="Search" />
+                               Content="Search" />
                         <Separator DockPanel.Dock="Bottom" />
                         <TextBox DockPanel.Dock="Left"
-                             Margin="5,0,0,5"
-                             TextWrapping="NoWrap"
-                             Width="200"
-                             IsEnabled="False" />
-                        <RadioButton DockPanel.Dock="Left"
-                                 GroupName="SearchRadioButtons"
-                                 Content="User"
-                                 Margin="5,3,0,5"
+                                 Margin="5,0,0,5"
+                                 TextWrapping="NoWrap"
+                                 Width="200"
                                  IsEnabled="False" />
                         <RadioButton DockPanel.Dock="Left"
-                                 GroupName="SearchRadioButtons"
-                                 Content="Group"
-                                 Margin="5,3,0,5"
-                                 IsEnabled="False" />
+                                     GroupName="SearchRadioButtons"
+                                     Content="User"
+                                     Margin="5,3,0,5"
+                                     IsEnabled="False" />
                         <RadioButton DockPanel.Dock="Left"
-                                 GroupName="SearchRadioButtons"
-                                 Content="Computer"
-                                 Margin="5,3,0,5"
-                                 IsEnabled="False" />
+                                     GroupName="SearchRadioButtons"
+                                     Content="Group"
+                                     Margin="5,3,0,5"
+                                     IsEnabled="False" />
+                        <RadioButton DockPanel.Dock="Left"
+                                     GroupName="SearchRadioButtons"
+                                     Content="Computer"
+                                     Margin="5,3,0,5"
+                                     IsEnabled="False" />
                         <Button DockPanel.Dock="Left"
-                            Content="Search in Organizational Unit"
-                            Margin="5,0,0,5"
-                            IsEnabled="False" />
+                                Content="Search in Organizational Unit"
+                                Margin="5,0,0,5"
+                                IsEnabled="False" />
                         <Button DockPanel.Dock="Left"
-                            Content="Search in Whole Active Directory"
-                            Margin="5,0,0,5"
-                            IsEnabled="False" />
+                                Content="Search in Whole Active Directory"
+                                Margin="5,0,0,5"
+                                IsEnabled="False" />
                     </DockPanel>
                 </Grid>
                 <Grid Grid.Row="2">
                     <DockPanel>
                         <DataGrid DockPanel.Dock="Top"
-                              ItemsSource="{Binding Data}"
-                              AutoGenerateColumns="True"
-                              IsReadOnly="True"
-                              EnableColumnVirtualization="True"
-                              EnableRowVirtualization="True"
-                              Margin="5,10,5,0"
-                              AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" />
+                                  ItemsSource="{Binding Data}"
+                                  AutoGenerateColumns="True"
+                                  IsReadOnly="True"
+                                  EnableColumnVirtualization="True"
+                                  EnableRowVirtualization="True"
+                                  Margin="5,10,5,0"
+                                  AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
+                                  SelectedItem="{Binding SelectedDataGridRow, Mode=TwoWay}">
+                            <DataGrid.ContextMenu>
+                                <ContextMenu ItemsSource="{Binding ContextMenu}"/>
+                            </DataGrid.ContextMenu>
+                            
+                        </DataGrid>
                     </DockPanel>
                     <ProgressBar HorizontalAlignment="Center"
-                             VerticalAlignment="Center"
-                             Height="10"
-                             Width="100"
-                             IsIndeterminate="true"
-                             Visibility="{Binding ProgressBarVisibility}" />
+                                 VerticalAlignment="Center"
+                                 Height="10"
+                                 Width="100"
+                                 IsIndeterminate="true"
+                                 Visibility="{Binding ProgressBarVisibility}" />
                     <Label HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       HorizontalContentAlignment="Center"
-                       Background="White"
-                       BorderThickness="1"
-                       BorderBrush="Black"
-                       Content="{Binding Path=MessageContent, Mode=TwoWay}"
-                       Visibility="{Binding Path=MessageVisibility, Mode=TwoWay}"
-                       MouseDoubleClick="Label_MouseDoubleClick" />
+                           VerticalAlignment="Center"
+                           HorizontalContentAlignment="Center"
+                           Background="White"
+                           BorderThickness="1"
+                           BorderBrush="Black"
+                           Content="{Binding Path=MessageContent, Mode=TwoWay}"
+                           Visibility="{Binding Path=MessageVisibility, Mode=TwoWay}"
+                           MouseDoubleClick="Label_MouseDoubleClick" />
                 </Grid>
             </Grid>
         </Grid>

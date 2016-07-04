@@ -1,0 +1,25 @@
+﻿<Window x:Class="ActiveDirectoryToolWpf.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        DataContext="{StaticResource MainViewModel}"
+        Title="About"
+        Height="90"
+        Width="300"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel>
+        <Label>
+            <Label.Content>
+                <Binding Path="Version" />
+            </Label.Content>
+            <Label.ContentStringFormat>
+                Active Directory Tool {0}
+            </Label.ContentStringFormat>
+        </Label>
+        <Label>
+            Copyright © Michael Brandon Morris 2016
+        </Label>
+    </StackPanel>
+</Window>

@@ -210,48 +210,61 @@ namespace ActiveDirectoryToolWpf
 
             foreach (var data in Data)
             {
-                GroupPrincipal groupPrincipal;
-                UserPrincipal userPrincipal;
                 if (data is UserGroups)
                 {
                     var userGroups = data as UserGroups;
-                    userPrincipal = userGroups.User;
                     foreach (var group in userGroups.Groups)
                     {
-                        groupPrincipal = group;
                         dynamic result = new ExpandoObject();
                         AddAttributesToResult(
-                            null, groupPrincipal, null, userPrincipal, result);
+                            result,
+                            groupPrincipal:group,
+                            userPrincipal:userGroups.User);
                         results.Add(result);
                     }
                     userGroups.Dispose();
                 }
-                else if (data is DirectReports)
+                else if (data is UserDirectReports)
                 {
-                    var directReports = data as DirectReports;
-                    if (directReports.Reports == null) continue;
-                    userPrincipal = directReports.User;
-                    foreach (var directReport in directReports.Reports)
+                    var directReports = data as UserDirectReports;
+                    if (directReports.DirectReports == null) continue;
+                    foreach (var directReport in directReports.DirectReports)
                     {
                         dynamic result = new ExpandoObject();
                         AddAttributesToResult(
-                            null, null, directReport, userPrincipal, result);
+                            result,
+                            directReportUserPrincipal:directReport,
+                            userPrincipal:directReports.User);
                         results.Add(result);
                     }
                     directReports.Dispose();
                 }
+                else if (data is ComputerGroups)
+                {
+                    var computerGroups = data as ComputerGroups;
+                    if (computerGroups.Groups == null) continue;
+                    foreach (var group in computerGroups.Groups)
+                    {
+                        dynamic result = new ExpandoObject();
+                        AddAttributesToResult(
+                            result,
+                            computerPrincipal:computerGroups.Computer,
+                            groupPrincipal:group);
+                        results.Add(result);
+                    }
+                }
                 else
                 {
                     var computerPrincipal = data as ComputerPrincipal;
-                    groupPrincipal = data as GroupPrincipal;
-                    userPrincipal = data as UserPrincipal;
+                    var groupPrincipal = data as GroupPrincipal;
+                    var userPrincipal = data as UserPrincipal;
                     dynamic result = new ExpandoObject();
                     AddAttributesToResult(
+                        result,
                         computerPrincipal,
                         groupPrincipal,
                         null,
-                        userPrincipal,
-                        result);
+                        userPrincipal);
                     results.Add(result);
                     var principal = data as Principal;
                     principal?.Dispose();
@@ -714,11 +727,11 @@ namespace ActiveDirectoryToolWpf
         }
 
         private void AddAttributesToResult(
-            ComputerPrincipal computerPrincipal,
-            GroupPrincipal groupPrincipal,
-            UserPrincipal directReportUserPrincipal,
-            UserPrincipal userPrincipal,
-            dynamic result)
+            dynamic result,
+            ComputerPrincipal computerPrincipal = null,
+            GroupPrincipal groupPrincipal = null,
+            UserPrincipal directReportUserPrincipal = null,
+            UserPrincipal userPrincipal = null)
         {
             foreach (var attribute in Attributes)
             {

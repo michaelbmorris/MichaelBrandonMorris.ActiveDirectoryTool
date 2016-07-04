@@ -1,0 +1,19 @@
+﻿<Page x:Class="ActiveDirectoryToolWpf.HelpMainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Help">
+    <StackPanel>
+        <TextBlock TextWrapping="Wrap"
+                   Margin="5 5 5 5">
+            Welcome to the Active Directory Tool! This application runs queries
+            on the local active directory, retrieving a variety of reports that
+            can be opened in Microsoft Excel for further processing. Please 
+            select a topic below to learn more.
+        </TextBlock>
+        <Label>
+            <Hyperlink Click="QueryTypesHyperlink_OnClick">
+                Query Types
+            </Hyperlink>
+        </Label>
+    </StackPanel>
+</Page>
