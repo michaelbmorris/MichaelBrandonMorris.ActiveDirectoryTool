@@ -122,6 +122,7 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ActiveDirectoryQuery.cs" />
     <Compile Include="ActiveDirectoryToolViewModel.cs" />
     <Compile Include="BindableSelectedItemBehavior.cs" />
     <Compile Include="DataFileWriter.cs" />

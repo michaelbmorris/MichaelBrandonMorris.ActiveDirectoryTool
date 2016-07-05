@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
-using System.DirectoryServices.AccountManagement;
-using System.Dynamic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,172 +13,24 @@ using static System.Deployment.Application.ApplicationDeployment;
 
 namespace ActiveDirectoryToolWpf
 {
-    public enum QueryType
-    {
-        ContextualComputerGroups,
-        ContextualDirectReportDirectReports,
-        ContextualDirectReportGroups,
-        ContextualGroupComputers,
-        ContextualGroupUsersDirectReports,
-        ContextualGroupUsers,
-        ContextualUserDirectReports,
-        ContextualUserGroups,
-        OrganizationalUnitComputers,
-        OrganizationalUnitGroups,
-        OrganizationalUnitUsers,
-        OrganizationalUnitUsersDirectReports,
-        OrganizationalUnitUsersGroups
-    }
-
     public class ActiveDirectoryToolViewModel : INotifyPropertyChanged
     {
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultComputerAttributes =
-            {
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.ComputerDescription,
-                ActiveDirectoryAttribute.ComputerDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultComputerGroupsAttributes =
-            {
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ComputerDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupAttributes =
-            {
-                ActiveDirectoryAttribute.GroupSamAccountName,
-                ActiveDirectoryAttribute.GroupManagedBy,
-                ActiveDirectoryAttribute.GroupDescription,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupComputersAttributes =
-            {
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.GroupDistinguishedName,
-                ActiveDirectoryAttribute.ComputerDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersAttributes =
-            {
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.UserSurname,
-                ActiveDirectoryAttribute.UserGivenName,
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.UserIsActive,
-                ActiveDirectoryAttribute.UserIsAccountLockedOut,
-                ActiveDirectoryAttribute.UserDescription,
-                ActiveDirectoryAttribute.UserTitle,
-                ActiveDirectoryAttribute.UserCompany,
-                ActiveDirectoryAttribute.UserManager,
-                ActiveDirectoryAttribute.UserHomeDrive,
-                ActiveDirectoryAttribute.UserHomeDirectory,
-                ActiveDirectoryAttribute.UserScriptPath,
-                ActiveDirectoryAttribute.UserEmailAddress,
-                ActiveDirectoryAttribute.UserStreetAddress,
-                ActiveDirectoryAttribute.UserCity,
-                ActiveDirectoryAttribute.UserState,
-                ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
-                ActiveDirectoryAttribute.UserPager,
-                ActiveDirectoryAttribute.UserMobile,
-                ActiveDirectoryAttribute.UserFax,
-                ActiveDirectoryAttribute.UserVoip,
-                ActiveDirectoryAttribute.UserSip,
-                ActiveDirectoryAttribute.UserUserPrincipalName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersDirectReportsAttributes =
-            {
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.DirectReportDisplayName,
-                ActiveDirectoryAttribute.DirectReportSamAccountName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.DirectReportDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserAttributes =
-            {
-                ActiveDirectoryAttribute.UserSurname,
-                ActiveDirectoryAttribute.UserGivenName,
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.UserIsActive,
-                ActiveDirectoryAttribute.UserIsAccountLockedOut,
-                ActiveDirectoryAttribute.UserDescription,
-                ActiveDirectoryAttribute.UserTitle,
-                ActiveDirectoryAttribute.UserCompany,
-                ActiveDirectoryAttribute.UserManager,
-                ActiveDirectoryAttribute.UserHomeDrive,
-                ActiveDirectoryAttribute.UserHomeDirectory,
-                ActiveDirectoryAttribute.UserScriptPath,
-                ActiveDirectoryAttribute.UserEmailAddress,
-                ActiveDirectoryAttribute.UserStreetAddress,
-                ActiveDirectoryAttribute.UserCity,
-                ActiveDirectoryAttribute.UserState,
-                ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
-                ActiveDirectoryAttribute.UserPager,
-                ActiveDirectoryAttribute.UserMobile,
-                ActiveDirectoryAttribute.UserFax,
-                ActiveDirectoryAttribute.UserVoip,
-                ActiveDirectoryAttribute.UserSip,
-                ActiveDirectoryAttribute.UserUserPrincipalName,
-                ActiveDirectoryAttribute.UserDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserDirectReportsAttributes =
-            {
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.DirectReportDisplayName,
-                ActiveDirectoryAttribute.DirectReportSamAccountName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.DirectReportDistinguishedName
-            };
-
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserGroupsAttributes =
-            {
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.GroupSamAccountName,
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
         private readonly MenuItem _computerGetGroupsMenuItem;
+        private readonly MenuItem _computerGetSummaryMenuItem;
         private readonly MenuItem _directReportGetDirectReportsMenuItem;
         private readonly MenuItem _directReportGetGroupsMenuItem;
+        private readonly MenuItem _directReportGetSummaryMenuItem;
         private readonly MenuItem _groupGetComputersMenuItem;
         private readonly MenuItem _groupGetUsersDirectReportsMenuItem;
         private readonly MenuItem _groupGetUsersGroupsMenuItem;
         private readonly MenuItem _groupGetUsersMenuItem;
-
-        private readonly PrincipalContext _principalContext;
+        private readonly MenuItem _groupGetSummaryMenuItem;
         private readonly MenuItem _userGetDirectReportsMenuItem;
         private readonly MenuItem _userGetGroupsMenuItem;
+        private readonly MenuItem _userGetSummaryMenuItem;
         private AboutWindow _aboutWindow;
-        private ActiveDirectorySearcher _activeDirectorySearcher;
-        private List<MenuItem> _contextMenu;
+        private List<MenuItem> _contextMenuItems;
         private DataView _data;
-        private DataPreparer _dataPreparer;
         private HelpWindow _helpWindow;
 
         private string _messageContent;
@@ -197,55 +46,79 @@ namespace ActiveDirectoryToolWpf
         {
             RootScope = new ActiveDirectoryScopeFetcher().Scope;
             SetViewVariables();
-            _principalContext = new PrincipalContext(ContextType.Domain);
             _computerGetGroupsMenuItem = new MenuItem
             {
                 Header = "Computer - Get Groups",
-                Command = GetComputerGroupsCommand
+                Command = GetContextComputerGroupsCommand
             };
-            _userGetGroupsMenuItem = new MenuItem
+            _computerGetSummaryMenuItem = new MenuItem
             {
-                Header = "User - Get Groups",
-                Command = GetUserGroupsCommand
+                Header = "Computer - Get Summary",
+                Command = GetContextComputerSummaryCommand
             };
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Direct Reports",
-                Command = GetDirectReportDirectReportsCommand
+                Command = GetContextDirectReportDirectReportsCommand
             };
             _directReportGetGroupsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Groups",
-                Command = GetDirectReportGroupsCommand
+                Command = GetContextDirectReportGroupsCommand
+            };
+            _directReportGetSummaryMenuItem = new MenuItem
+            {
+                Header = "Direct Report - Get Summary",
+                Command = GetContextDirectReportSummaryCommand
             };
             _groupGetComputersMenuItem = new MenuItem
             {
                 Header = "Group - Get Computers",
-                Command = GetGroupComputersCommand
+                Command = GetContextGroupComputersCommand
             };
             _groupGetUsersMenuItem = new MenuItem
             {
                 Header = "Group - Get Users",
-                Command = GetGroupUsersCommand
+                Command = GetContextGroupUsersCommand
             };
             _groupGetUsersDirectReportsMenuItem = new MenuItem
             {
                 Header = "Group - Get Users' Direct Reports",
-                Command = GetGroupUsersDirectReportsCommand
+                Command = GetContextGroupUsersDirectReportsCommand
             };
             _groupGetUsersGroupsMenuItem = new MenuItem
             {
                 Header = "Group - Get Users' Groups",
-                Command = GetGroupUsersGroupsCommand
+                Command = GetContextGroupUsersGroupsCommand
+            };
+            _groupGetSummaryMenuItem = new MenuItem
+            {
+                Header = "Group - Get Summary",
+                Command = GetContextGroupSummaryCommand
+            };
+            _userGetDirectReportsMenuItem = new MenuItem
+            {
+                Header = "User - Get Direct Reports",
+                Command = GetContextUserDirectReportsCommand
+            };
+            _userGetGroupsMenuItem = new MenuItem
+            {
+                Header = "User - Get Groups",
+                Command = GetContextUserGroupsCommand
+            };
+            _userGetSummaryMenuItem = new MenuItem
+            {
+                Header = "User - Get Summary",
+                Command = GetContextUserSummaryCommand
             };
         }
 
-        public List<MenuItem> ContextMenu
+        public List<MenuItem> ContextMenuItems
         {
-            get { return _contextMenu; }
+            get { return _contextMenuItems; }
             private set
             {
-                _contextMenu = value;
+                _contextMenuItems = value;
                 NotifyPropertyChanged();
             }
         }
@@ -385,49 +258,79 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
-        private ICommand GetComputerGroupsCommand
+        private ICommand GetContextComputerGroupsCommand
         {
             get;
             set;
         }
 
-        private ICommand GetDirectReportDirectReportsCommand
+        private ICommand GetContextComputerSummaryCommand
         {
             get;
             set;
         }
 
-        private ICommand GetDirectReportGroupsCommand
+        private ICommand GetContextDirectReportDirectReportsCommand
         {
             get;
             set;
         }
 
-        private ICommand GetGroupComputersCommand
+        private ICommand GetContextDirectReportGroupsCommand
         {
             get;
             set;
         }
 
-        private ICommand GetGroupUsersCommand
+        private ICommand GetContextDirectReportSummaryCommand
         {
             get;
             set;
         }
 
-        private ICommand GetGroupUsersDirectReportsCommand
+        private ICommand GetContextGroupComputersCommand
         {
             get;
             set;
         }
 
-        private ICommand GetGroupUsersGroupsCommand
+        private ICommand GetContextGroupUsersCommand
         {
             get;
             set;
         }
 
-        private ICommand GetUserGroupsCommand
+        private ICommand GetContextGroupUsersDirectReportsCommand
+        {
+            get;
+            set;
+        }
+
+        private ICommand GetContextGroupUsersGroupsCommand
+        {
+            get;
+            set;
+        }
+
+        private ICommand GetContextUserDirectReportsCommand
+        {
+            get;
+            set;
+        }
+
+        private ICommand GetContextUserGroupsCommand
+        {
+            get;
+            set;
+        }
+
+        private ICommand GetContextUserSummaryCommand
+        {
+            get;
+            set;
+        }
+
+        private ICommand GetContextGroupSummaryCommand
         {
             get;
             set;
@@ -437,358 +340,258 @@ namespace ActiveDirectoryToolWpf
 
         private void FinishTask()
         {
-            ContextMenu = GenerateContextMenu();
+            ContextMenuItems = GenerateContextMenuItems();
             ProgressBarVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
         }
 
-        private List<MenuItem> GenerateContextMenu()
+        private List<MenuItem> GenerateContextMenuItems()
         {
-            var contextMenu = new List<MenuItem>();
-            if (QueryType == QueryType.OrganizationalUnitComputers)
+            var contextMenuItems = new List<MenuItem>();
+            switch (QueryType)
             {
-                contextMenu.Add(_computerGetGroupsMenuItem);
+                case QueryType.ContextComputerGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    break;
+                case QueryType.ContextDirectReportDirectReports:
+                    contextMenuItems.Add(
+                        _directReportGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_directReportGetGroupsMenuItem);
+                    contextMenuItems.Add(_directReportGetSummaryMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextDirectReportGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextGroupComputers:
+                    contextMenuItems.Add(_computerGetGroupsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    break;
+                case QueryType.ContextGroupUsers:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextGroupUsersDirectReports:
+                    contextMenuItems.Add(
+                        _directReportGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_directReportGetGroupsMenuItem);
+                    contextMenuItems.Add(_directReportGetSummaryMenuItem);
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextGroupUsersGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextUserDirectReports:
+                    contextMenuItems.Add(
+                        _directReportGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_directReportGetGroupsMenuItem);
+                    contextMenuItems.Add(_directReportGetSummaryMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextUserGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.OuComputers:
+                    contextMenuItems.Add(_computerGetGroupsMenuItem);
+                    contextMenuItems.Add(_computerGetSummaryMenuItem);
+                    break;
+                case QueryType.OuGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_groupGetSummaryMenuItem);
+                    break;
+                case QueryType.OuUsers:
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.OuUsersDirectReports:
+                    contextMenuItems.Add(
+                        _directReportGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_directReportGetGroupsMenuItem);
+                    contextMenuItems.Add(_directReportGetSummaryMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.OuUsersGroups:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
+                    break;
+                case QueryType.ContextComputerSummary:
+                    contextMenuItems.Add(_computerGetGroupsMenuItem);
+                    break;
+                case QueryType.ContextDirectReportSummary:
+                    contextMenuItems.Add(
+                        _directReportGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_directReportGetGroupsMenuItem);
+                    break;
+                case QueryType.ContextGroupSummary:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    break;
+                case QueryType.ContextUserSummary:
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            if (QueryType == QueryType.OrganizationalUnitGroups ||
-                QueryType == QueryType.OrganizationalUnitUsersGroups)
-            {
-                contextMenu.Add(_groupGetComputersMenuItem);
-                contextMenu.Add(_groupGetUsersDirectReportsMenuItem);
-            }
-            if (QueryType == QueryType.OrganizationalUnitUsers ||
-                QueryType == QueryType.OrganizationalUnitUsersDirectReports)
-            {
-                contextMenu.Add(_userGetGroupsMenuItem);
-            }
-            if (QueryType == QueryType.OrganizationalUnitUsersDirectReports)
-            {
-                contextMenu.Add(_directReportGetDirectReportsMenuItem);
-                contextMenu.Add(_directReportGetGroupsMenuItem);
-            }
-            if (QueryType == QueryType.OrganizationalUnitUsersGroups)
-            {
-            }
-
-            return contextMenu;
+            return contextMenuItems;
         }
 
-        private async void GetComputerGroupsCommandExecute()
+        private async void GetContextComputerGroupsCommandExecute()
         {
-            StartTask();
-            QueryType = QueryType.ContextualComputerGroups;
-            await Task.Run(() =>
-            {
-                var computerPrincipal = ComputerPrincipal.FindByIdentity(
-                    _principalContext, GetSelectedComputerDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetComputerGroups(
-                            computerPrincipal)
-                    },
-                    Attributes = DefaultComputerGroupsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No groups found for the selected computer.");
-                }
-            });
-            FinishTask();
+            await
+                RunQuery(QueryType.ContextComputerGroups,
+                    GetSelectedComputerDistinguishedName());
         }
 
-        private async void GetDirectReportDirectReportsCommandExecute()
+        private async void GetContextComputerSummaryCommandExecute()
         {
-            StartTask();
-            QueryType = QueryType.ContextualDirectReportDirectReports;
-            await Task.Run(() =>
-            {
-                var directReportUserPrincipal = UserPrincipal.FindByIdentity(
-                    _principalContext,
+            await RunQuery(
+                QueryType.ContextComputerSummary,
+                GetSelectedComputerDistinguishedName());
+        }
+
+        private async void GetContextDirectReportDirectReportsCommandExecute()
+        {
+            await
+                RunQuery(QueryType.ContextDirectReportDirectReports,
+                    GetSelectedGroupDistinguishedName());
+        }
+
+        private async void GetContextDirectReportGroupsCommandExecute()
+        {
+            await
+                RunQuery(QueryType.ContextDirectReportGroups,
                     GetSelectedDirectReportDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUserDirectReports(
-                            directReportUserPrincipal)
-                    },
-                    Attributes = DefaultUserDirectReportsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No direct reports found for the selected user.");
-                }
-            });
-            FinishTask();
         }
 
-        private async void GetDirectReportGroupsCommandExecute()
+        private async void GetContextGroupComputersCommandExecute()
         {
-            StartTask();
-            QueryType = QueryType.ContextualDirectReportDirectReports;
-            await Task.Run(() =>
-            {
-                var directReportUserPrincipal = UserPrincipal.FindByIdentity(
-                    _principalContext,
-                    GetSelectedDirectReportDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUserGroups(
-                            directReportUserPrincipal)
-                    },
-                    Attributes = DefaultUserGroupsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No groups found for the selected direct report.");
-                }
-            });
-            FinishTask();
-        }
-
-        private async void GetGroupComputersCommandExecute()
-        {
-            StartTask();
-            QueryType = QueryType.ContextualGroupComputers;
-            await Task.Run(() =>
-            {
-                var groupPrincipal = GroupPrincipal.FindByIdentity(
-                    _principalContext,
+            await
+                RunQuery(QueryType.ContextGroupComputers,
                     GetSelectedGroupDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetComputersFromGroup(
-                            groupPrincipal)
-                    },
-                    Attributes = DefaultGroupComputersAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No groups found for the selected direct report.");
-                }
-            });
-            FinishTask();
         }
 
-        private async void GetGroupUsersCommandExecute()
+        private async void GetContextGroupUsersCommandExecute()
         {
+            await RunQuery(QueryType.ContextGroupUsers);
         }
 
-        private async void GetGroupUsersDirectReportsCommandExecute()
+        private async void GetContextGroupUsersDirectReportsCommandExecute()
         {
-            StartTask();
-            QueryType = QueryType.ContextualGroupUsersDirectReports;
-            await Task.Run(() =>
-            {
-                var groupPrincipal = GroupPrincipal.FindByIdentity(
-                    _principalContext,
+            await
+                RunQuery(QueryType.ContextGroupUsersDirectReports,
                     GetSelectedGroupDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUsersDirectReports(
-                            groupPrincipal)
-                    },
-                    Attributes = DefaultGroupUsersDirectReportsAttributes
-                        .ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No users and/or direct reports found in the selected group.");
-                }
-            });
-            FinishTask();
         }
 
-        private async void GetGroupUsersGroupsCommandExecute()
+        private async void GetContextGroupUsersGroupsCommandExecute()
         {
-            /*StartTask();
-            QueryType = QueryType.ContextualGroupUsersDirectReports;
-            await Task.Run(() =>
-            {
-                var groupPrincipal = GroupPrincipal.FindByIdentity(
-                    _principalContext,
+            await
+                RunQuery(QueryType.ContextGroupUsersGroups,
                     GetSelectedGroupDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUsersGroups(
-                            groupPrincipal)
-                    },
-                    Attributes = DefaultGroupUsersGroupsAttributes
-                    .ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No users and/or groups found in the selected group.");
-                }
-            });
-            FinishTask();*/
+        }
+
+        private async void GetContextUserDirectReportsCommandExecute()
+        {
+            await
+                RunQuery(QueryType.ContextUserDirectReports,
+                    GetSelectedUserDistinguishedName());
+        }
+
+        private async void GetContextUserGroupsCommandExecute()
+        {
+            await
+                RunQuery(QueryType.ContextUserGroups,
+                    GetSelectedUserDistinguishedName());
         }
 
         private async void GetOuComputersCommandExecute()
         {
-            StartOuTask();
-            QueryType = QueryType.OrganizationalUnitComputers;
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _activeDirectorySearcher.GetOuComputers(),
-                    Attributes = DefaultComputerAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage("No computers found in selected OU.");
-                }
-            });
-            FinishTask();
+            await RunQuery(QueryType.OuComputers);
         }
 
         private async void GetOuGroupsCommandExecute()
         {
-            StartOuTask();
-            QueryType = QueryType.OrganizationalUnitGroups;
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _activeDirectorySearcher.GetOuGroups(),
-                    Attributes = DefaultGroupAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage("No groups found in selected OU.");
-                }
-            });
-            FinishTask();
+            await RunQuery(QueryType.OuGroups);
         }
 
         private async void GetOuUsersCommandExecute()
         {
-            StartOuTask();
-            QueryType = QueryType.OrganizationalUnitUsers;
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _activeDirectorySearcher.GetOuUsers(),
-                    Attributes = DefaultUserAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage("No users found in selected OU.");
-                }
-            });
-            FinishTask();
+            await RunQuery(QueryType.OuUsers);
         }
 
         private async void GetOuUsersDirectReportsCommandExecute()
         {
-            StartOuTask();
-            QueryType = QueryType.OrganizationalUnitUsersDirectReports;
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _activeDirectorySearcher.GetOuUsersDirectReports(),
-                    Attributes = DefaultUserDirectReportsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No users and/or direct reports found in selected OU.");
-                }
-            });
-            FinishTask();
+            await RunQuery(QueryType.OuUsersDirectReports);
         }
 
         private async void GetOuUsersGroupsCommandExecute()
         {
-            StartOuTask();
-            QueryType = QueryType.OrganizationalUnitUsersGroups;
-            await Task.Run(() =>
-            {
-                _dataPreparer = new DataPreparer
-                {
-                    Data = _activeDirectorySearcher.GetOuUsersGroups(),
-                    Attributes = DefaultUserGroupsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No users and/or groups found in selected OU.");
-                }
-            });
-            FinishTask();
+            await RunQuery(QueryType.OuUsersGroups);
+        }
+
+        private async void GetContextUserSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextUserSummary,
+                GetSelectedUserDistinguishedName());
+        }
+
+        private async void GetContextDirectReportSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextDirectReportSummary,
+                GetSelectedDirectReportDistinguishedName());
+        }
+
+        private async void GetContextGroupSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextGroupSummary,
+                GetSelectedGroupDistinguishedName());
         }
 
         private string GetSelectedComputerDistinguishedName()
@@ -798,8 +601,8 @@ namespace ActiveDirectoryToolWpf
 
         private string GetSelectedDirectReportDistinguishedName()
         {
-            return SelectedDataGridRow["DirectReportDistinguishedName"]
-                .ToString();
+            return
+                SelectedDataGridRow["DirectReportDistinguishedName"].ToString();
         }
 
         private string GetSelectedGroupDistinguishedName()
@@ -812,37 +615,6 @@ namespace ActiveDirectoryToolWpf
             return SelectedDataGridRow["UserDistinguishedName"].ToString();
         }
 
-        private async void GetUserGroupsCommandExecute()
-        {
-            StartTask();
-            QueryType = QueryType.ContextualUserGroups;
-            await Task.Run(() =>
-            {
-                var userPrincipal = UserPrincipal.FindByIdentity(
-                    _principalContext, GetSelectedUserDistinguishedName());
-                _dataPreparer = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetUserGroups(
-                            userPrincipal)
-                    },
-                    Attributes = DefaultUserGroupsAttributes.ToList()
-                };
-                try
-                {
-                    Data = new List<ExpandoObject>(_dataPreparer.GetResults())
-                        .ToDataTable().AsDataView();
-                }
-                catch (ArgumentNullException)
-                {
-                    ShowMessage(
-                        "No groups found for the selected user.");
-                }
-            });
-            FinishTask();
-        }
-
         private void HideMessage()
         {
             MessageContent = string.Empty;
@@ -852,8 +624,8 @@ namespace ActiveDirectoryToolWpf
         private void NotifyPropertyChanged(
             [CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(
-                this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this,
+                new PropertyChangedEventArgs(propertyName));
         }
 
         private void OpenAboutWindowCommandExecute()
@@ -883,36 +655,90 @@ namespace ActiveDirectoryToolWpf
             return CurrentScope != null;
         }
 
+        private async Task RunQuery(QueryType queryType,
+            string selectedItemDistinguishedName = null)
+        {
+            StartTask();
+            try
+            {
+                var activeDirectoryQuery = new ActiveDirectoryQuery(queryType,
+                    CurrentScope, selectedItemDistinguishedName);
+                await activeDirectoryQuery.Execute();
+                Data = activeDirectoryQuery.Data.ToDataTable().AsDataView();
+                QueryType = queryType;
+            }
+            catch (ArgumentNullException)
+            {
+                ShowMessage(
+                    "No results of desired type found in selected context.");
+            }
+            FinishTask();
+        }
+
         private void SetUpCommands()
         {
             GetOuComputersCommand = new RelayCommand(
                 GetOuComputersCommandExecute, OuCommandCanExecute);
+
             GetOuGroupsCommand = new RelayCommand(
                 GetOuGroupsCommandExecute, OuCommandCanExecute);
+
             GetOuUsersCommand = new RelayCommand(
                 GetOuUsersCommandExecute, OuCommandCanExecute);
+
             GetOuUsersDirectReportsCommand = new RelayCommand(
                 GetOuUsersDirectReportsCommandExecute, OuCommandCanExecute);
+
             GetOuUsersGroupsCommand = new RelayCommand(
                 GetOuUsersGroupsCommandExecute, OuCommandCanExecute);
+
             WriteToFileCommand = new RelayCommand(
                 WriteToFileCommandExecute, WriteToFileCommandCanExecute);
+
             OpenAboutWindowCommand = new RelayCommand(
                 OpenAboutWindowCommandExecute);
+
             OpenHelpWindowCommand = new RelayCommand(
                 OpenHelpWindowCommandExecute);
-            GetUserGroupsCommand = new RelayCommand(
-                GetUserGroupsCommandExecute);
-            GetComputerGroupsCommand = new RelayCommand(
-                GetComputerGroupsCommandExecute);
-            GetDirectReportDirectReportsCommand = new RelayCommand(
-                GetDirectReportDirectReportsCommandExecute);
-            GetDirectReportGroupsCommand = new RelayCommand(
-                GetDirectReportGroupsCommandExecute);
-            GetGroupComputersCommand = new RelayCommand(
-                GetGroupComputersCommandExecute);
-            GetGroupUsersDirectReportsCommand = new RelayCommand(
-                GetGroupUsersDirectReportsCommandExecute);
+
+            GetContextUserGroupsCommand = new RelayCommand(
+                GetContextUserGroupsCommandExecute);
+
+            GetContextComputerGroupsCommand = new RelayCommand(
+                GetContextComputerGroupsCommandExecute);
+
+            GetContextDirectReportDirectReportsCommand = new RelayCommand(
+                GetContextDirectReportDirectReportsCommandExecute);
+
+            GetContextDirectReportGroupsCommand = new RelayCommand(
+                GetContextDirectReportGroupsCommandExecute);
+
+            GetContextGroupComputersCommand = new RelayCommand(
+                GetContextGroupComputersCommandExecute);
+
+            GetContextGroupUsersCommand = new RelayCommand(
+                GetContextGroupUsersCommandExecute);
+
+            GetContextGroupUsersDirectReportsCommand = new RelayCommand(
+                GetContextGroupUsersDirectReportsCommandExecute);
+
+            GetContextUserDirectReportsCommand = new RelayCommand(
+                GetContextUserDirectReportsCommandExecute);
+
+            GetContextGroupUsersGroupsCommand = new RelayCommand(
+                GetContextGroupUsersGroupsCommandExecute);
+
+            GetContextDirectReportSummaryCommand = new RelayCommand(
+                GetContextDirectReportSummaryCommandExecute);
+
+            GetContextUserSummaryCommand = new RelayCommand(
+                GetContextUserSummaryCommandExecute);
+
+            GetContextComputerSummaryCommand = new RelayCommand(
+                GetContextComputerSummaryCommandExecute);
+
+            GetContextGroupSummaryCommand = new RelayCommand(
+                GetContextGroupSummaryCommandExecute);
         }
 
         private void SetViewVariables()
@@ -935,13 +761,6 @@ namespace ActiveDirectoryToolWpf
         {
             MessageContent = messageContent + "\n\nDouble-click to dismiss.";
             MessageVisibility = Visibility.Visible;
-        }
-
-        private void StartOuTask()
-        {
-            StartTask();
-            _activeDirectorySearcher = new ActiveDirectorySearcher(
-                CurrentScope);
         }
 
         private void StartTask()

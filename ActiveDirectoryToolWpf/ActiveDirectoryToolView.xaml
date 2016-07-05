@@ -8,7 +8,6 @@
         mc:Ignorable="d"
         DataContext="{StaticResource MainViewModel}"
         Height="576"
-        IsEnabled="{Binding ViewIsEnabled}"
         MinHeight="576"
         MinWidth="1024"
         Title="Active Directory Tool"
@@ -23,7 +22,7 @@
                           Command="{Binding OpenHelpWindowCommand}" />
             </MenuItem>
         </Menu>
-        <Grid>
+        <Grid IsEnabled="{Binding ViewIsEnabled}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25*" />
                 <ColumnDefinition Width="75*" />
@@ -54,7 +53,7 @@
                 <Grid Grid.Row="0">
                     <DockPanel LastChildFill="False">
                         <Label DockPanel.Dock="Top"
-                               Content="Organizational Unit Operations" />
+                               Content="Organizational Unit Queries" />
                         <Separator DockPanel.Dock="Bottom" />
                         <Button Content="Get Users"
                                 Command="{Binding GetOuUsersCommand}"
@@ -129,7 +128,7 @@
                                   AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
                                   SelectedItem="{Binding SelectedDataGridRow, Mode=TwoWay}">
                             <DataGrid.ContextMenu>
-                                <ContextMenu ItemsSource="{Binding ContextMenu}"/>
+                                <ContextMenu ItemsSource="{Binding ContextMenuItems}"/>
                             </DataGrid.ContextMenu>
                             
                         </DataGrid>

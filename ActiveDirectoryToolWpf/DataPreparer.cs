@@ -4,6 +4,7 @@ using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
+using PrimitiveExtensions;
 using static ActiveDirectoryToolWpf.ActiveDirectoryAttribute;
 
 namespace ActiveDirectoryToolWpf
@@ -41,6 +42,21 @@ namespace ActiveDirectoryToolWpf
         ComputerStructuralObjectClass,
         ComputerUserCannotChangePassword,
         ComputerUserPrincipalName,
+        ContainerGroupContext,
+        ContainerGroupContextType,
+        ContainerGroupDescription,
+        ContainerGroupDisplayName,
+        ContainerGroupDistinguishedName,
+        ContainerGroupGuid,
+        ContainerGroupIsSecurityGroup,
+        ContainerGroupManagedBy,
+        ContainerGroupMembers,
+        ContainerGroupName,
+        ContainerGroupSamAccountName,
+        ContainerGroupScope,
+        ContainerGroupSid,
+        ContainerGroupStructuralObjectClass,
+        ContainerGroupUserPrincipalName,
         DirectReportUserAccountControl,
         DirectReportAccountExpirationDate,
         DirectReportAccountLockoutTime,
@@ -180,78 +196,92 @@ namespace ActiveDirectoryToolWpf
 
     internal static class Extensions
     {
-        public static DataTable ToDataTable(this IEnumerable<dynamic> items)
+        public static DataTable ToDataTable(
+            this IEnumerable<ExpandoObject> data)
         {
-            var data = items.ToArray();
-            if (data.Length == 0) return null;
+            var dataAsArray = data as ExpandoObject[] ?? data.ToArray();
+            if (dataAsArray.IsNullOrEmpty()) return null;
             var dataTable = new DataTable();
-            foreach (
-                var key in ((IDictionary<string, object>) data[0]).Keys)
+            foreach (var key in ((IDictionary<string, object>) dataAsArray[0])
+                .Keys)
             {
                 dataTable.Columns.Add(key);
             }
-            foreach (var d in data)
+            foreach (var dataItem in dataAsArray)
             {
-                dataTable.Rows.Add(
-                    ((IDictionary<string, object>) d).Values.ToArray());
+                dataTable.Rows.Add(((IDictionary<string, object>) dataItem)
+                    .Values.ToArray());
             }
             return dataTable;
         }
     }
 
-    internal class DataPreparer
+    public class DataPreparer
     {
-        internal List<ActiveDirectoryAttribute> Attributes { get; set; }
-        internal IEnumerable<object> Data { get; set; }
+        public IEnumerable<ActiveDirectoryAttribute> Attributes
+        {
+            get;
+            set;
+        }
 
-        internal IEnumerable<ExpandoObject> GetResults()
+        public IEnumerable<object> Data
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<ExpandoObject> GetResults()
         {
             var results = new List<ExpandoObject>();
 
             foreach (var data in Data)
             {
-                if (data is UserGroups)
+                if (data is ComputerGroups)
+                {
+                    var computerGroups = data as ComputerGroups;
+                    results.AddRange(PrepareComputerGroups(computerGroups));
+                    computerGroups.Dispose();
+                }
+                else if (data is GroupComputers)
+                {
+                    var groupComputers = data as GroupComputers;
+                    results.AddRange(PrepareGroupComputers(groupComputers));
+                    groupComputers.Dispose();
+                }
+                else if (data is GroupUsers)
+                {
+                    var groupUsers = data as GroupUsers;
+                    results.AddRange(PrepareGroupUsers(groupUsers));
+                    groupUsers.Dispose();
+                }
+                else if (data is GroupUsersDirectReports)
+                {
+                    var groupUsersDirectReports =
+                        data as GroupUsersDirectReports;
+                    results.AddRange(
+                        PrepareGroupUsersDirectReports(
+                            groupUsersDirectReports));
+                    groupUsersDirectReports.Dispose();
+                }
+                else if (data is GroupUsersGroups)
+                {
+                    var groupUsersGroups = data as GroupUsersGroups;
+                    results.AddRange(
+                        PrepareGroupUsersGroups(groupUsersGroups));
+                    groupUsersGroups.Dispose();
+                }
+                else if (data is UserGroups)
                 {
                     var userGroups = data as UserGroups;
-                    foreach (var group in userGroups.Groups)
-                    {
-                        dynamic result = new ExpandoObject();
-                        AddAttributesToResult(
-                            result,
-                            groupPrincipal:group,
-                            userPrincipal:userGroups.User);
-                        results.Add(result);
-                    }
+                    results.AddRange(PrepareUserGroups(userGroups));
                     userGroups.Dispose();
                 }
                 else if (data is UserDirectReports)
                 {
-                    var directReports = data as UserDirectReports;
-                    if (directReports.DirectReports == null) continue;
-                    foreach (var directReport in directReports.DirectReports)
-                    {
-                        dynamic result = new ExpandoObject();
-                        AddAttributesToResult(
-                            result,
-                            directReportUserPrincipal:directReport,
-                            userPrincipal:directReports.User);
-                        results.Add(result);
-                    }
-                    directReports.Dispose();
-                }
-                else if (data is ComputerGroups)
-                {
-                    var computerGroups = data as ComputerGroups;
-                    if (computerGroups.Groups == null) continue;
-                    foreach (var group in computerGroups.Groups)
-                    {
-                        dynamic result = new ExpandoObject();
-                        AddAttributesToResult(
-                            result,
-                            computerPrincipal:computerGroups.Computer,
-                            groupPrincipal:group);
-                        results.Add(result);
-                    }
+                    var userDirectReports = data as UserDirectReports;
+                    results.AddRange(PrepareUserDirectReports(
+                        userDirectReports));
+                    userDirectReports.Dispose();
                 }
                 else
                 {
@@ -261,10 +291,9 @@ namespace ActiveDirectoryToolWpf
                     dynamic result = new ExpandoObject();
                     AddAttributesToResult(
                         result,
-                        computerPrincipal,
-                        groupPrincipal,
-                        null,
-                        userPrincipal);
+                        computerPrincipal: computerPrincipal,
+                        groupPrincipal: groupPrincipal,
+                        userPrincipal: userPrincipal);
                     results.Add(result);
                     var principal = data as Principal;
                     principal?.Dispose();
@@ -730,6 +759,7 @@ namespace ActiveDirectoryToolWpf
             dynamic result,
             ComputerPrincipal computerPrincipal = null,
             GroupPrincipal groupPrincipal = null,
+            GroupPrincipal containerGroupPrincipal = null,
             UserPrincipal directReportUserPrincipal = null,
             UserPrincipal userPrincipal = null)
         {
@@ -739,6 +769,14 @@ namespace ActiveDirectoryToolWpf
                 {
                     if (AddComputerAttributeToResult(
                         computerPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
+                }
+                if (containerGroupPrincipal != null)
+                {
+                    if (AddContainerGroupAttributeToResult(
+                        containerGroupPrincipal, attribute, result))
                     {
                         continue;
                     }
@@ -764,6 +802,192 @@ namespace ActiveDirectoryToolWpf
                     AddUserAttributeToResult(userPrincipal, attribute, result);
                 }
             }
+        }
+
+        private bool AddContainerGroupAttributeToResult(
+            GroupPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [ContainerGroupContext] =
+                        () => result.ContainerGroupContext = principal.Context,
+                    [ContainerGroupContextType] = () =>
+                        result.ContainerGroupContextType =
+                            principal.ContextType,
+                    [ContainerGroupDescription] = () =>
+                        result.ContainerGroupDescription =
+                            principal.Description,
+                    [ContainerGroupDisplayName] = () =>
+                        result.ContainerGroupDisplayName =
+                            principal.DisplayName,
+                    [ContainerGroupDistinguishedName] = () =>
+                        result.ContainerGroupDistinguishedName =
+                            principal.DistinguishedName,
+                    [ContainerGroupGuid] = () => result.ContainerGroupGuid =
+                        principal.Guid,
+                    [ContainerGroupIsSecurityGroup] = () =>
+                        result.ContainerGroupIsSecurityGroup =
+                            principal.IsSecurityGroup,
+                    [ContainerGroupManagedBy] = () =>
+                        result.ContainerGroupManagedBy =
+                            principal.GetManagedBy(),
+                    [ContainerGroupName] =
+                        () => result.ContainerGroupName = principal.Name,
+                    [ContainerGroupSamAccountName] = () =>
+                        result.ContainerGroupSamAccountName =
+                            principal.SamAccountName,
+                    [ContainerGroupScope] = () =>
+                        result.ContainerGroupScope = principal.GroupScope,
+                    [ContainerGroupSid] =
+                        () => result.ContainerGroupSid = principal.Sid,
+                    [ContainerGroupStructuralObjectClass] = () =>
+                        result.ContainerGroupStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [ContainerGroupUserPrincipalName] = () =>
+                        result.ContainerGroupUserPrincipalName =
+                            principal.UserPrincipalName,
+                    [ContainerGroupMembers] =
+                        () => result.ContainerGroupMembers = principal.Members
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return false;
+            attributeMapping[attribute]();
+            return true;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareComputerGroups(
+            ComputerGroups computerGroups)
+        {
+            var results = new List<ExpandoObject>();
+            if (computerGroups.Groups == null) return results;
+            foreach (var group in computerGroups.Groups)
+            {
+                dynamic result = new ExpandoObject();
+                AddAttributesToResult(
+                    result,
+                    computerPrincipal: computerGroups.Computer,
+                    groupPrincipal: group);
+                results.Add(result);
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareGroupComputers(
+            GroupComputers groupComputers)
+        {
+            var results = new List<ExpandoObject>();
+            if (groupComputers.Computers == null) return results;
+            foreach (var computer in groupComputers.Computers)
+            {
+                dynamic result = new ExpandoObject();
+                AddAttributesToResult(
+                    result,
+                    computerPrincipal: computer,
+                    containerGroupPrincipal: groupComputers.Group);
+                results.Add(result);
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareGroupUsers(
+            GroupUsers groupUsers)
+        {
+            var results = new List<ExpandoObject>();
+            if (groupUsers.Users == null) return results;
+            foreach (var user in groupUsers.Users)
+            {
+                dynamic result = new ExpandoObject();
+                AddAttributesToResult(
+                    result,
+                    userPrincipal: user,
+                    containerGroupPrincipal: groupUsers.Group);
+                results.Add(result);
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareGroupUsersDirectReports(
+            GroupUsersDirectReports groupUsersDirectReports)
+        {
+            var results = new List<ExpandoObject>();
+            if (groupUsersDirectReports.UsersDirectReports == null)
+                return results;
+            foreach (
+                var userDirectReports in
+                    groupUsersDirectReports.UsersDirectReports)
+            {
+                if (userDirectReports.DirectReports == null) continue;
+                foreach (var directReport in userDirectReports.DirectReports)
+                {
+                    dynamic result = new ExpandoObject();
+                    AddAttributesToResult(
+                        result,
+                        containerGroupPrincipal: groupUsersDirectReports.Group,
+                        userPrincipal: userDirectReports.User,
+                        directReportUserPrincipal: directReport);
+                    results.Add(result);
+                }
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareGroupUsersGroups(
+            GroupUsersGroups groupUsersGroups)
+        {
+            var results = new List<ExpandoObject>();
+            if (groupUsersGroups.UsersGroups == null) return results;
+            foreach (var userGroups in groupUsersGroups.UsersGroups)
+            {
+                if (userGroups.Groups == null) continue;
+                foreach (var group in userGroups.Groups)
+                {
+                    dynamic result = new ExpandoObject();
+                    AddAttributesToResult(
+                        result,
+                        containerGroupPrincipal: groupUsersGroups.Group,
+                        userPrincipal: userGroups.User,
+                        groupPrincipal: group);
+                    results.Add(result);
+                }
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareUserDirectReports(
+            UserDirectReports userDirectReports)
+        {
+            var results = new List<ExpandoObject>();
+            if (userDirectReports.DirectReports == null) return results;
+            foreach (var directReport in userDirectReports.DirectReports)
+            {
+                dynamic result = new ExpandoObject();
+                AddAttributesToResult(
+                    result,
+                    directReportUserPrincipal: directReport,
+                    userPrincipal: userDirectReports.User);
+                results.Add(result);
+            }
+            return results;
+        }
+
+        private IEnumerable<ExpandoObject> PrepareUserGroups(
+            UserGroups userGroups)
+        {
+            var results = new List<ExpandoObject>();
+            if (userGroups.Groups == null) return results;
+            foreach (var group in userGroups.Groups)
+            {
+                dynamic result = new ExpandoObject();
+                AddAttributesToResult(
+                    result,
+                    groupPrincipal: group,
+                    userPrincipal: userGroups.User);
+                results.Add(result);
+            }
+            return results;
         }
     }
 }
