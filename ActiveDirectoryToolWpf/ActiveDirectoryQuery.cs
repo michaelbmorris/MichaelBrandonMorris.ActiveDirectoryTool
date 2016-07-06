@@ -321,6 +321,17 @@ namespace ActiveDirectoryToolWpf
                             Attributes = DefaultComputerGroupsAttributes
                         };
                     }
+                    else if (QueryType == QueryType.ContextComputerSummary)
+                    {
+                        dataPreparer = new DataPreparer
+                        {
+                            Data = new[]
+                            {
+                                computerPrincipal
+                            },
+                            Attributes = DefaultComputerAttributes
+                        };
+                    }
                 }
                 else if (QueryTypeIsContextDirectReport() ||
                          QueryTypeIsContextUser())
