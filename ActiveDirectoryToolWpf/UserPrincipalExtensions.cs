@@ -63,7 +63,7 @@ namespace ActiveDirectoryToolWpf
             return user.GetPropertyAsString(Department);
         }
 
-        public static IEnumerable<UserPrincipal> GetDirectReports(
+        public static IEnumerable<UserPrincipal> GetDirectReportUserPrincipals(
             this UserPrincipal user)
         {
             var directReportDistinguishedNames =

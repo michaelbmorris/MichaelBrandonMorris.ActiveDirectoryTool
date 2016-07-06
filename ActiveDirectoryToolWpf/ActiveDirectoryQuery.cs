@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
+using System.Threading;
 using System.Threading.Tasks;
 using static ActiveDirectoryToolWpf.QueryType;
 using static ActiveDirectoryToolWpf.SimplifiedQueryType;
@@ -180,6 +181,8 @@ namespace ActiveDirectoryToolWpf
         private readonly QueryType _queryType;
         private readonly string _selectedItemDistinguishedName;
 
+        private CancellationTokenSource _cancellationTokenSource;
+
         public ActiveDirectoryQuery(
             QueryType queryType,
             ActiveDirectoryScope activeDirectoryScope = null,
@@ -196,6 +199,9 @@ namespace ActiveDirectoryToolWpf
             get;
             private set;
         }
+
+        private CancellationToken CancellationToken
+            => _cancellationTokenSource.Token;
 
         private bool QueryTypeIsOu()
         {
@@ -263,27 +269,30 @@ namespace ActiveDirectoryToolWpf
             {
                 [OuComputers] = new DataPreparer
                 {
-                    Data = activeDirectorySearcher.GetComputers(),
+                    Data = activeDirectorySearcher.GetOuComputerPrincipals(),
                     Attributes = DefaultComputerAttributes
                 },
                 [OuGroups] = new DataPreparer
                 {
-                    Data = activeDirectorySearcher.GetGroups(),
+                    Data = activeDirectorySearcher.GetOuGroupPrincipals(
+                        CancellationToken),
                     Attributes = DefaultGroupAttributes
                 },
                 [OuUsers] = new DataPreparer
                 {
-                    Data = activeDirectorySearcher.GetUsers(),
+                    Data = activeDirectorySearcher.GetOuUserPrincipals(),
                     Attributes = DefaultUserAttributes
                 },
                 [OuUsersDirectReports] = new DataPreparer
                 {
-                    Data = activeDirectorySearcher.GetUsersDirectReports(),
+                    Data = activeDirectorySearcher.GetOuUsersDirectReports(
+                        CancellationToken),
                     Attributes = DefaultUserDirectReportsAttributes
                 },
                 [OuUsersGroups] = new DataPreparer
                 {
-                    Data = activeDirectorySearcher.GetUsersGroups(),
+                    Data = activeDirectorySearcher.GetOuUsersGroups(
+                        CancellationToken),
                     Attributes = DefaultUserGroupsAttributes
                 }
             };
@@ -362,6 +371,11 @@ namespace ActiveDirectoryToolWpf
                 simplifiedQueryTypes[_queryType]];
         }
 
+        public void Cancel()
+        {
+            _cancellationTokenSource?.Cancel();
+        }
+
         private DataPreparer SetUpGroupDataPreparer()
         {
             var groupPrincipal = GetSelectedGroupPrincipal();
@@ -371,7 +385,7 @@ namespace ActiveDirectoryToolWpf
                 {
                     Data = new[]
                     {
-                        ActiveDirectorySearcher.GetComputers(
+                        ActiveDirectorySearcher.GetComputerPrincipals(
                             groupPrincipal)
                     },
                     Attributes = DefaultGroupComputersAttributes
@@ -388,7 +402,7 @@ namespace ActiveDirectoryToolWpf
                 {
                     Data = new[]
                     {
-                        ActiveDirectorySearcher.GetUsers(
+                        ActiveDirectorySearcher.GetUserPrincipals(
                             groupPrincipal)
                     },
                     Attributes = DefaultGroupUsersAttributes
@@ -398,7 +412,8 @@ namespace ActiveDirectoryToolWpf
                     Data = new[]
                     {
                         ActiveDirectorySearcher
-                            .GetGroupUsersDirectReports(groupPrincipal)
+                            .GetGroupUsersDirectReports(
+                                groupPrincipal, CancellationToken)
                     },
                     Attributes =
                         DefaultGroupUsersDirectReportsAttributes
@@ -408,7 +423,7 @@ namespace ActiveDirectoryToolWpf
                     Data = new[]
                     {
                         ActiveDirectorySearcher.GetGroupUsersGroups(
-                            groupPrincipal)
+                            groupPrincipal, CancellationToken)
                     },
                     Attributes = DefaultGroupUsersGroupsAttributes
                 }
@@ -418,8 +433,9 @@ namespace ActiveDirectoryToolWpf
 
         public async Task Execute()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             DataPreparer dataPreparer = null;
-            await Task.Run(() =>
+            var task = Task.Run(() =>
             {
                 if (QueryTypeIsOu())
                 {
@@ -438,7 +454,9 @@ namespace ActiveDirectoryToolWpf
                     dataPreparer = SetUpGroupDataPreparer();
                 }
                 Data = GetData(dataPreparer);
-            });
+            },
+                _cancellationTokenSource.Token);
+            await task;
         }
     }
 }

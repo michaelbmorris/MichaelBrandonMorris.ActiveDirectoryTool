@@ -38,10 +38,10 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -137,6 +137,8 @@
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrincipalExtensions.cs" />
+    <Compile Include="PrincipalSearcherExtensions.cs" />
+    <Compile Include="PrincipalSearchResultExtensions.cs" />
     <Compile Include="UserPrincipalExtensions.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>

@@ -1,4 +1,5 @@
-﻿using PrimitiveExtensions;
+﻿using System.Collections.Generic;
+using PrimitiveExtensions;
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
@@ -26,6 +27,12 @@ namespace ActiveDirectoryToolWpf
             this Principal principal)
         {
             return principal.GetUnderlyingObject() as DirectoryEntry;
+        }
+
+        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
+            this Principal principal)
+        {
+            return principal.GetGroups().GetGroupPrincipals();
         }
 
         public static PropertyValueCollection GetProperty(

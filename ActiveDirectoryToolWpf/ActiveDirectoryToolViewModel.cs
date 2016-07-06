@@ -35,12 +35,15 @@ namespace ActiveDirectoryToolWpf
 
         private string _messageContent;
 
+        private Visibility _cancelButtonVisibility;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
 
-        private QueryType _queryType;
+        private QueryType _currentQueryType;
         private DataRowView _selectedDataGridRow;
         private bool _viewIsEnabled;
+
+        private ActiveDirectoryQuery _activeDirectoryQuery;
 
         public ActiveDirectoryToolViewModel()
         {
@@ -113,6 +116,16 @@ namespace ActiveDirectoryToolWpf
             };
         }
 
+        public Visibility CancelButtonVisibility
+        {
+            get { return _cancelButtonVisibility;}
+            set
+            {
+                _cancelButtonVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public List<MenuItem> ContextMenuItems
         {
             get { return _contextMenuItems; }
@@ -169,6 +182,12 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
+        public ICommand CancelCommand
+        {
+            get;
+            private set;
+        }
+
         public string MessageContent
         {
             get { return _messageContent; }
@@ -211,12 +230,12 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public QueryType QueryType
+        public QueryType CurrentQueryType
         {
-            get { return _queryType; }
+            get { return _currentQueryType; }
             set
             {
-                _queryType = value;
+                _currentQueryType = value;
                 NotifyPropertyChanged();
             }
         }
@@ -342,13 +361,14 @@ namespace ActiveDirectoryToolWpf
         {
             ContextMenuItems = GenerateContextMenuItems();
             ProgressBarVisibility = Visibility.Hidden;
+            CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
         }
 
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
-            switch (QueryType)
+            switch (CurrentQueryType)
             {
                 case QueryType.ContextComputerGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
@@ -601,8 +621,8 @@ namespace ActiveDirectoryToolWpf
 
         private string GetSelectedDirectReportDistinguishedName()
         {
-            return
-                SelectedDataGridRow["DirectReportDistinguishedName"].ToString();
+            return SelectedDataGridRow["DirectReportDistinguishedName"]
+                .ToString();
         }
 
         private string GetSelectedGroupDistinguishedName()
@@ -661,18 +681,36 @@ namespace ActiveDirectoryToolWpf
             StartTask();
             try
             {
-                var activeDirectoryQuery = new ActiveDirectoryQuery(queryType,
+                _activeDirectoryQuery = new ActiveDirectoryQuery(queryType,
                     CurrentScope, selectedItemDistinguishedName);
-                await activeDirectoryQuery.Execute();
-                Data = activeDirectoryQuery.Data.ToDataTable().AsDataView();
-                QueryType = queryType;
+                await _activeDirectoryQuery.Execute();
+                Data = _activeDirectoryQuery.Data.ToDataTable().AsDataView();
+                CurrentQueryType = queryType;
+            }
+            catch (OperationCanceledException)
+            {
+                ShowMessage("Operation was cancelled.");
             }
             catch (ArgumentNullException)
             {
                 ShowMessage(
                     "No results of desired type found in selected context.");
             }
+            catch (OutOfMemoryException)
+            {
+                ShowMessage("The selected query is too large to run.");
+            }
             FinishTask();
+        }
+
+        private void CancelCommandExecute()
+        {
+            _activeDirectoryQuery?.Cancel();
+        }
+
+        private bool CancelCommandCanExecute()
+        {
+            return _activeDirectoryQuery != null;
         }
 
         private void SetUpCommands()
@@ -739,12 +777,16 @@ namespace ActiveDirectoryToolWpf
 
             GetContextGroupSummaryCommand = new RelayCommand(
                 GetContextGroupSummaryCommandExecute);
+
+            CancelCommand= new RelayCommand(
+                CancelCommandExecute, CancelCommandCanExecute);
         }
 
         private void SetViewVariables()
         {
             ProgressBarVisibility = Visibility.Hidden;
             MessageVisibility = Visibility.Hidden;
+            CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
             try
             {
@@ -768,6 +810,7 @@ namespace ActiveDirectoryToolWpf
             HideMessage();
             ViewIsEnabled = false;
             ProgressBarVisibility = Visibility.Visible;
+            CancelButtonVisibility = Visibility.Visible;
         }
 
         private bool WriteToFileCommandCanExecute()
@@ -784,7 +827,7 @@ namespace ActiveDirectoryToolWpf
                 {
                     Data = Data,
                     Scope = CurrentScope.Context,
-                    QueryType = QueryType
+                    QueryType = CurrentQueryType
                 };
                 ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
             });

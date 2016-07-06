@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
-using System.Linq;
+using System.Threading;
 
 namespace ActiveDirectoryToolWpf
 {
@@ -98,81 +98,80 @@ namespace ActiveDirectoryToolWpf
 
     public class ActiveDirectorySearcher
     {
-        public ActiveDirectorySearcher(ActiveDirectoryScope scope)
+        public ActiveDirectorySearcher(
+            ActiveDirectoryScope activeDirectoryScope)
         {
-            Scope = scope;
+            ActiveDirectoryScope = activeDirectoryScope;
         }
 
-        private PrincipalContext PrincipalContext => new PrincipalContext(
-            ContextType.Domain, Scope.Domain, Scope.Context);
-
-        private ActiveDirectoryScope Scope
+        private ActiveDirectoryScope ActiveDirectoryScope
         {
             get;
         }
 
+        private PrincipalContext PrincipalContext => new PrincipalContext(
+            ContextType.Domain,
+            ActiveDirectoryScope.Domain,
+            ActiveDirectoryScope.Context);
+
         public static ComputerGroups GetComputerGroups(
-            ComputerPrincipal computer)
+            ComputerPrincipal computerPrincipal)
         {
             return new ComputerGroups
             {
-                Computer = computer,
-                Groups = computer.GetGroups().OfType<GroupPrincipal>().ToList()
+                Computer = computerPrincipal,
+                Groups = computerPrincipal.GetGroupPrincipals()
             };
         }
 
-        public static GroupComputers GetComputers(GroupPrincipal groupPrincipal)
-        {
-            return new GroupComputers
-            {
-                Group = groupPrincipal,
-                Computers = groupPrincipal.Members.OfType<ComputerPrincipal>()
-            };
-        }
-
-        public static IEnumerable<ComputerPrincipal> GetComputers(
-            PrincipalContext context)
+        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
+            PrincipalContext principalContext)
         {
             IEnumerable<ComputerPrincipal> computers;
             using (var searcher = new PrincipalSearcher(
-                new ComputerPrincipal(context)))
+                new ComputerPrincipal(principalContext)))
             {
-                computers = searcher.FindAll().OfType<ComputerPrincipal>()
-                    .ToList();
+                computers = searcher.GetAllComputerPrincipals();
             }
             return computers;
         }
 
+        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
+            GroupPrincipal group)
+        {
+            return group.GetComputerPrincipals();
+        }
+
         public static IEnumerable<ComputerGroups> GetComputersGroups(
-            PrincipalContext principalContext)
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
         {
             var computersGroups = new List<ComputerGroups>();
-            using (var searcher =
-                new PrincipalSearcher(new ComputerPrincipal(principalContext)))
+            using (var searcher = new PrincipalSearcher(
+                new ComputerPrincipal(principalContext)))
             {
-                computersGroups.AddRange(
-                    searcher.FindAll().OfType<ComputerPrincipal>().Select(
-                        GetComputerGroups));
+                foreach (var computerPrincipal in searcher
+                    .GetAllComputerPrincipals())
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    computersGroups.Add(GetComputerGroups(computerPrincipal));
+                }
             }
             return computersGroups;
         }
 
-        public static IEnumerable<GroupPrincipal> GetGroups(
-            PrincipalContext principalContext)
+        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
+            IEnumerable<UserPrincipal> userPrincipals,
+            CancellationToken cancellationToken)
         {
-            return GetGroups(GetUsers(principalContext));
-        }
-
-        public static IEnumerable<GroupPrincipal> GetGroups(
-            IEnumerable<UserPrincipal> users)
-        {
-            var groups = new HashSet<GroupPrincipal>();
-            foreach (var user in users)
+            var groupPrincipals = new HashSet<GroupPrincipal>();
+            foreach (var userPrincipal in userPrincipals)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 try
                 {
-                    groups.UnionWith(user.GetGroups().OfType<GroupPrincipal>()
-                        .ToList());
+                    groupPrincipals.UnionWith(
+                        userPrincipal.GetGroupPrincipals());
                 }
                 catch (Exception e)
                 {
@@ -180,45 +179,56 @@ namespace ActiveDirectoryToolWpf
                 }
             }
 
-            return groups;
+            return groupPrincipals;
+        }
+
+        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
+        {
+            return GetGroupPrincipals(
+                GetUserPrincipals(principalContext), cancellationToken);
         }
 
         public static GroupUsersDirectReports GetGroupUsersDirectReports(
-            GroupPrincipal groupPrincipal)
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
         {
             return new GroupUsersDirectReports
             {
                 Group = groupPrincipal,
-                UsersDirectReports = GetUsersDirectReports(groupPrincipal)
+                UsersDirectReports = GetUsersDirectReports(
+                    groupPrincipal, cancellationToken)
             };
         }
 
         public static GroupUsersGroups GetGroupUsersGroups(
-            GroupPrincipal groupPrincipal)
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
         {
             return new GroupUsersGroups
             {
                 Group = groupPrincipal,
-                UsersGroups = GetUsersGroups(groupPrincipal)
+                UsersGroups = GetUsersGroups(groupPrincipal, cancellationToken)
             };
         }
 
         public static UserDirectReports GetUserDirectReports(
-            UserPrincipal user)
+            UserPrincipal userPrincipal)
         {
             return new UserDirectReports
             {
-                User = user,
-                DirectReports = user.GetDirectReports()
+                User = userPrincipal,
+                DirectReports = userPrincipal.GetDirectReportUserPrincipals()
             };
         }
 
-        public static UserGroups GetUserGroups(UserPrincipal user)
+        public static UserGroups GetUserGroups(UserPrincipal userPrincipal)
         {
             var groups = new List<GroupPrincipal>();
             try
             {
-                groups.AddRange(user.GetGroups().OfType<GroupPrincipal>());
+                groups.AddRange(userPrincipal.GetGroupPrincipals());
             }
             catch (Exception e)
             {
@@ -226,104 +236,136 @@ namespace ActiveDirectoryToolWpf
             }
             return new UserGroups
             {
-                User = user,
+                User = userPrincipal,
                 Groups = groups
             };
         }
 
-        public static IEnumerable<UserPrincipal> GetUsers(
-            PrincipalContext context)
-        {
-            IEnumerable<UserPrincipal> users;
-            using (var searcher = new PrincipalSearcher(
-                new UserPrincipal(context)))
-            {
-                users = searcher.FindAll().OfType<UserPrincipal>().ToList();
-            }
-            return users;
-        }
-
-        public static GroupUsers GetUsers(GroupPrincipal groupPrincipal)
-        {
-            return new GroupUsers
-            {
-                Group = groupPrincipal,
-                Users = groupPrincipal.Members.OfType<UserPrincipal>()
-            };
-        }
-
-        public static IEnumerable<GroupUsers> GetUsers(
-            IEnumerable<GroupPrincipal> groupPrincipals)
-        {
-            return groupPrincipals.Select(GetUsers).ToList();
-        }
-
-        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
-            GroupPrincipal groupPrincipal)
-        {
-            return groupPrincipal.Members.OfType<UserPrincipal>().Select(
-                GetUserDirectReports).ToList();
-        }
-
-        public static IEnumerable<UserDirectReports>
-            GetUsersDirectReports(PrincipalContext principalContext)
-        {
-            return GetUsersDirectReports(GetUsers(principalContext));
-        }
-
-        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
-            IEnumerable<UserPrincipal> userPrincipals)
-        {
-            return userPrincipals.Select(GetUserDirectReports).ToList();
-        }
-
-        public static IEnumerable<UserGroups> GetUsersGroups(
-            GroupPrincipal groupPrincipal)
-        {
-            return groupPrincipal.Members.OfType<UserPrincipal>().Select(
-                GetUserGroups).ToList();
-        }
-
-        public static IEnumerable<UserGroups> GetUsersGroups(
+        public static IEnumerable<UserPrincipal> GetUserPrincipals(
             PrincipalContext principalContext)
         {
-            return GetUsersGroups(GetUsers(principalContext));
+            IEnumerable<UserPrincipal> userPrincipals;
+            using (var searcher = new PrincipalSearcher(
+                new UserPrincipal(principalContext)))
+            {
+                userPrincipals = searcher.GetAllUserPrincipals();
+            }
+            return userPrincipals;
+        }
+
+        public static IEnumerable<UserPrincipal> GetUserPrincipals(
+            GroupPrincipal groupPrincipal)
+        {
+            return groupPrincipal.GetUserPrincipals();
+        }
+
+        public static IEnumerable<UserPrincipal> GetUserPrincipals(
+            IEnumerable<GroupPrincipal> groupPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var userPrincipals = new List<UserPrincipal>();
+            foreach (var groupPrincipal in groupPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                userPrincipals.AddRange(GetUserPrincipals(groupPrincipal));
+            }
+            return userPrincipals;
+        }
+
+        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
+        {
+            var usersDirectReports = new List<UserDirectReports>();
+            foreach (var userPrincipal in groupPrincipal.GetUserPrincipals())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                usersDirectReports.Add(GetUserDirectReports(userPrincipal));
+            }
+            return usersDirectReports;
+        }
+
+        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
+        {
+            return GetUsersDirectReports(
+                GetUserPrincipals(principalContext), cancellationToken);
+        }
+
+        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
+            IEnumerable<UserPrincipal> userPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var usersDirectReports = new List<UserDirectReports>();
+            foreach (var userPrincipal in userPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                usersDirectReports.Add(GetUserDirectReports(userPrincipal));
+            }
+            return usersDirectReports;
         }
 
         public static IEnumerable<UserGroups> GetUsersGroups(
-            IEnumerable<UserPrincipal> users)
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
         {
-            return users.Select(GetUserGroups).ToList();
+            var usersGroups = new List<UserGroups>();
+            foreach (var userPrincipal in groupPrincipal.GetUserPrincipals())
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                usersGroups.Add(GetUserGroups(userPrincipal));
+            }
+            return usersGroups;
         }
 
-        public IEnumerable<ComputerPrincipal> GetComputers()
+        public static IEnumerable<UserGroups> GetUsersGroups(
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
         {
-            return GetComputers(PrincipalContext);
+            return GetUsersGroups(
+                GetUserPrincipals(principalContext), cancellationToken);
         }
 
-        public IEnumerable<ComputerGroups> GetComputersGroups()
+        public static IEnumerable<UserGroups> GetUsersGroups(
+            IEnumerable<UserPrincipal> userPrincipals,
+            CancellationToken cancellationToken)
         {
-            return GetComputersGroups(PrincipalContext);
+            var usersGroups = new List<UserGroups>();
+            foreach (var userPrincipal in userPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                usersGroups.Add(GetUserGroups(userPrincipal));
+            }
+            return usersGroups;
         }
 
-        public IEnumerable<GroupPrincipal> GetGroups()
+        public IEnumerable<ComputerPrincipal> GetOuComputerPrincipals()
         {
-            return GetGroups(PrincipalContext);
+            return GetComputerPrincipals(PrincipalContext);
         }
 
-        public IEnumerable<UserPrincipal> GetUsers()
+        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals(
+            CancellationToken cancellationToken)
         {
-            return GetUsers(PrincipalContext);
+            return GetGroupPrincipals(PrincipalContext, cancellationToken);
         }
 
-        public IEnumerable<UserDirectReports> GetUsersDirectReports()
+        public IEnumerable<UserPrincipal> GetOuUserPrincipals()
         {
-            return GetUsersDirectReports(PrincipalContext);
+            return GetUserPrincipals(PrincipalContext);
         }
 
-        public IEnumerable<UserGroups> GetUsersGroups()
+        public IEnumerable<UserDirectReports> GetOuUsersDirectReports(
+            CancellationToken cancellationToken)
         {
-            return GetUsersGroups(PrincipalContext);
+            return GetUsersDirectReports(PrincipalContext, cancellationToken);
+        }
+
+        public IEnumerable<UserGroups> GetOuUsersGroups(
+            CancellationToken cancellationToken)
+        {
+            return GetUsersGroups(PrincipalContext, cancellationToken);
         }
     }
 
