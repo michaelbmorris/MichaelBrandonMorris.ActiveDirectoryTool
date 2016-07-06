@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -39,15 +40,42 @@ namespace ActiveDirectoryToolWpf
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
 
-        private QueryType _currentQueryType;
+        private ObservableStack<ActiveDirectoryQuery> _previousQueries;
         private DataRowView _selectedDataGridRow;
         private bool _viewIsEnabled;
 
         private ActiveDirectoryQuery _activeDirectoryQuery;
 
+        public ActiveDirectoryQuery Query
+        {
+            get { return _activeDirectoryQuery;}
+            set
+            {
+                _activeDirectoryQuery = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ObservableStack<ActiveDirectoryQuery> PreviousQueries
+        {
+            get { return _previousQueries; }
+            set
+            {
+                _previousQueries = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ICommand PreviousQueryCommand
+        {
+            get;
+            private set;
+        }
+
         public ActiveDirectoryToolViewModel()
         {
             RootScope = new ActiveDirectoryScopeFetcher().Scope;
+            PreviousQueries = new ObservableStack<ActiveDirectoryQuery>();
             SetViewVariables();
             _computerGetGroupsMenuItem = new MenuItem
             {
@@ -230,16 +258,6 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public QueryType CurrentQueryType
-        {
-            get { return _currentQueryType; }
-            set
-            {
-                _currentQueryType = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         public ActiveDirectoryScope RootScope
         {
             get;
@@ -368,7 +386,7 @@ namespace ActiveDirectoryToolWpf
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
-            switch (CurrentQueryType)
+            switch (_activeDirectoryQuery.QueryType)
             {
                 case QueryType.ContextComputerGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
@@ -681,26 +699,36 @@ namespace ActiveDirectoryToolWpf
             StartTask();
             try
             {
-                _activeDirectoryQuery = new ActiveDirectoryQuery(queryType,
-                    CurrentScope, selectedItemDistinguishedName);
-                await _activeDirectoryQuery.Execute();
-                Data = _activeDirectoryQuery.Data.ToDataTable().AsDataView();
-                CurrentQueryType = queryType;
+                if(Query != null)
+                    PreviousQueries.Push(Query);
+                Query = new ActiveDirectoryQuery(
+                    queryType, CurrentScope, selectedItemDistinguishedName);
+                await Query.Execute();
+                Data = Query.Data.ToDataTable().AsDataView();
             }
             catch (OperationCanceledException)
             {
                 ShowMessage("Operation was cancelled.");
+                ResetQuery();
             }
             catch (ArgumentNullException)
             {
                 ShowMessage(
                     "No results of desired type found in selected context.");
+                ResetQuery();
             }
             catch (OutOfMemoryException)
             {
                 ShowMessage("The selected query is too large to run.");
+                ResetQuery();
             }
             FinishTask();
+        }
+
+        private void ResetQuery()
+        {
+            if (PreviousQueries.Any() && PreviousQueries.Peek() != null)
+                Query = PreviousQueries.Pop();
         }
 
         private void CancelCommandExecute()
@@ -826,8 +854,8 @@ namespace ActiveDirectoryToolWpf
                 var fileWriter = new DataFileWriter
                 {
                     Data = Data,
-                    Scope = CurrentScope.Context,
-                    QueryType = CurrentQueryType
+                    Scope = _activeDirectoryQuery.Scope,
+                    QueryType = _activeDirectoryQuery.QueryType
                 };
                 ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
             });

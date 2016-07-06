@@ -118,6 +118,17 @@ namespace ActiveDirectoryToolWpf
             };
 
         private static readonly ActiveDirectoryAttribute[]
+            DefaultGroupUsersGroupsAttributes =
+            {
+                ActiveDirectoryAttribute.ContainerGroupName,
+                ActiveDirectoryAttribute.UserName,
+                ActiveDirectoryAttribute.GroupName,
+                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
+                ActiveDirectoryAttribute.UserDistinguishedName,
+                ActiveDirectoryAttribute.GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryAttribute[]
             DefaultUserAttributes =
             {
                 ActiveDirectoryAttribute.UserSurname,
@@ -165,20 +176,9 @@ namespace ActiveDirectoryToolWpf
                 ActiveDirectoryAttribute.GroupDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersGroupsAttributes =
-            {
-                ActiveDirectoryAttribute.ContainerGroupName,
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
-            };
-
         private readonly ActiveDirectoryScope _activeDirectoryScope;
         private readonly PrincipalContext _principalContext;
-        private readonly QueryType _queryType;
+
         private readonly string _selectedItemDistinguishedName;
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -188,7 +188,7 @@ namespace ActiveDirectoryToolWpf
             ActiveDirectoryScope activeDirectoryScope = null,
             string selectedItemDistinguishedName = null)
         {
-            _queryType = queryType;
+            QueryType = queryType;
             _principalContext = new PrincipalContext(ContextType.Domain);
             _activeDirectoryScope = activeDirectoryScope;
             _selectedItemDistinguishedName = selectedItemDistinguishedName;
@@ -200,41 +200,53 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
+        public QueryType QueryType
+        {
+            get;
+        }
+
+        public string Scope
+        {
+            get;
+            private set;
+        }
+
+        public string Name => Scope + QueryType;
+
         private CancellationToken CancellationToken
             => _cancellationTokenSource.Token;
 
-        private bool QueryTypeIsOu()
+        public void Cancel()
         {
-            return _queryType == OuComputers ||
-                   _queryType == OuGroups ||
-                   _queryType == OuUsers ||
-                   _queryType == OuUsersDirectReports ||
-                   _queryType == OuUsersGroups;
+            _cancellationTokenSource?.Cancel();
         }
 
-        private bool QueryTypeIsContextDirectReportOrUser()
+        public async Task Execute()
         {
-            return _queryType == ContextUserDirectReports ||
-                   _queryType == ContextUserGroups ||
-                   _queryType == ContextUserSummary ||
-                   _queryType == ContextDirectReportDirectReports ||
-                   _queryType == ContextDirectReportGroups ||
-                   _queryType == ContextDirectReportSummary;
-        }
-
-        private bool QueryTypeIsContextComputer()
-        {
-            return _queryType == ContextComputerGroups ||
-                   _queryType == ContextComputerSummary;
-        }
-
-        private bool QueryTypeIsContextGroup()
-        {
-            return _queryType == ContextGroupComputers ||
-                   _queryType == ContextGroupUsers ||
-                   _queryType == ContextGroupUsersDirectReports ||
-                   _queryType == ContextGroupUsersGroups ||
-                   _queryType == ContextGroupSummary;
+            _cancellationTokenSource = new CancellationTokenSource();
+            DataPreparer dataPreparer = null;
+            var task = Task.Run(() =>
+            {
+                if (QueryTypeIsOu())
+                {
+                    dataPreparer = SetUpOuDataPreparer();
+                }
+                else if (QueryTypeIsContextComputer())
+                {
+                    dataPreparer = SetUpComputerDataPreparer();
+                }
+                else if (QueryTypeIsContextDirectReportOrUser())
+                {
+                    dataPreparer = SetUpDirectReportOrUserDataPreparer();
+                }
+                else if (QueryTypeIsContextGroup())
+                {
+                    dataPreparer = SetUpGroupDataPreparer();
+                }
+                Data = GetData(dataPreparer);
+            },
+                _cancellationTokenSource.Token);
+            await task;
         }
 
         private static IEnumerable<ExpandoObject> GetData(
@@ -243,9 +255,9 @@ namespace ActiveDirectoryToolWpf
             return new List<ExpandoObject>(dataPreparer.GetResults());
         }
 
-        private UserPrincipal GetSelectedUserPrincipal()
+        private ComputerPrincipal GetSelectedComputerPrincipal()
         {
-            return UserPrincipal.FindByIdentity(
+            return ComputerPrincipal.FindByIdentity(
                 _principalContext, _selectedItemDistinguishedName);
         }
 
@@ -255,53 +267,50 @@ namespace ActiveDirectoryToolWpf
                 _principalContext, _selectedItemDistinguishedName);
         }
 
-        private ComputerPrincipal GetSelectedComputerPrincipal()
+        private UserPrincipal GetSelectedUserPrincipal()
         {
-            return ComputerPrincipal.FindByIdentity(
+            return UserPrincipal.FindByIdentity(
                 _principalContext, _selectedItemDistinguishedName);
         }
 
-        private DataPreparer SetUpOuDataPreparer()
+        private bool QueryTypeIsContextComputer()
         {
-            var activeDirectorySearcher = new ActiveDirectorySearcher(
-                _activeDirectoryScope);
-            var ouDataPreparers = new Dictionary<QueryType, DataPreparer>
-            {
-                [OuComputers] = new DataPreparer
-                {
-                    Data = activeDirectorySearcher.GetOuComputerPrincipals(),
-                    Attributes = DefaultComputerAttributes
-                },
-                [OuGroups] = new DataPreparer
-                {
-                    Data = activeDirectorySearcher.GetOuGroupPrincipals(
-                        CancellationToken),
-                    Attributes = DefaultGroupAttributes
-                },
-                [OuUsers] = new DataPreparer
-                {
-                    Data = activeDirectorySearcher.GetOuUserPrincipals(),
-                    Attributes = DefaultUserAttributes
-                },
-                [OuUsersDirectReports] = new DataPreparer
-                {
-                    Data = activeDirectorySearcher.GetOuUsersDirectReports(
-                        CancellationToken),
-                    Attributes = DefaultUserDirectReportsAttributes
-                },
-                [OuUsersGroups] = new DataPreparer
-                {
-                    Data = activeDirectorySearcher.GetOuUsersGroups(
-                        CancellationToken),
-                    Attributes = DefaultUserGroupsAttributes
-                }
-            };
-            return ouDataPreparers[_queryType];
+            return QueryType == ContextComputerGroups ||
+                   QueryType == ContextComputerSummary;
+        }
+
+        private bool QueryTypeIsContextDirectReportOrUser()
+        {
+            return QueryType == ContextUserDirectReports ||
+                   QueryType == ContextUserGroups ||
+                   QueryType == ContextUserSummary ||
+                   QueryType == ContextDirectReportDirectReports ||
+                   QueryType == ContextDirectReportGroups ||
+                   QueryType == ContextDirectReportSummary;
+        }
+
+        private bool QueryTypeIsContextGroup()
+        {
+            return QueryType == ContextGroupComputers ||
+                   QueryType == ContextGroupUsers ||
+                   QueryType == ContextGroupUsersDirectReports ||
+                   QueryType == ContextGroupUsersGroups ||
+                   QueryType == ContextGroupSummary;
+        }
+
+        private bool QueryTypeIsOu()
+        {
+            return QueryType == OuComputers ||
+                   QueryType == OuGroups ||
+                   QueryType == OuUsers ||
+                   QueryType == OuUsersDirectReports ||
+                   QueryType == OuUsersGroups;
         }
 
         private DataPreparer SetUpComputerDataPreparer()
         {
             var computerPrincipal = GetSelectedComputerPrincipal();
+            Scope = computerPrincipal.Name;
             var computerDataPreparers = new Dictionary<QueryType, DataPreparer>
             {
                 [ContextComputerGroups] = new DataPreparer
@@ -322,12 +331,13 @@ namespace ActiveDirectoryToolWpf
                     Attributes = DefaultComputerAttributes
                 }
             };
-            return computerDataPreparers[_queryType];
+            return computerDataPreparers[QueryType];
         }
 
         private DataPreparer SetUpDirectReportOrUserDataPreparer()
         {
             var userPrincipal = GetSelectedUserPrincipal();
+            Scope = userPrincipal.Name;
             var simplifiedQueryTypes =
                 new Dictionary<QueryType, SimplifiedQueryType>
                 {
@@ -368,17 +378,13 @@ namespace ActiveDirectoryToolWpf
                 }
             };
             return directReportOrUserDataPreparers[
-                simplifiedQueryTypes[_queryType]];
-        }
-
-        public void Cancel()
-        {
-            _cancellationTokenSource?.Cancel();
+                simplifiedQueryTypes[QueryType]];
         }
 
         private DataPreparer SetUpGroupDataPreparer()
         {
             var groupPrincipal = GetSelectedGroupPrincipal();
+            Scope = groupPrincipal.Name;
             var groupDataPreparers = new Dictionary<QueryType, DataPreparer>
             {
                 [ContextGroupComputers] = new DataPreparer
@@ -428,35 +434,46 @@ namespace ActiveDirectoryToolWpf
                     Attributes = DefaultGroupUsersGroupsAttributes
                 }
             };
-            return groupDataPreparers[_queryType];
+            return groupDataPreparers[QueryType];
         }
 
-        public async Task Execute()
+        private DataPreparer SetUpOuDataPreparer()
         {
-            _cancellationTokenSource = new CancellationTokenSource();
-            DataPreparer dataPreparer = null;
-            var task = Task.Run(() =>
+            Scope = _activeDirectoryScope.Context;
+            var activeDirectorySearcher = new ActiveDirectorySearcher(
+                _activeDirectoryScope);
+            var ouDataPreparers = new Dictionary<QueryType, DataPreparer>
             {
-                if (QueryTypeIsOu())
+                [OuComputers] = new DataPreparer
                 {
-                    dataPreparer = SetUpOuDataPreparer();
-                }
-                else if (QueryTypeIsContextComputer())
+                    Data = activeDirectorySearcher.GetOuComputerPrincipals(),
+                    Attributes = DefaultComputerAttributes
+                },
+                [OuGroups] = new DataPreparer
                 {
-                    dataPreparer = SetUpComputerDataPreparer();
-                }
-                else if (QueryTypeIsContextDirectReportOrUser())
+                    Data = activeDirectorySearcher.GetOuGroupPrincipals(
+                        CancellationToken),
+                    Attributes = DefaultGroupAttributes
+                },
+                [OuUsers] = new DataPreparer
                 {
-                    dataPreparer = SetUpDirectReportOrUserDataPreparer();
-                }
-                else if (QueryTypeIsContextGroup())
+                    Data = activeDirectorySearcher.GetOuUserPrincipals(),
+                    Attributes = DefaultUserAttributes
+                },
+                [OuUsersDirectReports] = new DataPreparer
                 {
-                    dataPreparer = SetUpGroupDataPreparer();
+                    Data = activeDirectorySearcher.GetOuUsersDirectReports(
+                        CancellationToken),
+                    Attributes = DefaultUserDirectReportsAttributes
+                },
+                [OuUsersGroups] = new DataPreparer
+                {
+                    Data = activeDirectorySearcher.GetOuUsersGroups(
+                        CancellationToken),
+                    Attributes = DefaultUserGroupsAttributes
                 }
-                Data = GetData(dataPreparer);
-            },
-                _cancellationTokenSource.Token);
-            await task;
+            };
+            return ouDataPreparers[QueryType];
         }
     }
 }

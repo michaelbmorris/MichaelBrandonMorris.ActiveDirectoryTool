@@ -121,6 +121,18 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <Button DockPanel.Dock="Left"
+                                    Content="Previous Query"
+                                    Command="{Binding PreviousQueryCommand}"
+                                    Margin="5 5 0 5" />
+                            <ComboBox DockPanel.Dock="Left"
+                                      Margin="5 5 5 5"
+                                      SelectedIndex="0"
+                                      ItemsSource="{Binding PreviousQueries}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValue="{Binding Query}"/>
+                        </DockPanel>
                         <DataGrid DockPanel.Dock="Top"
                                   IsEnabled="{Binding ViewIsEnabled}"
                                   ItemsSource="{Binding Data}"

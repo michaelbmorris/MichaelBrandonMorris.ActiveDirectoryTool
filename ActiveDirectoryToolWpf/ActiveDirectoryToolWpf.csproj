@@ -41,7 +41,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -136,6 +136,7 @@
     <Compile Include="HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObservableStack.cs" />
     <Compile Include="PrincipalExtensions.cs" />
     <Compile Include="PrincipalSearcherExtensions.cs" />
     <Compile Include="PrincipalSearchResultExtensions.cs" />
