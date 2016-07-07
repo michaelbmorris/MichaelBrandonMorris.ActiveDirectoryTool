@@ -224,7 +224,7 @@ namespace ActiveDirectoryToolWpf
             set;
         }
 
-        public IEnumerable<object> Data
+        public Lazy<IEnumerable<object>> Data
         {
             get;
             set;
@@ -234,7 +234,7 @@ namespace ActiveDirectoryToolWpf
         {
             var results = new List<ExpandoObject>();
 
-            foreach (var data in Data)
+            foreach (var data in Data.Value)
             {
                 if (data is ComputerGroups)
                 {

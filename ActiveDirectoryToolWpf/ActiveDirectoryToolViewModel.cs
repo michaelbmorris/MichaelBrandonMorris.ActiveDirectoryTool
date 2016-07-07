@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using CollectionExtensions;
 using GalaSoft.MvvmLight.CommandWpf;
 using static System.Deployment.Application.ApplicationDeployment;
 
@@ -22,60 +24,57 @@ namespace ActiveDirectoryToolWpf
         private readonly MenuItem _directReportGetGroupsMenuItem;
         private readonly MenuItem _directReportGetSummaryMenuItem;
         private readonly MenuItem _groupGetComputersMenuItem;
+        private readonly MenuItem _groupGetSummaryMenuItem;
         private readonly MenuItem _groupGetUsersDirectReportsMenuItem;
         private readonly MenuItem _groupGetUsersGroupsMenuItem;
         private readonly MenuItem _groupGetUsersMenuItem;
-        private readonly MenuItem _groupGetSummaryMenuItem;
         private readonly MenuItem _userGetDirectReportsMenuItem;
         private readonly MenuItem _userGetGroupsMenuItem;
         private readonly MenuItem _userGetSummaryMenuItem;
         private AboutWindow _aboutWindow;
+        private Visibility _cancelButtonVisibility;
         private List<MenuItem> _contextMenuItems;
         private DataView _data;
         private HelpWindow _helpWindow;
 
         private string _messageContent;
-
-        private Visibility _cancelButtonVisibility;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
 
-        private ObservableStack<ActiveDirectoryQuery> _previousQueries;
+        private ObservableCollection<ActiveDirectoryQuery> _queries;
         private DataRowView _selectedDataGridRow;
         private bool _viewIsEnabled;
 
-        private ActiveDirectoryQuery _activeDirectoryQuery;
+        //private int _selectedQueryIndex;
 
-        public ActiveDirectoryQuery Query
+        /*public int SelectedQueryIndex
         {
-            get { return _activeDirectoryQuery;}
+            get { return _selectedQueryIndex; }
             set
             {
-                _activeDirectoryQuery = value;
+                if (value == _selectedQueryIndex) return;
+                if (value != Queries.Count - 1)
+                {
+                    RunQuery(SelectedQueryIndex);
+                }
+                _selectedQueryIndex = value;
                 NotifyPropertyChanged();
             }
-        }
+        }*/
 
-        public ObservableStack<ActiveDirectoryQuery> PreviousQueries
+        private async void RunQuery(int selectedQueryIndex)
         {
-            get { return _previousQueries; }
-            set
+            while (Queries.Count - 1 != selectedQueryIndex)
             {
-                _previousQueries = value;
-                NotifyPropertyChanged();
+                Queries.Pop();
             }
-        }
-
-        public ICommand PreviousQueryCommand
-        {
-            get;
-            private set;
+            await RunQuery(Queries.Pop());
         }
 
         public ActiveDirectoryToolViewModel()
         {
             RootScope = new ActiveDirectoryScopeFetcher().Scope;
-            PreviousQueries = new ObservableStack<ActiveDirectoryQuery>();
+            Queries = new ObservableCollection<ActiveDirectoryQuery>();
             SetViewVariables();
             _computerGetGroupsMenuItem = new MenuItem
             {
@@ -146,12 +145,18 @@ namespace ActiveDirectoryToolWpf
 
         public Visibility CancelButtonVisibility
         {
-            get { return _cancelButtonVisibility;}
+            get { return _cancelButtonVisibility; }
             set
             {
                 _cancelButtonVisibility = value;
                 NotifyPropertyChanged();
             }
+        }
+
+        public ICommand CancelCommand
+        {
+            get;
+            private set;
         }
 
         public List<MenuItem> ContextMenuItems
@@ -210,12 +215,6 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
-        public ICommand CancelCommand
-        {
-            get;
-            private set;
-        }
-
         public string MessageContent
         {
             get { return _messageContent; }
@@ -248,12 +247,28 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
+        public ICommand PreviousQueryCommand
+        {
+            get;
+            private set;
+        }
+
         public Visibility ProgressBarVisibility
         {
             get { return _progressBarVisibility; }
             set
             {
                 _progressBarVisibility = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<ActiveDirectoryQuery> Queries
+        {
+            get { return _queries; }
+            set
+            {
+                _queries = value;
                 NotifyPropertyChanged();
             }
         }
@@ -331,6 +346,12 @@ namespace ActiveDirectoryToolWpf
             set;
         }
 
+        private ICommand GetContextGroupSummaryCommand
+        {
+            get;
+            set;
+        }
+
         private ICommand GetContextGroupUsersCommand
         {
             get;
@@ -367,13 +388,18 @@ namespace ActiveDirectoryToolWpf
             set;
         }
 
-        private ICommand GetContextGroupSummaryCommand
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool CancelCommandCanExecute()
         {
-            get;
-            set;
+            return Queries.Peek() != null && Queries.Peek().CanCancel;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private void CancelCommandExecute()
+        {
+            Queries.Peek()?.Cancel();
+            ResetQuery();
+        }
 
         private void FinishTask()
         {
@@ -386,7 +412,7 @@ namespace ActiveDirectoryToolWpf
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
-            switch (_activeDirectoryQuery.QueryType)
+            switch (Queries.First().QueryType)
             {
                 case QueryType.ContextComputerGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
@@ -546,11 +572,25 @@ namespace ActiveDirectoryToolWpf
                     GetSelectedDirectReportDistinguishedName());
         }
 
+        private async void GetContextDirectReportSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextDirectReportSummary,
+                GetSelectedDirectReportDistinguishedName());
+        }
+
         private async void GetContextGroupComputersCommandExecute()
         {
             await
                 RunQuery(QueryType.ContextGroupComputers,
                     GetSelectedGroupDistinguishedName());
+        }
+
+        private async void GetContextGroupSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextGroupSummary,
+                GetSelectedGroupDistinguishedName());
         }
 
         private async void GetContextGroupUsersCommandExecute()
@@ -586,6 +626,13 @@ namespace ActiveDirectoryToolWpf
                     GetSelectedUserDistinguishedName());
         }
 
+        private async void GetContextUserSummaryCommandExecute()
+        {
+            await RunQuery(
+                QueryType.ContextUserSummary,
+                GetSelectedUserDistinguishedName());
+        }
+
         private async void GetOuComputersCommandExecute()
         {
             await RunQuery(QueryType.OuComputers);
@@ -609,27 +656,6 @@ namespace ActiveDirectoryToolWpf
         private async void GetOuUsersGroupsCommandExecute()
         {
             await RunQuery(QueryType.OuUsersGroups);
-        }
-
-        private async void GetContextUserSummaryCommandExecute()
-        {
-            await RunQuery(
-                QueryType.ContextUserSummary,
-                GetSelectedUserDistinguishedName());
-        }
-
-        private async void GetContextDirectReportSummaryCommandExecute()
-        {
-            await RunQuery(
-                QueryType.ContextDirectReportSummary,
-                GetSelectedDirectReportDistinguishedName());
-        }
-
-        private async void GetContextGroupSummaryCommandExecute()
-        {
-            await RunQuery(
-                QueryType.ContextGroupSummary,
-                GetSelectedGroupDistinguishedName());
         }
 
         private string GetSelectedComputerDistinguishedName()
@@ -693,18 +719,40 @@ namespace ActiveDirectoryToolWpf
             return CurrentScope != null;
         }
 
+        private bool PreviousQueryCommandCanExecute()
+        {
+            return Queries.Multiple();
+        }
+
+        private async void PreviousQueryCommandExecute()
+        {
+            Queries.Pop();
+            await RunQuery(Queries.Pop());
+        }
+
+        private void ResetQuery()
+        {
+            if (Queries.Any())
+                Queries.Pop();
+        }
+
         private async Task RunQuery(QueryType queryType,
             string selectedItemDistinguishedName = null)
+        {
+            await RunQuery(
+                new ActiveDirectoryQuery(
+                    queryType, CurrentScope, selectedItemDistinguishedName));
+        }
+
+        private async Task RunQuery(ActiveDirectoryQuery query)
         {
             StartTask();
             try
             {
-                if(Query != null)
-                    PreviousQueries.Push(Query);
-                Query = new ActiveDirectoryQuery(
-                    queryType, CurrentScope, selectedItemDistinguishedName);
-                await Query.Execute();
-                Data = Query.Data.ToDataTable().AsDataView();
+                Queries.Push(query);
+                //SelectedQueryIndex++;
+                await Queries.Peek().Execute();
+                Data = Queries.Peek().Data.ToDataTable().AsDataView();
             }
             catch (OperationCanceledException)
             {
@@ -723,22 +771,6 @@ namespace ActiveDirectoryToolWpf
                 ResetQuery();
             }
             FinishTask();
-        }
-
-        private void ResetQuery()
-        {
-            if (PreviousQueries.Any() && PreviousQueries.Peek() != null)
-                Query = PreviousQueries.Pop();
-        }
-
-        private void CancelCommandExecute()
-        {
-            _activeDirectoryQuery?.Cancel();
-        }
-
-        private bool CancelCommandCanExecute()
-        {
-            return _activeDirectoryQuery != null;
         }
 
         private void SetUpCommands()
@@ -806,8 +838,11 @@ namespace ActiveDirectoryToolWpf
             GetContextGroupSummaryCommand = new RelayCommand(
                 GetContextGroupSummaryCommandExecute);
 
-            CancelCommand= new RelayCommand(
+            CancelCommand = new RelayCommand(
                 CancelCommandExecute, CancelCommandCanExecute);
+
+            PreviousQueryCommand = new RelayCommand(
+                PreviousQueryCommandExecute, PreviousQueryCommandCanExecute);
         }
 
         private void SetViewVariables()
@@ -815,6 +850,7 @@ namespace ActiveDirectoryToolWpf
             ProgressBarVisibility = Visibility.Hidden;
             MessageVisibility = Visibility.Hidden;
             CancelButtonVisibility = Visibility.Hidden;
+            //SelectedQueryIndex = -1;
             ViewIsEnabled = true;
             try
             {
@@ -854,8 +890,8 @@ namespace ActiveDirectoryToolWpf
                 var fileWriter = new DataFileWriter
                 {
                     Data = Data,
-                    Scope = _activeDirectoryQuery.Scope,
-                    QueryType = _activeDirectoryQuery.QueryType
+                    Scope = Queries.First().Scope,
+                    QueryType = Queries.First().QueryType
                 };
                 ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
             });

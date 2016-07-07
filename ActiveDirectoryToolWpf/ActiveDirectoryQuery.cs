@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
@@ -27,7 +28,8 @@ namespace ActiveDirectoryToolWpf
         OuGroups,
         OuUsers,
         OuUsersDirectReports,
-        OuUsersGroups
+        OuUsersGroups,
+        Null
     }
 
     internal enum SimplifiedQueryType
@@ -180,6 +182,7 @@ namespace ActiveDirectoryToolWpf
         private readonly PrincipalContext _principalContext;
 
         private readonly string _selectedItemDistinguishedName;
+        private readonly DataPreparer _dataPreparer;
 
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -192,6 +195,28 @@ namespace ActiveDirectoryToolWpf
             _principalContext = new PrincipalContext(ContextType.Domain);
             _activeDirectoryScope = activeDirectoryScope;
             _selectedItemDistinguishedName = selectedItemDistinguishedName;
+            if (QueryTypeIsOu())
+            {
+                _dataPreparer = SetUpOuDataPreparer();
+            }
+            else if (QueryTypeIsContextComputer())
+            {
+                _dataPreparer = SetUpComputerDataPreparer();
+            }
+            else if (QueryTypeIsContextDirectReportOrUser())
+            {
+                _dataPreparer = SetUpDirectReportOrUserDataPreparer();
+            }
+            else if (QueryTypeIsContextGroup())
+            {
+                _dataPreparer = SetUpGroupDataPreparer();
+            }
+        }
+
+        public bool CanCancel
+        {
+            get;
+            private set;
         }
 
         public IEnumerable<ExpandoObject> Data
@@ -211,7 +236,7 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
-        public string Name => Scope + QueryType;
+        public string Name => Scope + " - " + QueryType;
 
         private CancellationToken CancellationToken
             => _cancellationTokenSource.Token;
@@ -224,26 +249,10 @@ namespace ActiveDirectoryToolWpf
         public async Task Execute()
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            DataPreparer dataPreparer = null;
+
             var task = Task.Run(() =>
             {
-                if (QueryTypeIsOu())
-                {
-                    dataPreparer = SetUpOuDataPreparer();
-                }
-                else if (QueryTypeIsContextComputer())
-                {
-                    dataPreparer = SetUpComputerDataPreparer();
-                }
-                else if (QueryTypeIsContextDirectReportOrUser())
-                {
-                    dataPreparer = SetUpDirectReportOrUserDataPreparer();
-                }
-                else if (QueryTypeIsContextGroup())
-                {
-                    dataPreparer = SetUpGroupDataPreparer();
-                }
-                Data = GetData(dataPreparer);
+                Data = GetData(_dataPreparer);
             },
                 _cancellationTokenSource.Token);
             await task;
@@ -311,27 +320,36 @@ namespace ActiveDirectoryToolWpf
         {
             var computerPrincipal = GetSelectedComputerPrincipal();
             Scope = computerPrincipal.Name;
-            var computerDataPreparers = new Dictionary<QueryType, DataPreparer>
+            var computerDataPreparers =
+                new Dictionary<QueryType, Func<DataPreparer>>
             {
-                [ContextComputerGroups] = new DataPreparer
+                [ContextComputerGroups] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher.GetComputerGroups(
-                            computerPrincipal)
-                    },
-                    Attributes = DefaultComputerGroupsAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetComputerGroups(
+                                computerPrincipal)
+                        }),
+                        Attributes = DefaultComputerGroupsAttributes
+                    };
                 },
-                [ContextComputerSummary] = new DataPreparer
+                [ContextComputerSummary] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        computerPrincipal
-                    },
-                    Attributes = DefaultComputerAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            computerPrincipal
+                        }),
+                        Attributes = DefaultComputerAttributes
+                    };
                 }
             };
-            return computerDataPreparers[QueryType];
+            return computerDataPreparers[QueryType]();
         }
 
         private DataPreparer SetUpDirectReportOrUserDataPreparer()
@@ -349,92 +367,131 @@ namespace ActiveDirectoryToolWpf
                     [ContextUserSummary] = Summary
                 };
             var directReportOrUserDataPreparers = new Dictionary
-                <SimplifiedQueryType, DataPreparer>
+                <SimplifiedQueryType, Func<DataPreparer>>
             {
-                [DirectReports] = new DataPreparer
+                [DirectReports] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher.GetUserDirectReports(
-                            userPrincipal)
-                    },
-                    Attributes = DefaultUserDirectReportsAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetUserDirectReports(
+                                userPrincipal)
+                        }),
+                        Attributes = DefaultUserDirectReportsAttributes
+                    };
                 },
-                [Groups] = new DataPreparer
+                [Groups] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher.GetUserGroups(userPrincipal)
-                    },
-                    Attributes = DefaultUserGroupsAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetUserGroups(
+                                userPrincipal)
+                        }),
+                        Attributes = DefaultUserGroupsAttributes
+                    };
                 },
-                [Summary] = new DataPreparer
+                [Summary] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        userPrincipal
-                    },
-                    Attributes = DefaultUserAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            userPrincipal
+                        }),
+                        Attributes = DefaultUserAttributes
+                    };
                 }
             };
             return directReportOrUserDataPreparers[
-                simplifiedQueryTypes[QueryType]];
+                simplifiedQueryTypes[QueryType]]();
+        }
+
+        public void DisposeData()
+        {
+            Data = null;
         }
 
         private DataPreparer SetUpGroupDataPreparer()
         {
             var groupPrincipal = GetSelectedGroupPrincipal();
             Scope = groupPrincipal.Name;
-            var groupDataPreparers = new Dictionary<QueryType, DataPreparer>
+            var groupDataPreparers = 
+                new Dictionary<QueryType, Func<DataPreparer>>
             {
-                [ContextGroupComputers] = new DataPreparer
+                [ContextGroupComputers] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher.GetComputerPrincipals(
-                            groupPrincipal)
-                    },
-                    Attributes = DefaultGroupComputersAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetComputerPrincipals(
+                                groupPrincipal)
+                        }),
+                        Attributes = DefaultGroupComputersAttributes
+                    };
                 },
-                [ContextGroupSummary] = new DataPreparer
+                [ContextGroupSummary] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        groupPrincipal
-                    },
-                    Attributes = DefaultGroupAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            groupPrincipal
+                        }),
+                        Attributes = DefaultGroupAttributes
+                    };
                 },
-                [ContextGroupUsers] = new DataPreparer
+                [ContextGroupUsers] = () =>
                 {
-                    Data = new[]
+                    CanCancel = false;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher.GetUserPrincipals(
-                            groupPrincipal)
-                    },
-                    Attributes = DefaultGroupUsersAttributes
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetUserPrincipals(
+                                groupPrincipal)
+                        }),
+                        Attributes = DefaultGroupUsersAttributes
+                    };
                 },
-                [ContextGroupUsersDirectReports] = new DataPreparer
+                [ContextGroupUsersDirectReports] = () =>
                 {
-                    Data = new[]
+                    CanCancel = true;
+                    return new DataPreparer
                     {
-                        ActiveDirectorySearcher
-                            .GetGroupUsersDirectReports(
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher
+                                .GetGroupUsersDirectReports(
+                                    groupPrincipal, CancellationToken)
+                        }),
+                        Attributes =
+                            DefaultGroupUsersDirectReportsAttributes
+                    };
+                },
+                [ContextGroupUsersGroups] = () =>
+                {
+                    CanCancel = true;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() => new[]
+                        {
+                            ActiveDirectorySearcher.GetGroupUsersGroups(
                                 groupPrincipal, CancellationToken)
-                    },
-                    Attributes =
-                        DefaultGroupUsersDirectReportsAttributes
-                },
-                [ContextGroupUsersGroups] = new DataPreparer
-                {
-                    Data = new[]
-                    {
-                        ActiveDirectorySearcher.GetGroupUsersGroups(
-                            groupPrincipal, CancellationToken)
-                    },
-                    Attributes = DefaultGroupUsersGroupsAttributes
+                        }),
+                        Attributes = DefaultGroupUsersGroupsAttributes
+                    };
                 }
             };
-            return groupDataPreparers[QueryType];
+            return groupDataPreparers[QueryType]();
         }
 
         private DataPreparer SetUpOuDataPreparer()
@@ -442,38 +499,63 @@ namespace ActiveDirectoryToolWpf
             Scope = _activeDirectoryScope.Context;
             var activeDirectorySearcher = new ActiveDirectorySearcher(
                 _activeDirectoryScope);
-            var ouDataPreparers = new Dictionary<QueryType, DataPreparer>
+            var ouDataPreparers = new Dictionary<QueryType, Func<DataPreparer>>
             {
-                [OuComputers] = new DataPreparer
+                [OuComputers] = () =>
                 {
-                    Data = activeDirectorySearcher.GetOuComputerPrincipals(),
-                    Attributes = DefaultComputerAttributes
+                    CanCancel = false;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() => 
+                             activeDirectorySearcher.GetOuComputerPrincipals()),
+                        Attributes = DefaultComputerAttributes
+                    };
                 },
-                [OuGroups] = new DataPreparer
+                [OuGroups] = () =>
                 {
-                    Data = activeDirectorySearcher.GetOuGroupPrincipals(
-                        CancellationToken),
-                    Attributes = DefaultGroupAttributes
+                    CanCancel = true;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() =>
+                            activeDirectorySearcher.GetOuGroupPrincipals(
+                                CancellationToken)),
+                        Attributes = DefaultGroupAttributes
+                    };
                 },
-                [OuUsers] = new DataPreparer
+                [OuUsers] = () =>
                 {
-                    Data = activeDirectorySearcher.GetOuUserPrincipals(),
-                    Attributes = DefaultUserAttributes
+                    CanCancel = false;
+                    return new DataPreparer()
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() =>
+                            activeDirectorySearcher.GetOuUserPrincipals()),
+                        Attributes = DefaultUserAttributes
+                    };
                 },
-                [OuUsersDirectReports] = new DataPreparer
+                [OuUsersDirectReports] = () =>
                 {
-                    Data = activeDirectorySearcher.GetOuUsersDirectReports(
-                        CancellationToken),
-                    Attributes = DefaultUserDirectReportsAttributes
+                    CanCancel = true;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() =>
+                            activeDirectorySearcher.GetOuUsersDirectReports(
+                                CancellationToken)),
+                        Attributes = DefaultUserDirectReportsAttributes
+                    };
                 },
-                [OuUsersGroups] = new DataPreparer
+                [OuUsersGroups] = () =>
                 {
-                    Data = activeDirectorySearcher.GetOuUsersGroups(
-                        CancellationToken),
-                    Attributes = DefaultUserGroupsAttributes
+                    CanCancel = true;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() =>
+                        activeDirectorySearcher.GetOuUsersGroups(
+                            CancellationToken)),
+                        Attributes = DefaultUserGroupsAttributes
+                    };
                 }
             };
-            return ouDataPreparers[QueryType];
+            return ouDataPreparers[QueryType]();
         }
     }
 }

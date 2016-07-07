@@ -125,13 +125,14 @@
                             <Button DockPanel.Dock="Left"
                                     Content="Previous Query"
                                     Command="{Binding PreviousQueryCommand}"
-                                    Margin="5 5 0 5" />
-                            <ComboBox DockPanel.Dock="Left"
+                                    Margin="5 5 5 5"
+                                    IsEnabled="{Binding ViewIsEnabled}"/>
+                            <!--<ComboBox DockPanel.Dock="Left"
                                       Margin="5 5 5 5"
-                                      SelectedIndex="0"
-                                      ItemsSource="{Binding PreviousQueries}"
+                                      SelectedIndex="{Binding SelectedQueryIndex}"
+                                      ItemsSource="{Binding Queries}"
                                       DisplayMemberPath="Name"
-                                      SelectedValue="{Binding Query}"/>
+                                      IsEnabled="{Binding ViewIsEnabled}" />-->
                         </DockPanel>
                         <DataGrid DockPanel.Dock="Top"
                                   IsEnabled="{Binding ViewIsEnabled}"
@@ -140,7 +141,7 @@
                                   IsReadOnly="True"
                                   EnableColumnVirtualization="True"
                                   EnableRowVirtualization="True"
-                                  Margin="5,10,5,0"
+                                  Margin="5,5,5,0"
                                   AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
                                   SelectedItem="{Binding SelectedDataGridRow, Mode=TwoWay}">
                             <DataGrid.ContextMenu>
