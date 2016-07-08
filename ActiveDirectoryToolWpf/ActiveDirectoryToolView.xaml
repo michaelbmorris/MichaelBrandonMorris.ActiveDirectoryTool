@@ -66,12 +66,16 @@
                                 Command="{Binding GetOuUsersGroupsCommand}"
                                 DockPanel.Dock="Left"
                                 Margin="5,0,0,5" />
-                        <Button Content="Get Groups Only"
+                        <Button Content="Get Users with Direct Reports"
+                                Command="{Binding GetOuUsersDirectReportsCommand}"
+                                DockPanel.Dock="Left"
+                                Margin="5,0,0,5" />
+                        <Button Content="Get Groups"
                                 Command="{Binding GetOuGroupsCommand}"
                                 DockPanel.Dock="Left"
                                 Margin="5,0,0,5" />
-                        <Button Content="Get Users with Direct Reports"
-                                Command="{Binding GetOuUsersDirectReportsCommand}"
+                        <Button Content="Get Groups with Users"
+                                Command="{Binding GetOuGroupsUsersCommand}"
                                 DockPanel.Dock="Left"
                                 Margin="5,0,0,5" />
                         <Button Content="Get Computers"
@@ -154,7 +158,8 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <DataGrid.ContextMenu>
-                                <ContextMenu ItemsSource="{Binding ContextMenuItems}" />
+                                <ContextMenu ItemsSource="{Binding ContextMenuItems}"
+                                             Visibility="{Binding ContextMenuVisibility}"/>
                             </DataGrid.ContextMenu>
                         </DataGrid>
                     </DockPanel>

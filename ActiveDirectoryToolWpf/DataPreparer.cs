@@ -248,19 +248,16 @@ namespace ActiveDirectoryToolWpf
                 {
                     var computerGroups = data as ComputerGroups;
                     results.AddRange(PrepareComputerGroups(computerGroups));
-                    computerGroups.Dispose();
                 }
                 else if (data is GroupComputers)
                 {
                     var groupComputers = data as GroupComputers;
                     results.AddRange(PrepareGroupComputers(groupComputers));
-                    groupComputers.Dispose();
                 }
                 else if (data is GroupUsers)
                 {
                     var groupUsers = data as GroupUsers;
                     results.AddRange(PrepareGroupUsers(groupUsers));
-                    groupUsers.Dispose();
                 }
                 else if (data is GroupUsersDirectReports)
                 {
@@ -269,27 +266,23 @@ namespace ActiveDirectoryToolWpf
                     results.AddRange(
                         PrepareGroupUsersDirectReports(
                             groupUsersDirectReports));
-                    groupUsersDirectReports.Dispose();
                 }
                 else if (data is GroupUsersGroups)
                 {
                     var groupUsersGroups = data as GroupUsersGroups;
                     results.AddRange(
                         PrepareGroupUsersGroups(groupUsersGroups));
-                    groupUsersGroups.Dispose();
                 }
                 else if (data is UserGroups)
                 {
                     var userGroups = data as UserGroups;
                     results.AddRange(PrepareUserGroups(userGroups));
-                    userGroups.Dispose();
                 }
                 else if (data is UserDirectReports)
                 {
                     var userDirectReports = data as UserDirectReports;
                     results.AddRange(PrepareUserDirectReports(
                         userDirectReports));
-                    userDirectReports.Dispose();
                 }
                 else
                 {

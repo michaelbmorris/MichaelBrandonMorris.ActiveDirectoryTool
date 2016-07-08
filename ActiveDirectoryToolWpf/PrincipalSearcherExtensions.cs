@@ -20,5 +20,11 @@ namespace ActiveDirectoryToolWpf
         {
             return principalSearcher.FindAll().GetUserPrincipals();
         }
+
+        public static IEnumerable<GroupPrincipal> GetAllGroupPrincipals(
+            this PrincipalSearcher principalSearcher)
+        {
+            return principalSearcher.FindAll().GetGroupPrincipals();
+        }
     }
 }

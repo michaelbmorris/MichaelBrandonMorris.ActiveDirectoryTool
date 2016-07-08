@@ -44,16 +44,16 @@ namespace ActiveDirectoryToolWpf
         private readonly MenuItem _userGetDirectReportsMenuItem;
         private readonly MenuItem _userGetGroupsMenuItem;
         private readonly MenuItem _userGetSummaryMenuItem;
+
         private AboutWindow _aboutWindow;
         private Visibility _cancelButtonVisibility;
         private List<MenuItem> _contextMenuItems;
+        private Visibility _contextMenuVisibility;
         private DataView _data;
         private HelpWindow _helpWindow;
-
         private string _messageContent;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
-
         private ObservableCollection<ActiveDirectoryQuery> _queries;
         private bool _viewIsEnabled;
 
@@ -65,67 +65,67 @@ namespace ActiveDirectoryToolWpf
             _computerGetGroupsMenuItem = new MenuItem
             {
                 Header = "Computer - Get Groups",
-                Command = GetContextComputerGroupsCommand
+                Command = GetComputerGroupsCommand
             };
             _computerGetSummaryMenuItem = new MenuItem
             {
                 Header = "Computer - Get Summary",
-                Command = GetContextComputerSummaryCommand
+                Command = GetComputerSummaryCommand
             };
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Direct Reports",
-                Command = GetContextDirectReportDirectReportsCommand
+                Command = GetDirectReportDirectReportsCommand
             };
             _directReportGetGroupsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Groups",
-                Command = GetContextDirectReportGroupsCommand
+                Command = GetDirectReportGroupsCommand
             };
             _directReportGetSummaryMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Summary",
-                Command = GetContextDirectReportSummaryCommand
+                Command = GetDirectReportSummaryCommand
             };
             _groupGetComputersMenuItem = new MenuItem
             {
                 Header = "Group - Get Computers",
-                Command = GetContextGroupComputersCommand
+                Command = GetGroupComputersCommand
             };
             _groupGetUsersMenuItem = new MenuItem
             {
                 Header = "Group - Get Users",
-                Command = GetContextGroupUsersCommand
+                Command = GetGroupUsersCommand
             };
             _groupGetUsersDirectReportsMenuItem = new MenuItem
             {
                 Header = "Group - Get Users' Direct Reports",
-                Command = GetContextGroupUsersDirectReportsCommand
+                Command = GetGroupUsersDirectReportsCommand
             };
             _groupGetUsersGroupsMenuItem = new MenuItem
             {
                 Header = "Group - Get Users' Groups",
-                Command = GetContextGroupUsersGroupsCommand
+                Command = GetGroupUsersGroupsCommand
             };
             _groupGetSummaryMenuItem = new MenuItem
             {
                 Header = "Group - Get Summary",
-                Command = GetContextGroupSummaryCommand
+                Command = GetGroupSummaryCommand
             };
             _userGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "User - Get Direct Reports",
-                Command = GetContextUserDirectReportsCommand
+                Command = GetUserDirectReportsCommand
             };
             _userGetGroupsMenuItem = new MenuItem
             {
                 Header = "User - Get Groups",
-                Command = GetContextUserGroupsCommand
+                Command = GetUserGroupsCommand
             };
             _userGetSummaryMenuItem = new MenuItem
             {
                 Header = "User - Get Summary",
-                Command = GetContextUserSummaryCommand
+                Command = GetUserSummaryCommand
             };
         }
 
@@ -139,11 +139,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ICommand CancelCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand CancelCommand { get; private set; }
 
         public List<MenuItem> ContextMenuItems
         {
@@ -151,15 +147,24 @@ namespace ActiveDirectoryToolWpf
             private set
             {
                 _contextMenuItems = value;
+                ContextMenuVisibility = _contextMenuItems.IsNullOrEmpty()
+                    ? Visibility.Hidden
+                    : Visibility.Visible;
                 NotifyPropertyChanged();
             }
         }
 
-        public ActiveDirectoryScope CurrentScope
+        public Visibility ContextMenuVisibility
         {
-            get;
-            set;
+            get { return _contextMenuVisibility; }
+            set
+            {
+                _contextMenuVisibility = value;
+                NotifyPropertyChanged();
+            }
         }
+
+        public ActiveDirectoryScope CurrentScope { get; set; }
 
         public DataView Data
         {
@@ -171,41 +176,25 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ICommand GetOuComputersCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand GetOuGroupsCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand GetOuUsersCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand GetOuUsersDirectReportsCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand GetOuUsersGroupsCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand SelectionChangedCommand
-        {
-            get;
-            private set;
-        }
+        private ICommand GetComputerGroupsCommand { get; set; }
+        private ICommand GetComputerSummaryCommand { get; set; }
+        private ICommand GetDirectReportDirectReportsCommand { get; set; }
+        private ICommand GetDirectReportGroupsCommand { get; set; }
+        private ICommand GetDirectReportSummaryCommand { get; set; }
+        private ICommand GetGroupComputersCommand { get; set; }
+        private ICommand GetGroupSummaryCommand { get; set; }
+        private ICommand GetGroupUsersCommand { get; set; }
+        private ICommand GetGroupUsersDirectReportsCommand { get; set; }
+        private ICommand GetGroupUsersGroupsCommand { get; set; }
+        private ICommand GetUserDirectReportsCommand { get; set; }
+        private ICommand GetUserGroupsCommand { get; set; }
+        private ICommand GetUserSummaryCommand { get; set; }
+        public ICommand GetOuComputersCommand { get; private set; }
+        public ICommand GetOuGroupsCommand { get; private set; }
+        public ICommand GetOuGroupsUsersCommand { get; private set; }
+        public ICommand GetOuUsersCommand { get; private set; }
+        public ICommand GetOuUsersDirectReportsCommand { get; private set; }
+        public ICommand GetOuUsersGroupsCommand { get; private set; }
 
         public string MessageContent
         {
@@ -227,23 +216,9 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ICommand OpenAboutWindowCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand OpenHelpWindowCommand
-        {
-            get;
-            private set;
-        }
-
-        public ICommand PreviousQueryCommand
-        {
-            get;
-            private set;
-        }
+        public ICommand OpenAboutWindowCommand { get; private set; }
+        public ICommand OpenHelpWindowCommand { get; private set; }
+        public ICommand PreviousQueryCommand { get; private set; }
 
         public Visibility ProgressBarVisibility
         {
@@ -265,22 +240,10 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ActiveDirectoryScope RootScope
-        {
-            get;
-        }
-
-        private IList SelectedDataRowViews
-        {
-            get;
-            set;
-        }
-
-        public string Version
-        {
-            get;
-            private set;
-        }
+        public ActiveDirectoryScope RootScope { get; }
+        private IList SelectedDataRowViews { get; set; }
+        public ICommand SelectionChangedCommand { get; private set; }
+        public string Version { get; private set; }
 
         public bool ViewIsEnabled
         {
@@ -292,89 +255,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ICommand WriteToFileCommand
-        {
-            get;
-            private set;
-        }
-
-        private ICommand GetContextComputerGroupsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextComputerSummaryCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextDirectReportDirectReportsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextDirectReportGroupsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextDirectReportSummaryCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextGroupComputersCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextGroupSummaryCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextGroupUsersCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextGroupUsersDirectReportsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextGroupUsersGroupsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextUserDirectReportsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextUserGroupsCommand
-        {
-            get;
-            set;
-        }
-
-        private ICommand GetContextUserSummaryCommand
-        {
-            get;
-            set;
-        }
+        public ICommand WriteToFileCommand { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -391,7 +272,6 @@ namespace ActiveDirectoryToolWpf
 
         private void FinishTask()
         {
-            ContextMenuItems = GenerateContextMenuItems();
             ProgressBarVisibility = Visibility.Hidden;
             CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
@@ -400,15 +280,16 @@ namespace ActiveDirectoryToolWpf
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
+            if (Queries.Peek() == null) return null;
             switch (Queries.Peek().QueryType)
             {
-                case QueryType.ContextComputerGroups:
+                case QueryType.ComputersGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
                     contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
                     break;
-                case QueryType.ContextDirectReportDirectReports:
+                case QueryType.DirectReportsDirectReports:
                     contextMenuItems.Add(
                         _directReportGetDirectReportsMenuItem);
                     contextMenuItems.Add(_directReportGetGroupsMenuItem);
@@ -416,7 +297,7 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextDirectReportGroups:
+                case QueryType.DirectReportsGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
@@ -424,13 +305,13 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetDirectReportsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextGroupComputers:
+                case QueryType.GroupsComputers:
                     contextMenuItems.Add(_computerGetGroupsMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
                     contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
                     break;
-                case QueryType.ContextGroupUsers:
+                case QueryType.GroupsUsers:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
                     contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
@@ -438,7 +319,7 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextGroupUsersDirectReports:
+                case QueryType.GroupsUsersDirectReports:
                     contextMenuItems.Add(
                         _directReportGetDirectReportsMenuItem);
                     contextMenuItems.Add(_directReportGetGroupsMenuItem);
@@ -450,7 +331,7 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextGroupUsersGroups:
+                case QueryType.GroupsUsersGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
@@ -458,7 +339,7 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextUserDirectReports:
+                case QueryType.UsersDirectReports:
                     contextMenuItems.Add(
                         _directReportGetDirectReportsMenuItem);
                     contextMenuItems.Add(_directReportGetGroupsMenuItem);
@@ -466,7 +347,7 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextUserGroups:
+                case QueryType.UsersGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
@@ -508,23 +389,31 @@ namespace ActiveDirectoryToolWpf
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
-                case QueryType.ContextComputerSummary:
+                case QueryType.ComputersSummaries:
                     contextMenuItems.Add(_computerGetGroupsMenuItem);
                     break;
-                case QueryType.ContextDirectReportSummary:
+                case QueryType.DirectReportsSummaries:
                     contextMenuItems.Add(
                         _directReportGetDirectReportsMenuItem);
                     contextMenuItems.Add(_directReportGetGroupsMenuItem);
                     break;
-                case QueryType.ContextGroupSummary:
+                case QueryType.GroupsSummaries:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
                     contextMenuItems.Add(_groupGetUsersMenuItem);
                     contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
                     contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
                     break;
-                case QueryType.ContextUserSummary:
+                case QueryType.UsersSummaries:
                     contextMenuItems.Add(_userGetDirectReportsMenuItem);
                     contextMenuItems.Add(_userGetGroupsMenuItem);
+                    break;
+                case QueryType.OuGroupsUsers:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -532,91 +421,129 @@ namespace ActiveDirectoryToolWpf
             return contextMenuItems;
         }
 
+        private static string GetComputerDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[ComputerDistinguishedName].ToString();
+        }
+
+        private IEnumerable<string> GetComputersDistinguishedNames()
+        {
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetComputerDistinguishedName(dataRowView)).ToList();
+        }
+
         private async void GetContextComputerGroupsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextComputerGroups,
+                QueryType.ComputersGroups,
                 GetComputersDistinguishedNames());
         }
 
         private async void GetContextComputerSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextComputerSummary,
+                QueryType.ComputersSummaries,
                 GetComputersDistinguishedNames());
         }
 
         private async void GetContextDirectReportDirectReportsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextDirectReportDirectReports,
+                QueryType.DirectReportsDirectReports,
                 GetGroupsDistinguishedNames());
         }
 
         private async void GetContextDirectReportGroupsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextDirectReportGroups,
+                QueryType.DirectReportsGroups,
                 GetDirectReportsDistinguishedNames());
         }
 
         private async void GetContextDirectReportSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextDirectReportSummary,
+                QueryType.DirectReportsSummaries,
                 GetDirectReportsDistinguishedNames());
         }
 
         private async void GetContextGroupComputersCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextGroupComputers,
+                QueryType.GroupsComputers,
                 GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextGroupSummary,
+                QueryType.GroupsSummaries,
                 GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupUsersCommandExecute()
         {
-            await RunQuery(QueryType.ContextGroupUsers);
+            await RunQuery(
+                QueryType.GroupsUsers,
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupUsersDirectReportsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextGroupUsersDirectReports,
+                QueryType.GroupsUsersDirectReports,
                 GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupUsersGroupsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextGroupUsersGroups,
+                QueryType.GroupsUsersGroups,
                 GetGroupsDistinguishedNames());
         }
 
         private async void GetContextUserDirectReportsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextUserDirectReports,
+                QueryType.UsersDirectReports,
                 GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserGroupsCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextUserGroups, GetUsersDistinguishedNames());
+                QueryType.UsersGroups, GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextUserSummary, GetUsersDistinguishedNames());
+                QueryType.UsersSummaries, GetUsersDistinguishedNames());
+        }
+
+        private static string GetDirectReportDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[DirectReportDistinguishedName].ToString();
+        }
+
+        private IEnumerable<string> GetDirectReportsDistinguishedNames()
+        {
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetDirectReportDistinguishedName(dataRowView)).ToList();
+        }
+
+        private static string GetGroupDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[GroupDistinguishedName].ToString();
+        }
+
+        private IEnumerable<string> GetGroupsDistinguishedNames()
+        {
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetGroupDistinguishedName(dataRowView)).ToList();
         }
 
         private async void GetOuComputersCommandExecute()
@@ -644,42 +571,6 @@ namespace ActiveDirectoryToolWpf
             await RunQuery(QueryType.OuUsersGroups);
         }
 
-        private static string GetComputerDistinguishedName(
-            DataRowView dataRowView)
-        {
-            return dataRowView[ComputerDistinguishedName].ToString();
-        }
-
-        private IEnumerable<string> GetComputersDistinguishedNames()
-        {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetComputerDistinguishedName(dataRowView)).ToList();
-        }
-
-        private static string GetDirectReportDistinguishedName(
-            DataRowView dataRowView)
-        {
-            return dataRowView[DirectReportDistinguishedName].ToString();
-        }
-
-        private IEnumerable<string> GetDirectReportsDistinguishedNames()
-        {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetDirectReportDistinguishedName(dataRowView)).ToList();
-        }
-
-        private static string GetGroupDistinguishedName(
-            DataRowView dataRowView)
-        {
-            return dataRowView[GroupDistinguishedName].ToString();
-        }
-
-        private IEnumerable<string> GetGroupsDistinguishedNames()
-        {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetGroupDistinguishedName(dataRowView)).ToList();
-        }
-
         private static string GetUserDistinguishedName(DataRowView dataRowView)
         {
             return dataRowView[UserDistinguishedName].ToString();
@@ -700,7 +591,8 @@ namespace ActiveDirectoryToolWpf
         private void NotifyPropertyChanged(
             [CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this,
+            PropertyChanged?.Invoke(
+                this,
                 new PropertyChangedEventArgs(propertyName));
         }
 
@@ -748,10 +640,12 @@ namespace ActiveDirectoryToolWpf
                 Queries.Pop();
         }
 
-        private async Task RunQuery(QueryType queryType,
+        private async Task RunQuery(
+            QueryType queryType,
             IEnumerable<string> selectedItemDistinguishedNames = null)
         {
-            await RunQuery(new ActiveDirectoryQuery(
+            await RunQuery(
+                new ActiveDirectoryQuery(
                     queryType, CurrentScope, selectedItemDistinguishedNames));
         }
 
@@ -763,6 +657,7 @@ namespace ActiveDirectoryToolWpf
                 Queries.Push(query);
                 await Queries.Peek().Execute();
                 Data = Queries.Peek().Data.ToDataTable().AsDataView();
+                ContextMenuItems = GenerateContextMenuItems();
             }
             catch (OperationCanceledException)
             {
@@ -809,43 +704,43 @@ namespace ActiveDirectoryToolWpf
             OpenHelpWindowCommand = new RelayCommand(
                 OpenHelpWindowCommandExecute);
 
-            GetContextUserGroupsCommand = new RelayCommand(
+            GetUserGroupsCommand = new RelayCommand(
                 GetContextUserGroupsCommandExecute);
 
-            GetContextComputerGroupsCommand = new RelayCommand(
+            GetComputerGroupsCommand = new RelayCommand(
                 GetContextComputerGroupsCommandExecute);
 
-            GetContextDirectReportDirectReportsCommand = new RelayCommand(
+            GetDirectReportDirectReportsCommand = new RelayCommand(
                 GetContextDirectReportDirectReportsCommandExecute);
 
-            GetContextDirectReportGroupsCommand = new RelayCommand(
+            GetDirectReportGroupsCommand = new RelayCommand(
                 GetContextDirectReportGroupsCommandExecute);
 
-            GetContextGroupComputersCommand = new RelayCommand(
+            GetGroupComputersCommand = new RelayCommand(
                 GetContextGroupComputersCommandExecute);
 
-            GetContextGroupUsersCommand = new RelayCommand(
+            GetGroupUsersCommand = new RelayCommand(
                 GetContextGroupUsersCommandExecute);
 
-            GetContextGroupUsersDirectReportsCommand = new RelayCommand(
+            GetGroupUsersDirectReportsCommand = new RelayCommand(
                 GetContextGroupUsersDirectReportsCommandExecute);
 
-            GetContextUserDirectReportsCommand = new RelayCommand(
+            GetUserDirectReportsCommand = new RelayCommand(
                 GetContextUserDirectReportsCommandExecute);
 
-            GetContextGroupUsersGroupsCommand = new RelayCommand(
+            GetGroupUsersGroupsCommand = new RelayCommand(
                 GetContextGroupUsersGroupsCommandExecute);
 
-            GetContextDirectReportSummaryCommand = new RelayCommand(
+            GetDirectReportSummaryCommand = new RelayCommand(
                 GetContextDirectReportSummaryCommandExecute);
 
-            GetContextUserSummaryCommand = new RelayCommand(
+            GetUserSummaryCommand = new RelayCommand(
                 GetContextUserSummaryCommandExecute);
 
-            GetContextComputerSummaryCommand = new RelayCommand(
+            GetComputerSummaryCommand = new RelayCommand(
                 GetContextComputerSummaryCommandExecute);
 
-            GetContextGroupSummaryCommand = new RelayCommand(
+            GetGroupSummaryCommand = new RelayCommand(
                 GetContextGroupSummaryCommandExecute);
 
             CancelCommand = new RelayCommand(
@@ -857,6 +752,14 @@ namespace ActiveDirectoryToolWpf
             SelectionChangedCommand =
                 new RelayCommand<IList>(
                     items => { SelectedDataRowViews = items; });
+
+            GetOuGroupsUsersCommand = new RelayCommand(
+                GetOuGroupsUsersCommandExecute, OuCommandCanExecute);
+        }
+
+        private async void GetOuGroupsUsersCommandExecute()
+        {
+            await RunQuery(QueryType.OuGroupsUsers);
         }
 
         private void SetViewVariables()
@@ -865,6 +768,7 @@ namespace ActiveDirectoryToolWpf
             MessageVisibility = Visibility.Hidden;
             CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
+            ContextMenuItems = null;
             try
             {
                 Version = CurrentDeployment.CurrentVersion.ToString();
@@ -898,16 +802,17 @@ namespace ActiveDirectoryToolWpf
         private async void WriteToFileCommandExecute()
         {
             StartTask();
-            await Task.Run(() =>
-            {
-                var fileWriter = new DataFileWriter
+            await Task.Run(
+                () =>
                 {
-                    Data = Data,
-                    Scope = Queries.First().Scope,
-                    QueryType = Queries.First().QueryType
-                };
-                ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
-            });
+                    var fileWriter = new DataFileWriter
+                    {
+                        Data = Data,
+                        Scope = Queries.First().Scope,
+                        QueryType = Queries.First().QueryType
+                    };
+                    ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
+                });
             FinishTask();
         }
     }

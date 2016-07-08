@@ -12,21 +12,22 @@ namespace ActiveDirectoryToolWpf
 {
     public enum QueryType
     {
-        ContextComputerGroups,
-        ContextComputerSummary,
-        ContextDirectReportDirectReports,
-        ContextDirectReportGroups,
-        ContextDirectReportSummary,
-        ContextGroupComputers,
-        ContextGroupUsers,
-        ContextGroupUsersDirectReports,
-        ContextGroupUsersGroups,
-        ContextGroupSummary,
-        ContextUserDirectReports,
-        ContextUserGroups,
-        ContextUserSummary,
+        ComputersGroups,
+        ComputersSummaries,
+        DirectReportsDirectReports,
+        DirectReportsGroups,
+        DirectReportsSummaries,
+        GroupsComputers,
+        GroupsUsers,
+        GroupsUsersDirectReports,
+        GroupsUsersGroups,
+        GroupsSummaries,
+        UsersDirectReports,
+        UsersGroups,
+        UsersSummaries,
         OuComputers,
         OuGroups,
+        OuGroupsUsers,
         OuUsers,
         OuUsersDirectReports,
         OuUsersGroups
@@ -36,7 +37,7 @@ namespace ActiveDirectoryToolWpf
     {
         DirectReports,
         Groups,
-        Summary
+        Summaries
     }
 
     public class ActiveDirectoryQuery
@@ -80,32 +81,9 @@ namespace ActiveDirectoryToolWpf
             DefaultGroupUsersAttributes =
             {
                 ActiveDirectoryAttribute.ContainerGroupName,
-                ActiveDirectoryAttribute.UserSurname,
-                ActiveDirectoryAttribute.UserGivenName,
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.UserIsActive,
-                ActiveDirectoryAttribute.UserIsAccountLockedOut,
-                ActiveDirectoryAttribute.UserDescription,
-                ActiveDirectoryAttribute.UserTitle,
-                ActiveDirectoryAttribute.UserCompany,
-                ActiveDirectoryAttribute.UserManager,
-                ActiveDirectoryAttribute.UserHomeDrive,
-                ActiveDirectoryAttribute.UserHomeDirectory,
-                ActiveDirectoryAttribute.UserScriptPath,
-                ActiveDirectoryAttribute.UserEmailAddress,
-                ActiveDirectoryAttribute.UserStreetAddress,
-                ActiveDirectoryAttribute.UserCity,
-                ActiveDirectoryAttribute.UserState,
-                ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
-                ActiveDirectoryAttribute.UserPager,
-                ActiveDirectoryAttribute.UserMobile,
-                ActiveDirectoryAttribute.UserFax,
-                ActiveDirectoryAttribute.UserVoip,
-                ActiveDirectoryAttribute.UserSip,
-                ActiveDirectoryAttribute.UserUserPrincipalName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.ContainerGroupDistinguishedName
+                ActiveDirectoryAttribute.UserName,
+                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
+                ActiveDirectoryAttribute.UserDistinguishedName
             };
 
         private static readonly ActiveDirectoryAttribute[]
@@ -199,15 +177,15 @@ namespace ActiveDirectoryToolWpf
             {
                 _dataPreparer = SetUpOuDataPreparer();
             }
-            else if (QueryTypeIsContextComputer())
+            else if (QueryTypeIsComputer())
             {
                 _dataPreparer = SetUpComputerDataPreparer();
             }
-            else if (QueryTypeIsContextDirectReportOrUser())
+            else if (QueryTypeIsDirectReportOrUser())
             {
                 _dataPreparer = SetUpDirectReportOrUserDataPreparer();
             }
-            else if (QueryTypeIsContextGroup())
+            else if (QueryTypeIsGroup())
             {
                 _dataPreparer = SetUpGroupDataPreparer();
             }
@@ -298,35 +276,36 @@ namespace ActiveDirectoryToolWpf
             return _distinguishedNames.Select(GetUserPrincipal).ToList();
         }
 
-        private bool QueryTypeIsContextComputer()
+        private bool QueryTypeIsComputer()
         {
-            return QueryType == ContextComputerGroups ||
-                   QueryType == ContextComputerSummary;
+            return QueryType == ComputersGroups ||
+                   QueryType == ComputersSummaries;
         }
 
-        private bool QueryTypeIsContextDirectReportOrUser()
+        private bool QueryTypeIsDirectReportOrUser()
         {
-            return QueryType == ContextUserDirectReports ||
-                   QueryType == ContextUserGroups ||
-                   QueryType == ContextUserSummary ||
-                   QueryType == ContextDirectReportDirectReports ||
-                   QueryType == ContextDirectReportGroups ||
-                   QueryType == ContextDirectReportSummary;
+            return QueryType == UsersDirectReports ||
+                   QueryType == UsersGroups ||
+                   QueryType == UsersSummaries ||
+                   QueryType == DirectReportsDirectReports ||
+                   QueryType == DirectReportsGroups ||
+                   QueryType == DirectReportsSummaries;
         }
 
-        private bool QueryTypeIsContextGroup()
+        private bool QueryTypeIsGroup()
         {
-            return QueryType == ContextGroupComputers ||
-                   QueryType == ContextGroupUsers ||
-                   QueryType == ContextGroupUsersDirectReports ||
-                   QueryType == ContextGroupUsersGroups ||
-                   QueryType == ContextGroupSummary;
+            return QueryType == GroupsComputers ||
+                   QueryType == GroupsUsers ||
+                   QueryType == GroupsUsersDirectReports ||
+                   QueryType == GroupsUsersGroups ||
+                   QueryType == GroupsSummaries;
         }
 
         private bool QueryTypeIsOu()
         {
             return QueryType == OuComputers ||
                    QueryType == OuGroups ||
+                   QueryType == OuGroupsUsers ||
                    QueryType == OuUsers ||
                    QueryType == OuUsersDirectReports ||
                    QueryType == OuUsersGroups;
@@ -339,7 +318,7 @@ namespace ActiveDirectoryToolWpf
             var computerDataPreparers =
                 new Dictionary<QueryType, Func<DataPreparer>>
             {
-                [ContextComputerGroups] = () =>
+                [ComputersGroups] = () =>
                 {
                     CanCancel = true;
                     return new DataPreparer
@@ -347,11 +326,10 @@ namespace ActiveDirectoryToolWpf
                         Data = new Lazy<IEnumerable<object>>(() =>
                             ActiveDirectorySearcher.GetComputersGroups(
                                 computerPrincipals, CancellationToken)),
-                        Attributes = DefaultComputerGroupsAttributes,
-                        CancellationToken = CancellationToken
+                        Attributes = DefaultComputerGroupsAttributes
                     };
                 },
-                [ContextComputerSummary] = () =>
+                [ComputersSummaries] = () =>
                 {
                     CanCancel = false;
                     return new DataPreparer
@@ -372,12 +350,12 @@ namespace ActiveDirectoryToolWpf
             var simplifiedQueryTypes =
                 new Dictionary<QueryType, SimplifiedQueryType>
                 {
-                    [ContextDirectReportDirectReports] = DirectReports,
-                    [ContextDirectReportGroups] = Groups,
-                    [ContextDirectReportSummary] = Summary,
-                    [ContextUserDirectReports] = DirectReports,
-                    [ContextUserGroups] = Groups,
-                    [ContextUserSummary] = Summary
+                    [DirectReportsDirectReports] = DirectReports,
+                    [DirectReportsGroups] = Groups,
+                    [DirectReportsSummaries] = Summaries,
+                    [UsersDirectReports] = DirectReports,
+                    [UsersGroups] = Groups,
+                    [UsersSummaries] = Summaries
                 };
             var directReportOrUserDataPreparers = new Dictionary
                 <SimplifiedQueryType, Func<DataPreparer>>
@@ -404,7 +382,7 @@ namespace ActiveDirectoryToolWpf
                         Attributes = DefaultUserGroupsAttributes
                     };
                 },
-                [Summary] = () =>
+                [Summaries] = () =>
                 {
                     CanCancel = false;
                     return new DataPreparer
@@ -431,7 +409,7 @@ namespace ActiveDirectoryToolWpf
             var groupDataPreparers = 
                 new Dictionary<QueryType, Func<DataPreparer>>
             {
-                [ContextGroupComputers] = () =>
+                [GroupsComputers] = () =>
                 {
                     CanCancel = true;
                     return new DataPreparer
@@ -442,7 +420,7 @@ namespace ActiveDirectoryToolWpf
                         Attributes = DefaultGroupComputersAttributes
                     };
                 },
-                [ContextGroupSummary] = () =>
+                [GroupsSummaries] = () =>
                 {
                     CanCancel = false;
                     return new DataPreparer
@@ -452,18 +430,18 @@ namespace ActiveDirectoryToolWpf
                         Attributes = DefaultGroupAttributes
                     };
                 },
-                [ContextGroupUsers] = () =>
+                [GroupsUsers] = () =>
                 {
                     CanCancel = true;
                     return new DataPreparer
                     {
                         Data = new Lazy<IEnumerable<object>>(() =>
-                            ActiveDirectorySearcher.GetUserPrincipals(
+                            ActiveDirectorySearcher.GetGroupsUsers(
                                 groupPrincipals, CancellationToken)),
                         Attributes = DefaultGroupUsersAttributes
                     };
                 },
-                [ContextGroupUsersDirectReports] = () =>
+                [GroupsUsersDirectReports] = () =>
                 {
                     CanCancel = true;
                     return new DataPreparer
@@ -476,7 +454,7 @@ namespace ActiveDirectoryToolWpf
                             DefaultGroupUsersDirectReportsAttributes
                     };
                 },
-                [ContextGroupUsersGroups] = () =>
+                [GroupsUsersGroups] = () =>
                 {
                     CanCancel = true;
                     return new DataPreparer
@@ -514,9 +492,19 @@ namespace ActiveDirectoryToolWpf
                     return new DataPreparer
                     {
                         Data = new Lazy<IEnumerable<object>>(() =>
-                            activeDirectorySearcher.GetOuGroupPrincipals(
-                                CancellationToken)),
+                            activeDirectorySearcher.GetOuGroupPrincipals()),
                         Attributes = DefaultGroupAttributes
+                    };
+                },
+                [OuGroupsUsers] = () =>
+                {
+                    CanCancel = true;
+                    return new DataPreparer
+                    {
+                        Data = new Lazy<IEnumerable<object>>(() =>
+                                activeDirectorySearcher.GetOuGroupsUsers(
+                                    CancellationToken)),
+                        Attributes = DefaultGroupUsersAttributes
                     };
                 },
                 [OuUsers] = () =>

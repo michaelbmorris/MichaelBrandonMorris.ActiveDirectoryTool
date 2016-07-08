@@ -219,11 +219,40 @@ namespace ActiveDirectoryToolWpf
         }
 
         public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
+            PrincipalContext principalContext)
+        {
+            IEnumerable<GroupPrincipal> groupPrincipals;
+            using (var searcher = new PrincipalSearcher(
+                new GroupPrincipal(principalContext)))
+            {
+                groupPrincipals = searcher.GetAllGroupPrincipals();
+            }
+            return groupPrincipals;
+        }
+
+        public static IEnumerable<GroupUsers> GetGroupsUsers(
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
         {
-            return GetGroupPrincipals(
-                GetUserPrincipals(principalContext), cancellationToken);
+            return GetGroupsUsers(
+                GetGroupPrincipals(principalContext), cancellationToken);
+        }
+
+        public static IEnumerable<GroupUsers> GetGroupsUsers(
+            IEnumerable<GroupPrincipal> groupPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var groupsUsers = new List<GroupUsers>();
+            foreach (var groupPrincipal in groupPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                groupsUsers.Add(new GroupUsers
+                {
+                    Group = groupPrincipal,
+                    Users = GetUserPrincipals(groupPrincipal)
+                });
+            }
+            return groupsUsers;
         }
 
         public static GroupUsersDirectReports GetGroupUsersDirectReports(
@@ -411,10 +440,15 @@ namespace ActiveDirectoryToolWpf
             return GetComputerPrincipals(PrincipalContext);
         }
 
-        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals(
+        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals()
+        {
+            return GetGroupPrincipals(PrincipalContext);
+        }
+
+        public IEnumerable<GroupUsers> GetOuGroupsUsers(
             CancellationToken cancellationToken)
         {
-            return GetGroupPrincipals(PrincipalContext, cancellationToken);
+            return GetGroupsUsers(PrincipalContext, cancellationToken);
         }
 
         public IEnumerable<UserPrincipal> GetOuUserPrincipals()
@@ -435,19 +469,12 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class ComputerGroups : IComputerPrincipal, IDisposable, IGroups
+    public class ComputerGroups : IComputerPrincipal, IGroups
     {
         public ComputerPrincipal Computer
         {
             get;
             set;
-        }
-
-        public void Dispose()
-        {
-            Computer?.Dispose();
-            foreach (var group in Groups)
-                group?.Dispose();
         }
 
         public IEnumerable<GroupPrincipal> Groups
@@ -457,20 +484,12 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class GroupComputers : IComputers, IDisposable, IGroup
+    public class GroupComputers : IComputers, IGroup
     {
         public IEnumerable<ComputerPrincipal> Computers
         {
             get;
             set;
-        }
-
-        public void Dispose()
-        {
-            Group?.Dispose();
-            if (Computers == null) return;
-            foreach (var computer in Computers)
-                computer?.Dispose();
         }
 
         public GroupPrincipal Group
@@ -480,15 +499,8 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class GroupUsers : IGroup, IDisposable, IUsers
+    public class GroupUsers : IGroup, IUsers
     {
-        public void Dispose()
-        {
-            Group?.Dispose();
-            foreach (var user in Users)
-                user?.Dispose();
-        }
-
         public GroupPrincipal Group
         {
             get;
@@ -502,16 +514,9 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class GroupUsersDirectReports : IDisposable, IGroup,
+    public class GroupUsersDirectReports : IGroup,
         IUsersDirectReports
     {
-        public void Dispose()
-        {
-            Group?.Dispose();
-            foreach (var userDirectReports in UsersDirectReports)
-                userDirectReports?.Dispose();
-        }
-
         public GroupPrincipal Group
         {
             get;
@@ -525,15 +530,8 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class GroupUsersGroups : IDisposable, IGroup, IUsersGroups
+    public class GroupUsersGroups : IGroup, IUsersGroups
     {
-        public void Dispose()
-        {
-            Group?.Dispose();
-            foreach (var userGroups in UsersGroups)
-                userGroups?.Dispose();
-        }
-
         public GroupPrincipal Group
         {
             get;
@@ -547,19 +545,12 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class UserDirectReports : IDirectReports, IDisposable, IUser
+    public class UserDirectReports : IDirectReports, IUser
     {
         public IEnumerable<UserPrincipal> DirectReports
         {
             get;
             set;
-        }
-
-        public void Dispose()
-        {
-            User?.Dispose();
-            foreach (var directReport in DirectReports)
-                directReport?.Dispose();
         }
 
         public UserPrincipal User
@@ -569,15 +560,8 @@ namespace ActiveDirectoryToolWpf
         }
     }
 
-    public class UserGroups : IDisposable, IGroups, IUser
+    public class UserGroups : IGroups, IUser
     {
-        public void Dispose()
-        {
-            User?.Dispose();
-            foreach (var group in Groups)
-                group?.Dispose();
-        }
-
         public IEnumerable<GroupPrincipal> Groups
         {
             get;
