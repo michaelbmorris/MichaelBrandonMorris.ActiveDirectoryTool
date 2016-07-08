@@ -137,9 +137,32 @@ namespace ActiveDirectoryToolWpf
         }
 
         public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            GroupPrincipal group)
+            GroupPrincipal groupPrincipal)
         {
-            return group.GetComputerPrincipals();
+            return groupPrincipal.GetComputerPrincipals();
+        }
+
+        public static IEnumerable<GroupComputers> GetComputerPrincipals(
+            IEnumerable<GroupPrincipal> groupPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var groupsComputers = new List<GroupComputers>();
+            foreach (var groupPrincipal in groupPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                groupsComputers.Add(GetGroupComputers(groupPrincipal));
+            }
+            return groupsComputers;
+        }
+
+        public static GroupComputers GetGroupComputers(
+            GroupPrincipal groupPrincipal)
+        {
+            return new GroupComputers
+            {
+                Group = groupPrincipal,
+                Computers = GetComputerPrincipals(groupPrincipal)
+            };
         }
 
         public static IEnumerable<ComputerGroups> GetComputersGroups(
@@ -156,6 +179,19 @@ namespace ActiveDirectoryToolWpf
                     cancellationToken.ThrowIfCancellationRequested();
                     computersGroups.Add(GetComputerGroups(computerPrincipal));
                 }
+            }
+            return computersGroups;
+        }
+
+        public static IEnumerable<ComputerGroups> GetComputersGroups(
+            IEnumerable<ComputerPrincipal> computerPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var computersGroups = new List<ComputerGroups>();
+            foreach (var computerPrincipal in computerPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                computersGroups.Add(GetComputerGroups(computerPrincipal));
             }
             return computersGroups;
         }
@@ -202,6 +238,22 @@ namespace ActiveDirectoryToolWpf
             };
         }
 
+        public static IEnumerable<GroupUsersDirectReports>
+            GetGroupsUsersDirectReports(
+            IEnumerable<GroupPrincipal> groupPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var groupsUsersDirectReports = new List<GroupUsersDirectReports>();
+            foreach (var groupPrincipal in groupPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                groupsUsersDirectReports.Add(
+                    GetGroupUsersDirectReports(
+                        groupPrincipal, cancellationToken));
+            }
+            return groupsUsersDirectReports;
+        }
+
         public static GroupUsersGroups GetGroupUsersGroups(
             GroupPrincipal groupPrincipal,
             CancellationToken cancellationToken)
@@ -211,6 +263,20 @@ namespace ActiveDirectoryToolWpf
                 Group = groupPrincipal,
                 UsersGroups = GetUsersGroups(groupPrincipal, cancellationToken)
             };
+        }
+
+        public static IEnumerable<GroupUsersGroups> GetGroupsUsersGroups(
+            IEnumerable<GroupPrincipal> groupPrincipals,
+            CancellationToken cancellationToken)
+        {
+            var groupsUsersGroups = new List<GroupUsersGroups>();
+            foreach (var groupPrincipal in groupPrincipals)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                groupsUsersGroups.Add(
+                    GetGroupUsersGroups(groupPrincipal, cancellationToken));
+            }
+            return groupsUsersGroups;
         }
 
         public static UserDirectReports GetUserDirectReports(

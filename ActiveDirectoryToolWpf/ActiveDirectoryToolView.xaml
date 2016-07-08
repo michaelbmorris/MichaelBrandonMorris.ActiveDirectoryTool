@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:activeDirectoryToolWpf="clr-namespace:ActiveDirectoryToolWpf"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         DataContext="{StaticResource MainViewModel}"
         Height="576"
@@ -143,9 +144,17 @@
                                   EnableRowVirtualization="True"
                                   Margin="5,5,5,0"
                                   AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"
-                                  SelectedItem="{Binding SelectedDataGridRow, Mode=TwoWay}">
+                                  x:Name="DataGrid"
+                                  x:FieldModifier="private">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <command:EventToCommand Command="{Binding SelectionChangedCommand}"
+                                                            CommandParameter="{Binding SelectedItems,
+                                                                                       ElementName=DataGrid}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <DataGrid.ContextMenu>
-                                <ContextMenu ItemsSource="{Binding ContextMenuItems}"/>
+                                <ContextMenu ItemsSource="{Binding ContextMenuItems}" />
                             </DataGrid.ContextMenu>
                         </DataGrid>
                     </DockPanel>

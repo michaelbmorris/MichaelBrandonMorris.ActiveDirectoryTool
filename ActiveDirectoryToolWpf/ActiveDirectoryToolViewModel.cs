@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,6 +19,18 @@ namespace ActiveDirectoryToolWpf
 {
     public class ActiveDirectoryToolViewModel : INotifyPropertyChanged
     {
+        private const string ComputerDistinguishedName =
+            "ComputerDistinguishedName";
+
+        private const string ContainerGroupDistinguishedName =
+            "ContainerGroupDistinguishedName";
+
+        private const string DirectReportDistinguishedName =
+            "DirectReportDistinguishedName";
+
+        private const string GroupDistinguishedName = "GroupDistinguishedName";
+        private const string UserDistinguishedName = "UserDistinguishedName";
+
         private readonly MenuItem _computerGetGroupsMenuItem;
         private readonly MenuItem _computerGetSummaryMenuItem;
         private readonly MenuItem _directReportGetDirectReportsMenuItem;
@@ -42,34 +55,7 @@ namespace ActiveDirectoryToolWpf
         private Visibility _progressBarVisibility;
 
         private ObservableCollection<ActiveDirectoryQuery> _queries;
-        private DataRowView _selectedDataGridRow;
         private bool _viewIsEnabled;
-
-        //private int _selectedQueryIndex;
-
-        /*public int SelectedQueryIndex
-        {
-            get { return _selectedQueryIndex; }
-            set
-            {
-                if (value == _selectedQueryIndex) return;
-                if (value != Queries.Count - 1)
-                {
-                    RunQuery(SelectedQueryIndex);
-                }
-                _selectedQueryIndex = value;
-                NotifyPropertyChanged();
-            }
-        }*/
-
-        private async void RunQuery(int selectedQueryIndex)
-        {
-            while (Queries.Count - 1 != selectedQueryIndex)
-            {
-                Queries.Pop();
-            }
-            await RunQuery(Queries.Pop());
-        }
 
         public ActiveDirectoryToolViewModel()
         {
@@ -215,6 +201,12 @@ namespace ActiveDirectoryToolWpf
             private set;
         }
 
+        public ICommand SelectionChangedCommand
+        {
+            get;
+            private set;
+        }
+
         public string MessageContent
         {
             get { return _messageContent; }
@@ -278,14 +270,10 @@ namespace ActiveDirectoryToolWpf
             get;
         }
 
-        public DataRowView SelectedDataGridRow
+        private IList SelectedDataRowViews
         {
-            private get { return _selectedDataGridRow; }
-            set
-            {
-                _selectedDataGridRow = value;
-                NotifyPropertyChanged();
-            }
+            get;
+            set;
         }
 
         public string Version
@@ -412,7 +400,7 @@ namespace ActiveDirectoryToolWpf
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
-            switch (Queries.First().QueryType)
+            switch (Queries.Peek().QueryType)
             {
                 case QueryType.ContextComputerGroups:
                     contextMenuItems.Add(_groupGetComputersMenuItem);
@@ -546,51 +534,51 @@ namespace ActiveDirectoryToolWpf
 
         private async void GetContextComputerGroupsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextComputerGroups,
-                    GetSelectedComputerDistinguishedName());
+            await RunQuery(
+                QueryType.ContextComputerGroups,
+                GetComputersDistinguishedNames());
         }
 
         private async void GetContextComputerSummaryCommandExecute()
         {
             await RunQuery(
                 QueryType.ContextComputerSummary,
-                GetSelectedComputerDistinguishedName());
+                GetComputersDistinguishedNames());
         }
 
         private async void GetContextDirectReportDirectReportsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextDirectReportDirectReports,
-                    GetSelectedGroupDistinguishedName());
+            await RunQuery(
+                QueryType.ContextDirectReportDirectReports,
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextDirectReportGroupsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextDirectReportGroups,
-                    GetSelectedDirectReportDistinguishedName());
+            await RunQuery(
+                QueryType.ContextDirectReportGroups,
+                GetDirectReportsDistinguishedNames());
         }
 
         private async void GetContextDirectReportSummaryCommandExecute()
         {
             await RunQuery(
                 QueryType.ContextDirectReportSummary,
-                GetSelectedDirectReportDistinguishedName());
+                GetDirectReportsDistinguishedNames());
         }
 
         private async void GetContextGroupComputersCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextGroupComputers,
-                    GetSelectedGroupDistinguishedName());
+            await RunQuery(
+                QueryType.ContextGroupComputers,
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupSummaryCommandExecute()
         {
             await RunQuery(
                 QueryType.ContextGroupSummary,
-                GetSelectedGroupDistinguishedName());
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupUsersCommandExecute()
@@ -600,37 +588,35 @@ namespace ActiveDirectoryToolWpf
 
         private async void GetContextGroupUsersDirectReportsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextGroupUsersDirectReports,
-                    GetSelectedGroupDistinguishedName());
+            await RunQuery(
+                QueryType.ContextGroupUsersDirectReports,
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextGroupUsersGroupsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextGroupUsersGroups,
-                    GetSelectedGroupDistinguishedName());
+            await RunQuery(
+                QueryType.ContextGroupUsersGroups,
+                GetGroupsDistinguishedNames());
         }
 
         private async void GetContextUserDirectReportsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextUserDirectReports,
-                    GetSelectedUserDistinguishedName());
+            await RunQuery(
+                QueryType.ContextUserDirectReports,
+                GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserGroupsCommandExecute()
         {
-            await
-                RunQuery(QueryType.ContextUserGroups,
-                    GetSelectedUserDistinguishedName());
+            await RunQuery(
+                QueryType.ContextUserGroups, GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.ContextUserSummary,
-                GetSelectedUserDistinguishedName());
+                QueryType.ContextUserSummary, GetUsersDistinguishedNames());
         }
 
         private async void GetOuComputersCommandExecute()
@@ -658,25 +644,51 @@ namespace ActiveDirectoryToolWpf
             await RunQuery(QueryType.OuUsersGroups);
         }
 
-        private string GetSelectedComputerDistinguishedName()
+        private static string GetComputerDistinguishedName(
+            DataRowView dataRowView)
         {
-            return SelectedDataGridRow["ComputerDistinguishedName"].ToString();
+            return dataRowView[ComputerDistinguishedName].ToString();
         }
 
-        private string GetSelectedDirectReportDistinguishedName()
+        private IEnumerable<string> GetComputersDistinguishedNames()
         {
-            return SelectedDataGridRow["DirectReportDistinguishedName"]
-                .ToString();
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetComputerDistinguishedName(dataRowView)).ToList();
         }
 
-        private string GetSelectedGroupDistinguishedName()
+        private static string GetDirectReportDistinguishedName(
+            DataRowView dataRowView)
         {
-            return SelectedDataGridRow["GroupDistinguishedName"].ToString();
+            return dataRowView[DirectReportDistinguishedName].ToString();
         }
 
-        private string GetSelectedUserDistinguishedName()
+        private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
-            return SelectedDataGridRow["UserDistinguishedName"].ToString();
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetDirectReportDistinguishedName(dataRowView)).ToList();
+        }
+
+        private static string GetGroupDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[GroupDistinguishedName].ToString();
+        }
+
+        private IEnumerable<string> GetGroupsDistinguishedNames()
+        {
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetGroupDistinguishedName(dataRowView)).ToList();
+        }
+
+        private static string GetUserDistinguishedName(DataRowView dataRowView)
+        {
+            return dataRowView[UserDistinguishedName].ToString();
+        }
+
+        private IEnumerable<string> GetUsersDistinguishedNames()
+        {
+            return (from DataRowView dataRowView in SelectedDataRowViews
+                select GetUserDistinguishedName(dataRowView)).ToList();
         }
 
         private void HideMessage()
@@ -737,11 +749,10 @@ namespace ActiveDirectoryToolWpf
         }
 
         private async Task RunQuery(QueryType queryType,
-            string selectedItemDistinguishedName = null)
+            IEnumerable<string> selectedItemDistinguishedNames = null)
         {
-            await RunQuery(
-                new ActiveDirectoryQuery(
-                    queryType, CurrentScope, selectedItemDistinguishedName));
+            await RunQuery(new ActiveDirectoryQuery(
+                    queryType, CurrentScope, selectedItemDistinguishedNames));
         }
 
         private async Task RunQuery(ActiveDirectoryQuery query)
@@ -750,7 +761,6 @@ namespace ActiveDirectoryToolWpf
             try
             {
                 Queries.Push(query);
-                //SelectedQueryIndex++;
                 await Queries.Peek().Execute();
                 Data = Queries.Peek().Data.ToDataTable().AsDataView();
             }
@@ -843,6 +853,10 @@ namespace ActiveDirectoryToolWpf
 
             PreviousQueryCommand = new RelayCommand(
                 PreviousQueryCommandExecute, PreviousQueryCommandCanExecute);
+
+            SelectionChangedCommand =
+                new RelayCommand<IList>(
+                    items => { SelectedDataRowViews = items; });
         }
 
         private void SetViewVariables()
@@ -850,7 +864,6 @@ namespace ActiveDirectoryToolWpf
             ProgressBarVisibility = Visibility.Hidden;
             MessageVisibility = Visibility.Hidden;
             CancelButtonVisibility = Visibility.Hidden;
-            //SelectedQueryIndex = -1;
             ViewIsEnabled = true;
             try
             {

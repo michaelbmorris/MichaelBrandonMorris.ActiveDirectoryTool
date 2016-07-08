@@ -4,6 +4,7 @@ using System.Data;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
+using System.Threading;
 using PrimitiveExtensions;
 using static ActiveDirectoryToolWpf.ActiveDirectoryAttribute;
 
@@ -230,12 +231,19 @@ namespace ActiveDirectoryToolWpf
             set;
         }
 
-        public IEnumerable<ExpandoObject> GetResults()
+        public CancellationToken CancellationToken
+        {
+            get;
+            set;
+        }
+
+    public IEnumerable<ExpandoObject> GetResults()
         {
             var results = new List<ExpandoObject>();
 
             foreach (var data in Data.Value)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 if (data is ComputerGroups)
                 {
                     var computerGroups = data as ComputerGroups;
@@ -804,7 +812,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        private bool AddContainerGroupAttributeToResult(
+        private static bool AddContainerGroupAttributeToResult(
             GroupPrincipal principal,
             ActiveDirectoryAttribute attribute,
             dynamic result)
@@ -865,6 +873,7 @@ namespace ActiveDirectoryToolWpf
             if (computerGroups.Groups == null) return results;
             foreach (var group in computerGroups.Groups)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,
@@ -882,6 +891,7 @@ namespace ActiveDirectoryToolWpf
             if (groupComputers.Computers == null) return results;
             foreach (var computer in groupComputers.Computers)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,
@@ -899,6 +909,7 @@ namespace ActiveDirectoryToolWpf
             if (groupUsers.Users == null) return results;
             foreach (var user in groupUsers.Users)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,
@@ -919,9 +930,11 @@ namespace ActiveDirectoryToolWpf
                 var userDirectReports in
                     groupUsersDirectReports.UsersDirectReports)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 if (userDirectReports.DirectReports == null) continue;
                 foreach (var directReport in userDirectReports.DirectReports)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
                     dynamic result = new ExpandoObject();
                     AddAttributesToResult(
                         result,
@@ -941,9 +954,11 @@ namespace ActiveDirectoryToolWpf
             if (groupUsersGroups.UsersGroups == null) return results;
             foreach (var userGroups in groupUsersGroups.UsersGroups)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 if (userGroups.Groups == null) continue;
                 foreach (var group in userGroups.Groups)
                 {
+                    CancellationToken.ThrowIfCancellationRequested();
                     dynamic result = new ExpandoObject();
                     AddAttributesToResult(
                         result,
