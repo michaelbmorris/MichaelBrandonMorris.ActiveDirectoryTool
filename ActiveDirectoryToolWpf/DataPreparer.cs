@@ -5,7 +5,7 @@ using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
 using System.Threading;
-using PrimitiveExtensions;
+using CollectionExtensions;
 using static ActiveDirectoryToolWpf.ActiveDirectoryAttribute;
 
 namespace ActiveDirectoryToolWpf
@@ -203,15 +203,21 @@ namespace ActiveDirectoryToolWpf
             var dataAsArray = data as ExpandoObject[] ?? data.ToArray();
             if (dataAsArray.IsNullOrEmpty()) return null;
             var dataTable = new DataTable();
-            foreach (var key in ((IDictionary<string, object>) dataAsArray[0])
-                .Keys)
-            {
-                dataTable.Columns.Add(key);
-            }
             foreach (var dataItem in dataAsArray)
             {
-                dataTable.Rows.Add(((IDictionary<string, object>) dataItem)
-                    .Values.ToArray());
+                foreach (var key in ((IDictionary<string, object>) dataItem)
+                    .Keys)
+                {
+                    if(!dataTable.Columns.Contains(key))
+                        dataTable.Columns.Add(key);
+                }
+            }
+            
+            foreach (var dataItem in dataAsArray)
+            {
+                dataTable.Rows.Add(
+                    ((IDictionary<string, object>) dataItem)
+                        .Values.ToArray());
             }
             return dataTable;
         }
@@ -219,88 +225,59 @@ namespace ActiveDirectoryToolWpf
 
     public class DataPreparer
     {
-        public IEnumerable<ActiveDirectoryAttribute> Attributes
-        {
-            get;
-            set;
-        }
+        public IEnumerable<ActiveDirectoryAttribute> Attributes { get; set; }
 
-        public Lazy<IEnumerable<object>> Data
-        {
-            get;
-            set;
-        }
+        public CancellationToken CancellationToken { get; set; }
 
-        public CancellationToken CancellationToken
-        {
-            get;
-            set;
-        }
+        public Lazy<IEnumerable<object>> Data { get; set; }
 
-    public IEnumerable<ExpandoObject> GetResults()
+        private void AddAttributesToResult(
+            dynamic result,
+            ComputerPrincipal computerPrincipal = null,
+            GroupPrincipal groupPrincipal = null,
+            GroupPrincipal containerGroupPrincipal = null,
+            UserPrincipal directReportUserPrincipal = null,
+            UserPrincipal userPrincipal = null)
         {
-            var results = new List<ExpandoObject>();
-
-            foreach (var data in Data.Value)
+            foreach (var attribute in Attributes)
             {
-                CancellationToken.ThrowIfCancellationRequested();
-                if (data is ComputerGroups)
+                if (computerPrincipal != null)
                 {
-                    var computerGroups = data as ComputerGroups;
-                    results.AddRange(PrepareComputerGroups(computerGroups));
+                    if (AddComputerAttributeToResult(
+                        computerPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
                 }
-                else if (data is GroupComputers)
+                if (containerGroupPrincipal != null)
                 {
-                    var groupComputers = data as GroupComputers;
-                    results.AddRange(PrepareGroupComputers(groupComputers));
+                    if (AddContainerGroupAttributeToResult(
+                        containerGroupPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
                 }
-                else if (data is GroupUsers)
+                if (directReportUserPrincipal != null)
                 {
-                    var groupUsers = data as GroupUsers;
-                    results.AddRange(PrepareGroupUsers(groupUsers));
+                    if (AddDirectReportAttributeToResult(
+                        directReportUserPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
                 }
-                else if (data is GroupUsersDirectReports)
+                if (groupPrincipal != null)
                 {
-                    var groupUsersDirectReports =
-                        data as GroupUsersDirectReports;
-                    results.AddRange(
-                        PrepareGroupUsersDirectReports(
-                            groupUsersDirectReports));
+                    if (AddGroupAttributeToResult(
+                        groupPrincipal, attribute, result))
+                    {
+                        continue;
+                    }
                 }
-                else if (data is GroupUsersGroups)
+                if (userPrincipal != null)
                 {
-                    var groupUsersGroups = data as GroupUsersGroups;
-                    results.AddRange(
-                        PrepareGroupUsersGroups(groupUsersGroups));
-                }
-                else if (data is UserGroups)
-                {
-                    var userGroups = data as UserGroups;
-                    results.AddRange(PrepareUserGroups(userGroups));
-                }
-                else if (data is UserDirectReports)
-                {
-                    var userDirectReports = data as UserDirectReports;
-                    results.AddRange(PrepareUserDirectReports(
-                        userDirectReports));
-                }
-                else
-                {
-                    var computerPrincipal = data as ComputerPrincipal;
-                    var groupPrincipal = data as GroupPrincipal;
-                    var userPrincipal = data as UserPrincipal;
-                    dynamic result = new ExpandoObject();
-                    AddAttributesToResult(
-                        result,
-                        computerPrincipal: computerPrincipal,
-                        groupPrincipal: groupPrincipal,
-                        userPrincipal: userPrincipal);
-                    results.Add(result);
-                    var principal = data as Principal;
-                    principal?.Dispose();
+                    AddUserAttributeToResult(userPrincipal, attribute, result);
                 }
             }
-            return results;
         }
 
         private static bool AddComputerAttributeToResult(
@@ -395,8 +372,62 @@ namespace ActiveDirectoryToolWpf
             return true;
         }
 
+        private static bool AddContainerGroupAttributeToResult(
+            GroupPrincipal principal,
+            ActiveDirectoryAttribute attribute,
+            dynamic result)
+        {
+            var attributeMapping =
+                new Dictionary<ActiveDirectoryAttribute, Action>
+                {
+                    [ContainerGroupContext] =
+                        () => result.ContainerGroupContext = principal.Context,
+                    [ContainerGroupContextType] = () =>
+                        result.ContainerGroupContextType =
+                            principal.ContextType,
+                    [ContainerGroupDescription] = () =>
+                        result.ContainerGroupDescription =
+                            principal.Description,
+                    [ContainerGroupDisplayName] = () =>
+                        result.ContainerGroupDisplayName =
+                            principal.DisplayName,
+                    [ContainerGroupDistinguishedName] = () =>
+                        result.ContainerGroupDistinguishedName =
+                            principal.DistinguishedName,
+                    [ContainerGroupGuid] = () => result.ContainerGroupGuid =
+                        principal.Guid,
+                    [ContainerGroupIsSecurityGroup] = () =>
+                        result.ContainerGroupIsSecurityGroup =
+                            principal.IsSecurityGroup,
+                    [ContainerGroupManagedBy] = () =>
+                        result.ContainerGroupManagedBy =
+                            principal.GetManagedBy(),
+                    [ContainerGroupName] =
+                        () => result.ContainerGroupName = principal.Name,
+                    [ContainerGroupSamAccountName] = () =>
+                        result.ContainerGroupSamAccountName =
+                            principal.SamAccountName,
+                    [ContainerGroupScope] = () =>
+                        result.ContainerGroupScope = principal.GroupScope,
+                    [ContainerGroupSid] =
+                        () => result.ContainerGroupSid = principal.Sid,
+                    [ContainerGroupStructuralObjectClass] = () =>
+                        result.ContainerGroupStructuralObjectClass =
+                            principal.StructuralObjectClass,
+                    [ContainerGroupUserPrincipalName] = () =>
+                        result.ContainerGroupUserPrincipalName =
+                            principal.UserPrincipalName,
+                    [ContainerGroupMembers] =
+                        () => result.ContainerGroupMembers = principal.Members
+                };
+
+            if (!attributeMapping.ContainsKey(attribute)) return false;
+            attributeMapping[attribute]();
+            return true;
+        }
+
         private static bool AddDirectReportAttributeToResult(
-            UserPrincipal principal,
+            UserPrincipal userPrincipal,
             ActiveDirectoryAttribute attribute,
             dynamic result)
         {
@@ -405,152 +436,152 @@ namespace ActiveDirectoryToolWpf
                 {
                     [DirectReportUserAccountControl] = () =>
                         result.DirectReportAccountControl =
-                            principal.GetUserAccountControl(),
+                            userPrincipal.GetUserAccountControl(),
                     [DirectReportAccountExpirationDate] = () =>
                         result.DirectReportAccountExpirationDate =
-                            principal.AccountExpirationDate,
+                            userPrincipal.AccountExpirationDate,
                     [DirectReportAccountLockoutTime] = () =>
                         result.DirectReportAccountLockoutTime =
-                            principal.AccountLockoutTime,
+                            userPrincipal.AccountLockoutTime,
                     [DirectReportAllowReversiblePasswordEncryption] = () =>
                         result.DirectReportAllowReversiblePasswordEncryption =
-                            principal.AllowReversiblePasswordEncryption,
+                            userPrincipal.AllowReversiblePasswordEncryption,
                     [DirectReportAssistant] = () =>
                         result.DirectReportAssistant =
-                            principal.GetAssistant(),
+                            userPrincipal.GetAssistant(),
                     [DirectReportBadLogonCount] = () =>
                         result.DirectReportBadLogonCount =
-                            principal.BadLogonCount,
+                            userPrincipal.BadLogonCount,
                     [DirectReportCertificates] = () =>
                         result.DirectReportCertificates =
-                            principal.Certificates,
+                            userPrincipal.Certificates,
                     [DirectReportCity] = () =>
-                        result.DirectReportCity = principal.GetCity(),
+                        result.DirectReportCity = userPrincipal.GetCity(),
                     [DirectReportComment] = () =>
-                        result.DirectReportComment = principal.GetComment(),
+                        result.DirectReportComment = userPrincipal.GetComment(),
                     [DirectReportCompany] = () =>
-                        result.DirectReportCompany = principal.GetCompany(),
+                        result.DirectReportCompany = userPrincipal.GetCompany(),
                     [DirectReportContext] = () =>
-                        result.DirectReportContext = principal.Context,
+                        result.DirectReportContext = userPrincipal.Context,
                     [DirectReportContextType] = () =>
-                        result.DirectReportContextType = principal.ContextType,
+                        result.DirectReportContextType = userPrincipal.ContextType,
                     [DirectReportCountry] = () =>
-                        result.DirectReportCountry = principal.GetCountry(),
+                        result.DirectReportCountry = userPrincipal.GetCountry(),
                     [DirectReportDelegationPermitted] = () =>
                         result.DirectReportDelegationPermitted =
-                            principal.DelegationPermitted,
+                            userPrincipal.DelegationPermitted,
                     [DirectReportDepartment] = () =>
                         result.DirectReportDepartment =
-                            principal.GetDepartment(),
+                            userPrincipal.GetDepartment(),
                     [DirectReportDescription] = () =>
-                        result.DirectReportDescription = principal.Description,
+                        result.DirectReportDescription = userPrincipal.Description,
                     [DirectReportDisplayName] = () =>
-                        result.DirectReportDisplayName = principal.DisplayName,
+                        result.DirectReportDisplayName = userPrincipal.DisplayName,
                     [DirectReportDistinguishedName] = () =>
                         result.DirectReportDistinguishedName =
-                            principal.DistinguishedName,
+                            userPrincipal.DistinguishedName,
                     [DirectReportDivision] = () =>
-                        result.DirectReportDivision = principal.GetDivision(),
+                        result.DirectReportDivision = userPrincipal.GetDivision(),
                     [DirectReportEmailAddress] = () =>
                         result.DirectReportEmailAddress =
-                            principal.EmailAddress,
+                            userPrincipal.EmailAddress,
                     [DirectReportEmployeeId] = () =>
-                        result.DirectReportEmployeeId = principal.EmployeeId,
+                        result.DirectReportEmployeeId = userPrincipal.EmployeeId,
                     [DirectReportEnabled] = () =>
-                        result.DirectReportEnabled = principal.Enabled,
+                        result.DirectReportEnabled = userPrincipal.Enabled,
                     [DirectReportFax] = () =>
-                        result.DirectReportFax = principal.GetFax(),
+                        result.DirectReportFax = userPrincipal.GetFax(),
                     [DirectReportSuffix] = () =>
-                        result.DirectReportSuffix = principal.GetSuffix(),
+                        result.DirectReportSuffix = userPrincipal.GetSuffix(),
                     [DirectReportGivenName] = () =>
-                        result.DirectReportGivenName = principal.GivenName,
+                        result.DirectReportGivenName = userPrincipal.GivenName,
                     [DirectReportGuid] = () =>
-                        result.DirectReportGuid = principal.Guid,
+                        result.DirectReportGuid = userPrincipal.Guid,
                     [DirectReportHomeAddress] = () =>
                         result.DirectReportHomeAddress =
-                            principal.GetHomeAddress(),
+                            userPrincipal.GetHomeAddress(),
                     [DirectReportHomeDirectory] = () =>
                         result.DirectReportHomeDirectory =
-                            principal.HomeDirectory,
+                            userPrincipal.HomeDirectory,
                     [DirectReportHomeDrive] = () =>
-                        result.DirectReportHomeDrive = principal.HomeDrive,
+                        result.DirectReportHomeDrive = userPrincipal.HomeDrive,
                     [DirectReportHomePhone] = () =>
                         result.DirectReportHomePhone =
-                            principal.GetHomePhone(),
+                            userPrincipal.GetHomePhone(),
                     [DirectReportInitials] = () =>
-                        result.DirectReportInitials = principal.GetInitials(),
+                        result.DirectReportInitials = userPrincipal.GetInitials(),
                     [DirectReportIsAccountLockedOut] = () =>
                         result.DirectReportIsAccountLockedOut =
-                            principal.IsAccountLockedOut(),
+                            userPrincipal.IsAccountLockedOut(),
                     [DirectReportIsActive] = () =>
-                        result.DirectReportIsActive = principal.IsActive(),
+                        result.DirectReportIsActive = userPrincipal.IsActive(),
                     [DirectReportLastBadPasswordAttempt] = () =>
                         result.DirectReportLastBadPasswordAttempt =
-                            principal.LastBadPasswordAttempt,
+                            userPrincipal.LastBadPasswordAttempt,
                     [DirectReportLastLogon] = () =>
-                        result.DirectReportLastLogon = principal.LastLogon,
+                        result.DirectReportLastLogon = userPrincipal.LastLogon,
                     [DirectReportLastPasswordSet] = () =>
                         result.DirectReportLastPasswordSet =
-                            principal.LastPasswordSet,
+                            userPrincipal.LastPasswordSet,
                     [DirectReportManager] = () =>
-                        result.DirectReportManager = principal.GetManager(),
+                        result.DirectReportManager = userPrincipal.GetManager(),
                     [DirectReportMiddleName] = () =>
-                        result.DirectReportMiddleName = principal.MiddleName,
+                        result.DirectReportMiddleName = userPrincipal.MiddleName,
                     [DirectReportMobile] = () =>
-                        result.DirectReportMobile = principal.GetMobile(),
-                    [DirectReportName] = () =>
-                        result.DirectReportName = principal.Name,
+                        result.DirectReportMobile = userPrincipal.GetMobile(),
+                    [DirectReportName] = () => result.DirectReportName =
+                        userPrincipal.Name,
                     [DirectReportNotes] = () =>
-                        result.DirectReportNotes = principal.GetNotes(),
+                        result.DirectReportNotes = userPrincipal.GetNotes(),
                     [DirectReportPager] = () =>
-                        result.DirectReportPager = principal.GetPager(),
+                        result.DirectReportPager = userPrincipal.GetPager(),
                     [DirectReportPasswordNeverExpires] = () =>
                         result.DirectReportPasswordNeverExpires =
-                            principal.PasswordNeverExpires,
+                            userPrincipal.PasswordNeverExpires,
                     [DirectReportPasswordNotRequired] = () =>
                         result.DirectReportPasswordNotRequired =
-                            principal.PasswordNotRequired,
+                            userPrincipal.PasswordNotRequired,
                     [DirectReportPermittedLogonTimes] = () =>
                         result.DirectReportPermittedLogonTimes =
-                            principal.PermittedLogonTimes,
+                            userPrincipal.PermittedLogonTimes,
                     [DirectReportPermittedWorkstations] = () =>
                         result.DirectReportPermittedWorkstations =
-                            principal.PermittedWorkstations,
+                            userPrincipal.PermittedWorkstations,
                     [DirectReportSamAccountName] = () =>
                         result.DirectReportSamAccountName =
-                            principal.SamAccountName,
+                            userPrincipal.SamAccountName,
                     [DirectReportScriptPath] = () =>
-                        result.DirectReportScriptPath = principal.ScriptPath,
+                        result.DirectReportScriptPath = userPrincipal.ScriptPath,
                     [DirectReportSid] = () =>
-                        result.DirectReportSid = principal.Sid,
+                        result.DirectReportSid = userPrincipal.Sid,
                     [DirectReportSip] = () =>
-                        result.DirectReportSip = principal.GetSip(),
+                        result.DirectReportSip = userPrincipal.GetSip(),
                     [DirectReportSmartcardLogonRequired] = () =>
                         result.DirectReportSmartcardLogonRequired =
-                            principal.SmartcardLogonRequired,
+                            userPrincipal.SmartcardLogonRequired,
                     [DirectReportState] = () =>
-                        result.DirectReportState = principal.GetState(),
+                        result.DirectReportState = userPrincipal.GetState(),
                     [DirectReportStreetAddress] = () =>
                         result.DirectReportStreetAddress =
-                            principal.GetStreetAddress(),
+                            userPrincipal.GetStreetAddress(),
                     [DirectReportStructuralObjectClass] = () =>
                         result.DirectReportStructuralObjectClass =
-                            principal.StructuralObjectClass,
+                            userPrincipal.StructuralObjectClass,
                     [DirectReportSurname] = () =>
-                        result.DirectReportSurname = principal.Surname,
+                        result.DirectReportSurname = userPrincipal.Surname,
                     [DirectReportTitle] = () =>
-                        result.DirectReportTitle = principal.GetTitle(),
+                        result.DirectReportTitle = userPrincipal.GetTitle(),
                     [DirectReportUserCannotChangePassword] = () =>
                         result.DirectReportUserCannotChangePassword =
-                            principal.UserCannotChangePassword,
+                            userPrincipal.UserCannotChangePassword,
                     [DirectReportUserPrincipalName] = () =>
                         result.DirectReportUserPrincipalName =
-                            principal.UserPrincipalName,
+                            userPrincipal.UserPrincipalName,
                     [DirectReportVoiceTelephoneNumber] = () =>
                         result.DirectReportVoiceTelephoneNumber =
-                            principal.VoiceTelephoneNumber,
+                            userPrincipal.VoiceTelephoneNumber,
                     [DirectReportVoip] = () =>
-                        result.DirectReportVoip = principal.GetVoip()
+                        result.DirectReportVoip = userPrincipal.GetVoip()
                 };
 
             if (!attributeMapping.ContainsKey(attribute)) return false;
@@ -756,107 +787,71 @@ namespace ActiveDirectoryToolWpf
             attributeMapping[attribute]();
         }
 
-        private void AddAttributesToResult(
-            dynamic result,
-            ComputerPrincipal computerPrincipal = null,
-            GroupPrincipal groupPrincipal = null,
-            GroupPrincipal containerGroupPrincipal = null,
-            UserPrincipal directReportUserPrincipal = null,
-            UserPrincipal userPrincipal = null)
+        public IEnumerable<ExpandoObject> GetResults()
         {
-            foreach (var attribute in Attributes)
+            var results = new List<ExpandoObject>();
+
+            foreach (var data in Data.Value)
             {
-                if (computerPrincipal != null)
+                CancellationToken.ThrowIfCancellationRequested();
+                if (data is ComputerGroups)
                 {
-                    if (AddComputerAttributeToResult(
-                        computerPrincipal, attribute, result))
-                    {
-                        continue;
-                    }
+                    var computerGroups = data as ComputerGroups;
+                    results.AddRange(PrepareComputerGroups(computerGroups));
                 }
-                if (containerGroupPrincipal != null)
+                else if (data is GroupComputers)
                 {
-                    if (AddContainerGroupAttributeToResult(
-                        containerGroupPrincipal, attribute, result))
-                    {
-                        continue;
-                    }
+                    var groupComputers = data as GroupComputers;
+                    results.AddRange(PrepareGroupComputers(groupComputers));
                 }
-                if (directReportUserPrincipal != null)
+                else if (data is GroupUsers)
                 {
-                    if (AddDirectReportAttributeToResult(
-                        directReportUserPrincipal, attribute, result))
-                    {
-                        continue;
-                    }
+                    var groupUsers = data as GroupUsers;
+                    results.AddRange(PrepareGroupUsers(groupUsers));
                 }
-                if (groupPrincipal != null)
+                else if (data is GroupUsersDirectReports)
                 {
-                    if (AddGroupAttributeToResult(
-                        groupPrincipal, attribute, result))
-                    {
-                        continue;
-                    }
+                    var groupUsersDirectReports =
+                        data as GroupUsersDirectReports;
+                    results.AddRange(
+                        PrepareGroupUsersDirectReports(
+                            groupUsersDirectReports));
                 }
-                if (userPrincipal != null)
+                else if (data is GroupUsersGroups)
                 {
-                    AddUserAttributeToResult(userPrincipal, attribute, result);
+                    var groupUsersGroups = data as GroupUsersGroups;
+                    results.AddRange(
+                        PrepareGroupUsersGroups(groupUsersGroups));
+                }
+                else if (data is UserGroups)
+                {
+                    var userGroups = data as UserGroups;
+                    results.AddRange(PrepareUserGroups(userGroups));
+                }
+                else if (data is UserDirectReports)
+                {
+                    var userDirectReports = data as UserDirectReports;
+                    results.AddRange(
+                        PrepareUserDirectReports(
+                            userDirectReports));
+                }
+                else
+                {
+                    var computerPrincipal = data as ComputerPrincipal;
+                    var groupPrincipal = data as GroupPrincipal;
+                    var userPrincipal = data as UserPrincipal;
+                    dynamic result = new ExpandoObject();
+                    AddAttributesToResult(
+                        result,
+                        computerPrincipal: computerPrincipal,
+                        groupPrincipal: groupPrincipal,
+                        userPrincipal: userPrincipal);
+                    results.Add(result);
+                    var principal = data as Principal;
+                    principal?.Dispose();
                 }
             }
-        }
-
-        private static bool AddContainerGroupAttributeToResult(
-            GroupPrincipal principal,
-            ActiveDirectoryAttribute attribute,
-            dynamic result)
-        {
-            var attributeMapping =
-                new Dictionary<ActiveDirectoryAttribute, Action>
-                {
-                    [ContainerGroupContext] =
-                        () => result.ContainerGroupContext = principal.Context,
-                    [ContainerGroupContextType] = () =>
-                        result.ContainerGroupContextType =
-                            principal.ContextType,
-                    [ContainerGroupDescription] = () =>
-                        result.ContainerGroupDescription =
-                            principal.Description,
-                    [ContainerGroupDisplayName] = () =>
-                        result.ContainerGroupDisplayName =
-                            principal.DisplayName,
-                    [ContainerGroupDistinguishedName] = () =>
-                        result.ContainerGroupDistinguishedName =
-                            principal.DistinguishedName,
-                    [ContainerGroupGuid] = () => result.ContainerGroupGuid =
-                        principal.Guid,
-                    [ContainerGroupIsSecurityGroup] = () =>
-                        result.ContainerGroupIsSecurityGroup =
-                            principal.IsSecurityGroup,
-                    [ContainerGroupManagedBy] = () =>
-                        result.ContainerGroupManagedBy =
-                            principal.GetManagedBy(),
-                    [ContainerGroupName] =
-                        () => result.ContainerGroupName = principal.Name,
-                    [ContainerGroupSamAccountName] = () =>
-                        result.ContainerGroupSamAccountName =
-                            principal.SamAccountName,
-                    [ContainerGroupScope] = () =>
-                        result.ContainerGroupScope = principal.GroupScope,
-                    [ContainerGroupSid] =
-                        () => result.ContainerGroupSid = principal.Sid,
-                    [ContainerGroupStructuralObjectClass] = () =>
-                        result.ContainerGroupStructuralObjectClass =
-                            principal.StructuralObjectClass,
-                    [ContainerGroupUserPrincipalName] = () =>
-                        result.ContainerGroupUserPrincipalName =
-                            principal.UserPrincipalName,
-                    [ContainerGroupMembers] =
-                        () => result.ContainerGroupMembers = principal.Members
-                };
-
-            if (!attributeMapping.ContainsKey(attribute)) return false;
-            attributeMapping[attribute]();
-            return true;
+            return results;
         }
 
         private IEnumerable<ExpandoObject> PrepareComputerGroups(
@@ -919,9 +914,8 @@ namespace ActiveDirectoryToolWpf
             var results = new List<ExpandoObject>();
             if (groupUsersDirectReports.UsersDirectReports == null)
                 return results;
-            foreach (
-                var userDirectReports in
-                    groupUsersDirectReports.UsersDirectReports)
+            foreach (var userDirectReports in groupUsersDirectReports
+                .UsersDirectReports)
             {
                 CancellationToken.ThrowIfCancellationRequested();
                 if (userDirectReports.DirectReports == null) continue;
@@ -971,6 +965,8 @@ namespace ActiveDirectoryToolWpf
             if (userDirectReports.DirectReports == null) return results;
             foreach (var directReport in userDirectReports.DirectReports)
             {
+                CancellationToken.ThrowIfCancellationRequested();
+                if (directReport == null) continue;
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,
@@ -988,6 +984,7 @@ namespace ActiveDirectoryToolWpf
             if (userGroups.Groups == null) return results;
             foreach (var group in userGroups.Groups)
             {
+                CancellationToken.ThrowIfCancellationRequested();
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,

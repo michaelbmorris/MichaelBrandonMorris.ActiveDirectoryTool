@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace ActiveDirectoryToolWpf
 
         private const string GroupDistinguishedName = "GroupDistinguishedName";
         private const string UserDistinguishedName = "UserDistinguishedName";
+        private const string HelpFile = "ActiveDirectoryToolHelp.chm";
 
         private readonly MenuItem _computerGetGroupsMenuItem;
         private readonly MenuItem _computerGetSummaryMenuItem;
@@ -50,7 +52,6 @@ namespace ActiveDirectoryToolWpf
         private List<MenuItem> _contextMenuItems;
         private Visibility _contextMenuVisibility;
         private DataView _data;
-        private HelpWindow _helpWindow;
         private string _messageContent;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
@@ -258,11 +259,6 @@ namespace ActiveDirectoryToolWpf
         public ICommand WriteToFileCommand { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private bool CancelCommandCanExecute()
-        {
-            return Queries.Peek() != null && Queries.Peek().CanCancel;
-        }
 
         private void CancelCommandExecute()
         {
@@ -607,16 +603,8 @@ namespace ActiveDirectoryToolWpf
                 _aboutWindow.Activate();
         }
 
-        private void OpenHelpWindowCommandExecute()
-        {
-            if (_helpWindow == null || !_helpWindow.IsVisible)
-            {
-                _helpWindow = new HelpWindow();
-                _helpWindow.Show();
-            }
-            else
-                _helpWindow.Activate();
-        }
+        private static void OpenHelpWindowCommandExecute() => Process.Start(
+            HelpFile);
 
         private bool OuCommandCanExecute()
         {
@@ -674,6 +662,11 @@ namespace ActiveDirectoryToolWpf
             {
                 ShowMessage("The selected query is too large to run.");
                 ResetQuery();
+            }
+            catch (ArgumentException)
+            {
+                ShowMessage(
+                    "There is an incorrectly formatted Active Directory Entry in the selected query context.");
             }
             FinishTask();
         }
@@ -743,8 +736,7 @@ namespace ActiveDirectoryToolWpf
             GetGroupSummaryCommand = new RelayCommand(
                 GetContextGroupSummaryCommandExecute);
 
-            CancelCommand = new RelayCommand(
-                CancelCommandExecute, CancelCommandCanExecute);
+            CancelCommand = new RelayCommand(CancelCommandExecute);
 
             PreviousQueryCommand = new RelayCommand(
                 PreviousQueryCommandExecute, PreviousQueryCommandCanExecute);

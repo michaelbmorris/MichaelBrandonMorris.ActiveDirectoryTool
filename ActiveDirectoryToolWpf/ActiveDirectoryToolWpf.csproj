@@ -30,7 +30,7 @@
     <PublisherName>IT Tools</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>33</ApplicationRevision>
+    <ApplicationRevision>37</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -130,15 +130,7 @@
     <Compile Include="BindableSelectedItemBehavior.cs" />
     <Compile Include="DataFileWriter.cs" />
     <Compile Include="GroupPrincipalExtensions.cs" />
-    <Compile Include="HelpMainPage.xaml.cs">
-      <DependentUpon>HelpMainPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HelpQueryTypesPage.xaml.cs">
-      <DependentUpon>HelpQueryTypesPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="HelpWindow.xaml.cs">
-      <DependentUpon>HelpWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="PrincipalContextExtensions.cs" />
     <Compile Include="PrincipalExtensions.cs" />
     <Compile Include="PrincipalSearcherExtensions.cs" />
     <Compile Include="PrincipalSearchResultExtensions.cs" />
@@ -163,18 +155,6 @@
       <DependentUpon>ActiveDirectoryToolView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="HelpMainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HelpQueryTypesPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="HelpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrganizationalUnit.cs" />
@@ -195,6 +175,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="ActiveDirectoryToolHelp.chm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="ActiveDirectoryToolWpf_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

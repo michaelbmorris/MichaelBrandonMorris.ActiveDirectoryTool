@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using CollectionExtensions;
 using PrimitiveExtensions;
 
 namespace ActiveDirectoryToolWpf
@@ -63,19 +64,28 @@ namespace ActiveDirectoryToolWpf
             return user.GetPropertyAsString(Department);
         }
 
+        public static IEnumerable<string> GetDirectReportDistinguishedNames(
+            this UserPrincipal userPrincipal)
+        {
+            return userPrincipal.GetProperty(DirectReports).Cast<string>()
+                .Where(
+                    directReportDistinguishedName =>
+                        !directReportDistinguishedName.IsNullOrWhiteSpace())
+                .ToList();
+        }
+
         public static IEnumerable<UserPrincipal> GetDirectReportUserPrincipals(
-            this UserPrincipal user)
+            this UserPrincipal userPrincipal)
         {
             var directReportDistinguishedNames =
-                user.GetDirectReportDistinguishedNames();
-            if (directReportDistinguishedNames != null)
-                return user.GetDirectReportDistinguishedNames()
-                    .Select(directReportDistinguishedName =>
-                        UserPrincipal.FindByIdentity(
-                            user.Context,
-                            IdentityType.DistinguishedName,
-                            directReportDistinguishedName)).ToList();
-            return null;
+                userPrincipal.GetDirectReportDistinguishedNames();
+            var directReportDistinguishedNamesArray =
+                directReportDistinguishedNames as string[] ??
+                directReportDistinguishedNames.ToArray();
+            if (directReportDistinguishedNamesArray.IsNullOrEmpty())
+                return null;
+            return userPrincipal.Context.FindUsersByDistinguishedNames(
+                directReportDistinguishedNamesArray);
         }
 
         public static string GetDivision(this UserPrincipal user)
@@ -162,19 +172,6 @@ namespace ActiveDirectoryToolWpf
         {
             return !Convert.ToBoolean(
                 (int) user.GetProperty(UserAccountControl).Value & 0x0002);
-        }
-
-        internal static IEnumerable<string> GetDirectReportDistinguishedNames(
-            this UserPrincipal user)
-        {
-            return
-                user.GetProperty(DirectReports)
-                    .Cast<string>()
-                    .Where(
-                        directReportDistinguishedName =>
-                            !directReportDistinguishedName
-                                .IsNullOrWhiteSpace())
-                    .ToList();
         }
     }
 }

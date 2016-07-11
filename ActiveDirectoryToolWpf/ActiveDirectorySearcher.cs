@@ -8,92 +8,52 @@ namespace ActiveDirectoryToolWpf
 {
     public interface IComputerPrincipal
     {
-        ComputerPrincipal Computer
-        {
-            get;
-            set;
-        }
+        ComputerPrincipal Computer { get; set; }
     }
 
     public interface IComputers
     {
-        IEnumerable<ComputerPrincipal> Computers
-        {
-            get;
-            set;
-        }
+        IEnumerable<ComputerPrincipal> Computers { get; set; }
     }
 
     public interface IDirectReports
     {
-        IEnumerable<UserPrincipal> DirectReports
-        {
-            get;
-            set;
-        }
+        IEnumerable<UserPrincipal> DirectReports { get; set; }
     }
 
     public interface IGroup
     {
-        GroupPrincipal Group
-        {
-            get;
-            set;
-        }
+        GroupPrincipal Group { get; set; }
     }
 
     public interface IGroups
     {
-        IEnumerable<GroupPrincipal> Groups
-        {
-            get;
-            set;
-        }
+        IEnumerable<GroupPrincipal> Groups { get; set; }
     }
 
     public interface IUser
     {
-        UserPrincipal User
-        {
-            get;
-            set;
-        }
+        UserPrincipal User { get; set; }
     }
 
     public interface IUserGroups
     {
-        IEnumerable<UserGroups> UsersGroups
-        {
-            get;
-            set;
-        }
+        IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
     public interface IUsers
     {
-        IEnumerable<UserPrincipal> Users
-        {
-            get;
-            set;
-        }
+        IEnumerable<UserPrincipal> Users { get; set; }
     }
 
     public interface IUsersDirectReports
     {
-        IEnumerable<UserDirectReports> UsersDirectReports
-        {
-            get;
-            set;
-        }
+        IEnumerable<UserDirectReports> UsersDirectReports { get; set; }
     }
 
     public interface IUsersGroups
     {
-        IEnumerable<UserGroups> UsersGroups
-        {
-            get;
-            set;
-        }
+        IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
     public class ActiveDirectorySearcher
@@ -104,10 +64,7 @@ namespace ActiveDirectoryToolWpf
             ActiveDirectoryScope = activeDirectoryScope;
         }
 
-        private ActiveDirectoryScope ActiveDirectoryScope
-        {
-            get;
-        }
+        private ActiveDirectoryScope ActiveDirectoryScope { get; }
 
         private PrincipalContext PrincipalContext => new PrincipalContext(
             ContextType.Domain,
@@ -155,16 +112,6 @@ namespace ActiveDirectoryToolWpf
             return groupsComputers;
         }
 
-        public static GroupComputers GetGroupComputers(
-            GroupPrincipal groupPrincipal)
-        {
-            return new GroupComputers
-            {
-                Group = groupPrincipal,
-                Computers = GetComputerPrincipals(groupPrincipal)
-            };
-        }
-
         public static IEnumerable<ComputerGroups> GetComputersGroups(
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
@@ -194,6 +141,16 @@ namespace ActiveDirectoryToolWpf
                 computersGroups.Add(GetComputerGroups(computerPrincipal));
             }
             return computersGroups;
+        }
+
+        public static GroupComputers GetGroupComputers(
+            GroupPrincipal groupPrincipal)
+        {
+            return new GroupComputers
+            {
+                Group = groupPrincipal,
+                Computers = GetComputerPrincipals(groupPrincipal)
+            };
         }
 
         public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
@@ -246,25 +203,14 @@ namespace ActiveDirectoryToolWpf
             foreach (var groupPrincipal in groupPrincipals)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                groupsUsers.Add(new GroupUsers
-                {
-                    Group = groupPrincipal,
-                    Users = GetUserPrincipals(groupPrincipal)
-                });
+                groupsUsers.Add(
+                    new GroupUsers
+                    {
+                        Group = groupPrincipal,
+                        Users = GetUserPrincipals(groupPrincipal)
+                    });
             }
             return groupsUsers;
-        }
-
-        public static GroupUsersDirectReports GetGroupUsersDirectReports(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new GroupUsersDirectReports
-            {
-                Group = groupPrincipal,
-                UsersDirectReports = GetUsersDirectReports(
-                    groupPrincipal, cancellationToken)
-            };
         }
 
         public static IEnumerable<GroupUsersDirectReports>
@@ -283,17 +229,6 @@ namespace ActiveDirectoryToolWpf
             return groupsUsersDirectReports;
         }
 
-        public static GroupUsersGroups GetGroupUsersGroups(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new GroupUsersGroups
-            {
-                Group = groupPrincipal,
-                UsersGroups = GetUsersGroups(groupPrincipal, cancellationToken)
-            };
-        }
-
         public static IEnumerable<GroupUsersGroups> GetGroupsUsersGroups(
             IEnumerable<GroupPrincipal> groupPrincipals,
             CancellationToken cancellationToken)
@@ -306,6 +241,62 @@ namespace ActiveDirectoryToolWpf
                     GetGroupUsersGroups(groupPrincipal, cancellationToken));
             }
             return groupsUsersGroups;
+        }
+
+        public static GroupUsersDirectReports GetGroupUsersDirectReports(
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
+        {
+            return new GroupUsersDirectReports
+            {
+                Group = groupPrincipal,
+                UsersDirectReports = GetUsersDirectReports(
+                    groupPrincipal, cancellationToken)
+            };
+        }
+
+        public static GroupUsersGroups GetGroupUsersGroups(
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
+        {
+            return new GroupUsersGroups
+            {
+                Group = groupPrincipal,
+                UsersGroups = GetUsersGroups(groupPrincipal, cancellationToken)
+            };
+        }
+
+        public IEnumerable<ComputerPrincipal> GetOuComputerPrincipals()
+        {
+            return GetComputerPrincipals(PrincipalContext);
+        }
+
+        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals()
+        {
+            return GetGroupPrincipals(PrincipalContext);
+        }
+
+        public IEnumerable<GroupUsers> GetOuGroupsUsers(
+            CancellationToken cancellationToken)
+        {
+            return GetGroupsUsers(PrincipalContext, cancellationToken);
+        }
+
+        public IEnumerable<UserPrincipal> GetOuUserPrincipals()
+        {
+            return GetUserPrincipals(PrincipalContext);
+        }
+
+        public IEnumerable<UserDirectReports> GetOuUsersDirectReports(
+            CancellationToken cancellationToken)
+        {
+            return GetUsersDirectReports(PrincipalContext, cancellationToken);
+        }
+
+        public IEnumerable<UserGroups> GetOuUsersGroups(
+            CancellationToken cancellationToken)
+        {
+            return GetUsersGroups(PrincipalContext, cancellationToken);
         }
 
         public static UserDirectReports GetUserDirectReports(
@@ -434,144 +425,55 @@ namespace ActiveDirectoryToolWpf
             }
             return usersGroups;
         }
-
-        public IEnumerable<ComputerPrincipal> GetOuComputerPrincipals()
-        {
-            return GetComputerPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals()
-        {
-            return GetGroupPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<GroupUsers> GetOuGroupsUsers(
-            CancellationToken cancellationToken)
-        {
-            return GetGroupsUsers(PrincipalContext, cancellationToken);
-        }
-
-        public IEnumerable<UserPrincipal> GetOuUserPrincipals()
-        {
-            return GetUserPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<UserDirectReports> GetOuUsersDirectReports(
-            CancellationToken cancellationToken)
-        {
-            return GetUsersDirectReports(PrincipalContext, cancellationToken);
-        }
-
-        public IEnumerable<UserGroups> GetOuUsersGroups(
-            CancellationToken cancellationToken)
-        {
-            return GetUsersGroups(PrincipalContext, cancellationToken);
-        }
     }
 
     public class ComputerGroups : IComputerPrincipal, IGroups
     {
-        public ComputerPrincipal Computer
-        {
-            get;
-            set;
-        }
+        public ComputerPrincipal Computer { get; set; }
 
-        public IEnumerable<GroupPrincipal> Groups
-        {
-            get;
-            set;
-        }
+        public IEnumerable<GroupPrincipal> Groups { get; set; }
     }
 
     public class GroupComputers : IComputers, IGroup
     {
-        public IEnumerable<ComputerPrincipal> Computers
-        {
-            get;
-            set;
-        }
+        public IEnumerable<ComputerPrincipal> Computers { get; set; }
 
-        public GroupPrincipal Group
-        {
-            get;
-            set;
-        }
+        public GroupPrincipal Group { get; set; }
     }
 
     public class GroupUsers : IGroup, IUsers
     {
-        public GroupPrincipal Group
-        {
-            get;
-            set;
-        }
+        public GroupPrincipal Group { get; set; }
 
-        public IEnumerable<UserPrincipal> Users
-        {
-            get;
-            set;
-        }
+        public IEnumerable<UserPrincipal> Users { get; set; }
     }
 
     public class GroupUsersDirectReports : IGroup,
         IUsersDirectReports
     {
-        public GroupPrincipal Group
-        {
-            get;
-            set;
-        }
+        public GroupPrincipal Group { get; set; }
 
-        public IEnumerable<UserDirectReports> UsersDirectReports
-        {
-            get;
-            set;
-        }
+        public IEnumerable<UserDirectReports> UsersDirectReports { get; set; }
     }
 
     public class GroupUsersGroups : IGroup, IUsersGroups
     {
-        public GroupPrincipal Group
-        {
-            get;
-            set;
-        }
+        public GroupPrincipal Group { get; set; }
 
-        public IEnumerable<UserGroups> UsersGroups
-        {
-            get;
-            set;
-        }
+        public IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
     public class UserDirectReports : IDirectReports, IUser
     {
-        public IEnumerable<UserPrincipal> DirectReports
-        {
-            get;
-            set;
-        }
+        public IEnumerable<UserPrincipal> DirectReports { get; set; }
 
-        public UserPrincipal User
-        {
-            get;
-            set;
-        }
+        public UserPrincipal User { get; set; }
     }
 
     public class UserGroups : IGroups, IUser
     {
-        public IEnumerable<GroupPrincipal> Groups
-        {
-            get;
-            set;
-        }
+        public IEnumerable<GroupPrincipal> Groups { get; set; }
 
-        public UserPrincipal User
-        {
-            get;
-            set;
-        }
+        public UserPrincipal User { get; set; }
     }
 }
