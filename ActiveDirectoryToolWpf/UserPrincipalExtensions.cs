@@ -68,10 +68,7 @@ namespace ActiveDirectoryToolWpf
             this UserPrincipal userPrincipal)
         {
             return userPrincipal.GetProperty(DirectReports).Cast<string>()
-                .Where(
-                    directReportDistinguishedName =>
-                        !directReportDistinguishedName.IsNullOrWhiteSpace())
-                .ToList();
+                .Where(dn => !dn.IsNullOrWhiteSpace());
         }
 
         public static IEnumerable<UserPrincipal> GetDirectReportUserPrincipals(

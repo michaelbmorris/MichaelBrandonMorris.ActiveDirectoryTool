@@ -32,7 +32,7 @@ namespace ActiveDirectoryToolWpf
             IEnumerable<string> distinguishedNames)
         {
             return distinguishedNames.Select(
-                    principalContext.FindUserByDistinguishedName).ToList();
+                principalContext.FindUserByDistinguishedName);
         }
 
         public static IEnumerable<Principal> FindByDistinguishedNames(
@@ -40,7 +40,7 @@ namespace ActiveDirectoryToolWpf
             IEnumerable<string> distinguishedNames)
         {
             return distinguishedNames.Select(
-                principalContext.FindByDistinguishedName).ToList();
+                principalContext.FindByDistinguishedName);
         }
     }
 }

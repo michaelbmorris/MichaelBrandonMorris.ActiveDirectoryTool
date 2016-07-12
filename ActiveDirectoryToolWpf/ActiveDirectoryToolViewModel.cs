@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
 using System.Diagnostics;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -60,9 +61,17 @@ namespace ActiveDirectoryToolWpf
 
         public ActiveDirectoryToolViewModel()
         {
-            RootScope = new ActiveDirectoryScopeFetcher().Scope;
-            Queries = new ObservableCollection<ActiveDirectoryQuery>();
             SetViewVariables();
+            try
+            {
+                RootScope = new ActiveDirectoryScopeFetcher().Scope;
+            }
+            catch (PrincipalServerDownException)
+            {
+                ShowMessage(
+                    "The Active Directory server could not be contacted.");
+            }
+            Queries = new ObservableCollection<ActiveDirectoryQuery>();
             _computerGetGroupsMenuItem = new MenuItem
             {
                 Header = "Computer - Get Groups",

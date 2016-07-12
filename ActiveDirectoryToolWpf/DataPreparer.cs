@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
@@ -208,11 +209,11 @@ namespace ActiveDirectoryToolWpf
                 foreach (var key in ((IDictionary<string, object>) dataItem)
                     .Keys)
                 {
-                    if(!dataTable.Columns.Contains(key))
+                    if (!dataTable.Columns.Contains(key))
                         dataTable.Columns.Add(key);
                 }
             }
-            
+
             foreach (var dataItem in dataAsArray)
             {
                 dataTable.Rows.Add(
@@ -257,13 +258,10 @@ namespace ActiveDirectoryToolWpf
                         continue;
                     }
                 }
-                if (directReportUserPrincipal != null)
+                if (AddDirectReportAttributeToResult(
+                    directReportUserPrincipal, attribute, result))
                 {
-                    if (AddDirectReportAttributeToResult(
-                        directReportUserPrincipal, attribute, result))
-                    {
-                        continue;
-                    }
+                    continue;
                 }
                 if (groupPrincipal != null)
                 {
@@ -427,161 +425,205 @@ namespace ActiveDirectoryToolWpf
         }
 
         private static bool AddDirectReportAttributeToResult(
-            UserPrincipal userPrincipal,
+            UserPrincipal directReportUserPrincipal,
             ActiveDirectoryAttribute attribute,
             dynamic result)
         {
+            Debug.WriteLine(directReportUserPrincipal);
             var attributeMapping =
                 new Dictionary<ActiveDirectoryAttribute, Action>
                 {
                     [DirectReportUserAccountControl] = () =>
                         result.DirectReportAccountControl =
-                            userPrincipal.GetUserAccountControl(),
+                            directReportUserPrincipal.GetUserAccountControl(),
                     [DirectReportAccountExpirationDate] = () =>
                         result.DirectReportAccountExpirationDate =
-                            userPrincipal.AccountExpirationDate,
+                            directReportUserPrincipal.AccountExpirationDate,
                     [DirectReportAccountLockoutTime] = () =>
                         result.DirectReportAccountLockoutTime =
-                            userPrincipal.AccountLockoutTime,
+                            directReportUserPrincipal.AccountLockoutTime,
                     [DirectReportAllowReversiblePasswordEncryption] = () =>
                         result.DirectReportAllowReversiblePasswordEncryption =
-                            userPrincipal.AllowReversiblePasswordEncryption,
+                            directReportUserPrincipal
+                                .AllowReversiblePasswordEncryption,
                     [DirectReportAssistant] = () =>
                         result.DirectReportAssistant =
-                            userPrincipal.GetAssistant(),
+                            directReportUserPrincipal.GetAssistant(),
                     [DirectReportBadLogonCount] = () =>
                         result.DirectReportBadLogonCount =
-                            userPrincipal.BadLogonCount,
+                            directReportUserPrincipal.BadLogonCount,
                     [DirectReportCertificates] = () =>
                         result.DirectReportCertificates =
-                            userPrincipal.Certificates,
+                            directReportUserPrincipal.Certificates,
                     [DirectReportCity] = () =>
-                        result.DirectReportCity = userPrincipal.GetCity(),
+                        result.DirectReportCity =
+                            directReportUserPrincipal.GetCity(),
                     [DirectReportComment] = () =>
-                        result.DirectReportComment = userPrincipal.GetComment(),
+                        result.DirectReportComment =
+                            directReportUserPrincipal.GetComment(),
                     [DirectReportCompany] = () =>
-                        result.DirectReportCompany = userPrincipal.GetCompany(),
+                        result.DirectReportCompany =
+                            directReportUserPrincipal.GetCompany(),
                     [DirectReportContext] = () =>
-                        result.DirectReportContext = userPrincipal.Context,
+                        result.DirectReportContext =
+                            directReportUserPrincipal.Context,
                     [DirectReportContextType] = () =>
-                        result.DirectReportContextType = userPrincipal.ContextType,
+                        result.DirectReportContextType =
+                            directReportUserPrincipal.ContextType,
                     [DirectReportCountry] = () =>
-                        result.DirectReportCountry = userPrincipal.GetCountry(),
+                        result.DirectReportCountry =
+                            directReportUserPrincipal.GetCountry(),
                     [DirectReportDelegationPermitted] = () =>
                         result.DirectReportDelegationPermitted =
-                            userPrincipal.DelegationPermitted,
+                            directReportUserPrincipal.DelegationPermitted,
                     [DirectReportDepartment] = () =>
                         result.DirectReportDepartment =
-                            userPrincipal.GetDepartment(),
+                            directReportUserPrincipal.GetDepartment(),
                     [DirectReportDescription] = () =>
-                        result.DirectReportDescription = userPrincipal.Description,
+                        result.DirectReportDescription =
+                            directReportUserPrincipal.Description,
                     [DirectReportDisplayName] = () =>
-                        result.DirectReportDisplayName = userPrincipal.DisplayName,
+                        result.DirectReportDisplayName =
+                            directReportUserPrincipal.DisplayName,
+
+                    // Distinguished Name
                     [DirectReportDistinguishedName] = () =>
                         result.DirectReportDistinguishedName =
-                            userPrincipal.DistinguishedName,
+                            directReportUserPrincipal == null
+                                ? string.Empty
+                                : directReportUserPrincipal.DistinguishedName,
+
+                    // Division
                     [DirectReportDivision] = () =>
-                        result.DirectReportDivision = userPrincipal.GetDivision(),
+                        result.DirectReportDivision =
+                            directReportUserPrincipal.GetDivision(),
                     [DirectReportEmailAddress] = () =>
                         result.DirectReportEmailAddress =
-                            userPrincipal.EmailAddress,
+                            directReportUserPrincipal.EmailAddress,
                     [DirectReportEmployeeId] = () =>
-                        result.DirectReportEmployeeId = userPrincipal.EmployeeId,
+                        result.DirectReportEmployeeId =
+                            directReportUserPrincipal.EmployeeId,
                     [DirectReportEnabled] = () =>
-                        result.DirectReportEnabled = userPrincipal.Enabled,
+                        result.DirectReportEnabled =
+                            directReportUserPrincipal.Enabled,
                     [DirectReportFax] = () =>
-                        result.DirectReportFax = userPrincipal.GetFax(),
+                        result.DirectReportFax =
+                            directReportUserPrincipal.GetFax(),
                     [DirectReportSuffix] = () =>
-                        result.DirectReportSuffix = userPrincipal.GetSuffix(),
+                        result.DirectReportSuffix =
+                            directReportUserPrincipal.GetSuffix(),
                     [DirectReportGivenName] = () =>
-                        result.DirectReportGivenName = userPrincipal.GivenName,
+                        result.DirectReportGivenName =
+                            directReportUserPrincipal.GivenName,
                     [DirectReportGuid] = () =>
-                        result.DirectReportGuid = userPrincipal.Guid,
+                        result.DirectReportGuid =
+                            directReportUserPrincipal.Guid,
                     [DirectReportHomeAddress] = () =>
                         result.DirectReportHomeAddress =
-                            userPrincipal.GetHomeAddress(),
+                            directReportUserPrincipal.GetHomeAddress(),
                     [DirectReportHomeDirectory] = () =>
                         result.DirectReportHomeDirectory =
-                            userPrincipal.HomeDirectory,
+                            directReportUserPrincipal.HomeDirectory,
                     [DirectReportHomeDrive] = () =>
-                        result.DirectReportHomeDrive = userPrincipal.HomeDrive,
+                        result.DirectReportHomeDrive =
+                            directReportUserPrincipal.HomeDrive,
                     [DirectReportHomePhone] = () =>
                         result.DirectReportHomePhone =
-                            userPrincipal.GetHomePhone(),
+                            directReportUserPrincipal.GetHomePhone(),
                     [DirectReportInitials] = () =>
-                        result.DirectReportInitials = userPrincipal.GetInitials(),
+                        result.DirectReportInitials =
+                            directReportUserPrincipal.GetInitials(),
                     [DirectReportIsAccountLockedOut] = () =>
                         result.DirectReportIsAccountLockedOut =
-                            userPrincipal.IsAccountLockedOut(),
+                            directReportUserPrincipal.IsAccountLockedOut(),
                     [DirectReportIsActive] = () =>
-                        result.DirectReportIsActive = userPrincipal.IsActive(),
+                        result.DirectReportIsActive =
+                            directReportUserPrincipal.IsActive(),
                     [DirectReportLastBadPasswordAttempt] = () =>
                         result.DirectReportLastBadPasswordAttempt =
-                            userPrincipal.LastBadPasswordAttempt,
+                            directReportUserPrincipal.LastBadPasswordAttempt,
                     [DirectReportLastLogon] = () =>
-                        result.DirectReportLastLogon = userPrincipal.LastLogon,
+                        result.DirectReportLastLogon =
+                            directReportUserPrincipal.LastLogon,
                     [DirectReportLastPasswordSet] = () =>
                         result.DirectReportLastPasswordSet =
-                            userPrincipal.LastPasswordSet,
+                            directReportUserPrincipal.LastPasswordSet,
                     [DirectReportManager] = () =>
-                        result.DirectReportManager = userPrincipal.GetManager(),
+                        result.DirectReportManager =
+                            directReportUserPrincipal.GetManager(),
                     [DirectReportMiddleName] = () =>
-                        result.DirectReportMiddleName = userPrincipal.MiddleName,
+                        result.DirectReportMiddleName =
+                            directReportUserPrincipal.MiddleName,
                     [DirectReportMobile] = () =>
-                        result.DirectReportMobile = userPrincipal.GetMobile(),
+                        result.DirectReportMobile =
+                            directReportUserPrincipal.GetMobile(),
+
+                    // Name
                     [DirectReportName] = () => result.DirectReportName =
-                        userPrincipal.Name,
+                        directReportUserPrincipal == null
+                            ? string.Empty
+                            : directReportUserPrincipal.Name,
+
+                    // Notes
                     [DirectReportNotes] = () =>
-                        result.DirectReportNotes = userPrincipal.GetNotes(),
+                        result.DirectReportNotes =
+                            directReportUserPrincipal.GetNotes(),
                     [DirectReportPager] = () =>
-                        result.DirectReportPager = userPrincipal.GetPager(),
+                        result.DirectReportPager =
+                            directReportUserPrincipal.GetPager(),
                     [DirectReportPasswordNeverExpires] = () =>
                         result.DirectReportPasswordNeverExpires =
-                            userPrincipal.PasswordNeverExpires,
+                            directReportUserPrincipal.PasswordNeverExpires,
                     [DirectReportPasswordNotRequired] = () =>
                         result.DirectReportPasswordNotRequired =
-                            userPrincipal.PasswordNotRequired,
+                            directReportUserPrincipal.PasswordNotRequired,
                     [DirectReportPermittedLogonTimes] = () =>
                         result.DirectReportPermittedLogonTimes =
-                            userPrincipal.PermittedLogonTimes,
+                            directReportUserPrincipal.PermittedLogonTimes,
                     [DirectReportPermittedWorkstations] = () =>
                         result.DirectReportPermittedWorkstations =
-                            userPrincipal.PermittedWorkstations,
+                            directReportUserPrincipal.PermittedWorkstations,
                     [DirectReportSamAccountName] = () =>
                         result.DirectReportSamAccountName =
-                            userPrincipal.SamAccountName,
+                            directReportUserPrincipal.SamAccountName,
                     [DirectReportScriptPath] = () =>
-                        result.DirectReportScriptPath = userPrincipal.ScriptPath,
+                        result.DirectReportScriptPath =
+                            directReportUserPrincipal.ScriptPath,
                     [DirectReportSid] = () =>
-                        result.DirectReportSid = userPrincipal.Sid,
+                        result.DirectReportSid = directReportUserPrincipal.Sid,
                     [DirectReportSip] = () =>
-                        result.DirectReportSip = userPrincipal.GetSip(),
+                        result.DirectReportSip =
+                            directReportUserPrincipal.GetSip(),
                     [DirectReportSmartcardLogonRequired] = () =>
                         result.DirectReportSmartcardLogonRequired =
-                            userPrincipal.SmartcardLogonRequired,
+                            directReportUserPrincipal.SmartcardLogonRequired,
                     [DirectReportState] = () =>
-                        result.DirectReportState = userPrincipal.GetState(),
+                        result.DirectReportState =
+                            directReportUserPrincipal.GetState(),
                     [DirectReportStreetAddress] = () =>
                         result.DirectReportStreetAddress =
-                            userPrincipal.GetStreetAddress(),
+                            directReportUserPrincipal.GetStreetAddress(),
                     [DirectReportStructuralObjectClass] = () =>
                         result.DirectReportStructuralObjectClass =
-                            userPrincipal.StructuralObjectClass,
+                            directReportUserPrincipal.StructuralObjectClass,
                     [DirectReportSurname] = () =>
-                        result.DirectReportSurname = userPrincipal.Surname,
+                        result.DirectReportSurname =
+                            directReportUserPrincipal.Surname,
                     [DirectReportTitle] = () =>
-                        result.DirectReportTitle = userPrincipal.GetTitle(),
+                        result.DirectReportTitle =
+                            directReportUserPrincipal.GetTitle(),
                     [DirectReportUserCannotChangePassword] = () =>
                         result.DirectReportUserCannotChangePassword =
-                            userPrincipal.UserCannotChangePassword,
+                            directReportUserPrincipal.UserCannotChangePassword,
                     [DirectReportUserPrincipalName] = () =>
-                        result.DirectReportUserPrincipalName =
-                            userPrincipal.UserPrincipalName,
+                        result.DirectReportdirectReportUserPrincipalName =
+                            directReportUserPrincipal.UserPrincipalName,
                     [DirectReportVoiceTelephoneNumber] = () =>
                         result.DirectReportVoiceTelephoneNumber =
-                            userPrincipal.VoiceTelephoneNumber,
+                            directReportUserPrincipal.VoiceTelephoneNumber,
                     [DirectReportVoip] = () =>
-                        result.DirectReportVoip = userPrincipal.GetVoip()
+                        result.DirectReportVoip =
+                            directReportUserPrincipal.GetVoip()
                 };
 
             if (!attributeMapping.ContainsKey(attribute)) return false;
@@ -966,7 +1008,6 @@ namespace ActiveDirectoryToolWpf
             foreach (var directReport in userDirectReports.DirectReports)
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                if (directReport == null) continue;
                 dynamic result = new ExpandoObject();
                 AddAttributesToResult(
                     result,
