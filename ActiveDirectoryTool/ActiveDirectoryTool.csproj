@@ -60,7 +60,7 @@
     <ManifestCertificateThumbprint>39EEAE4F29FC4449B4C317E4D733A59A73811590</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ActiveDirectoryToolWpf_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ActiveDirectoryTool_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -178,7 +178,7 @@
     <Content Include="ActiveDirectoryToolHelp.chm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="ActiveDirectoryToolWpf_TemporaryKey.pfx" />
+    <None Include="ActiveDirectoryTool_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
