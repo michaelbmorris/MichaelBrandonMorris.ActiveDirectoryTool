@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
     public class OrganizationalUnit
     {

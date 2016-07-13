@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using PrimitiveExtensions;
+using Extensions.PrimitiveExtensions;
 using static System.Environment;
 using static System.Environment.SpecialFolder;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
     public class DataFileWriter
     {

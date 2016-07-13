@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using PrimitiveExtensions;
+using Extensions.PrimitiveExtensions;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
-    public class ActiveDirectoryScope : IEquatable<ActiveDirectoryScope>
+    public class Scope : IEquatable<Scope>
     {
         private const char Comma = ',';
         private const string DomainComponentPrefix = "DC=";
         private const string LdapProtocolPrefix = "LDAP://";
         private const char Period = '.';
 
-        internal ActiveDirectoryScope()
+        internal Scope()
         {
-            Children = new List<ActiveDirectoryScope>();
+            Children = new List<Scope>();
         }
 
-        public List<ActiveDirectoryScope> Children { get; set; }
+        public List<Scope> Children { get; set; }
         internal string Context => Path.Remove(LdapProtocolPrefix);
 
         internal string Domain
@@ -27,7 +27,7 @@ namespace ActiveDirectoryToolWpf
         internal string Name { get; set; }
         internal string Path { get; set; }
 
-        public bool Equals(ActiveDirectoryScope other)
+        public bool Equals(Scope other)
         {
             return Name == other.Name;
         }
@@ -51,7 +51,7 @@ namespace ActiveDirectoryToolWpf
             var lastLevelIndex = organizationalUnitLevels.Length - 1;
             foreach (var level in organizationalUnitLevels)
             {
-                var scope = new ActiveDirectoryScope
+                var scope = new Scope
                 {
                     Name = level
                 };

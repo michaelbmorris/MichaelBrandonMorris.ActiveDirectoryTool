@@ -5,10 +5,11 @@ using System.Dynamic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static ActiveDirectoryToolWpf.QueryType;
-using static ActiveDirectoryToolWpf.SimplifiedQueryType;
+using static ActiveDirectoryTool.QueryType;
+using static ActiveDirectoryTool.SimplifiedQueryType;
+using static ActiveDirectoryTool.ActiveDirectoryProperty;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
     public enum QueryType
     {
@@ -40,134 +41,133 @@ namespace ActiveDirectoryToolWpf
         Summaries
     }
 
-    public class ActiveDirectoryQuery
+    public class Query
     {
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultComputerAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerProperties =
             {
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.ComputerDescription,
-                ActiveDirectoryAttribute.ComputerDistinguishedName
+                ComputerName,
+                ComputerDescription,
+                ComputerDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultComputerGroupsAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerGroupsProperties =
             {
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ComputerDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
+                ComputerName,
+                GroupName,
+                ComputerDistinguishedName,
+                GroupDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupProperties =
             {
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.GroupManagedBy,
-                ActiveDirectoryAttribute.GroupDescription,
-                ActiveDirectoryAttribute.GroupDistinguishedName
+                GroupName,
+                GroupManagedBy,
+                GroupDescription,
+                GroupDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupComputersAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupComputersProperties =
             {
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ComputerName,
-                ActiveDirectoryAttribute.GroupDistinguishedName,
-                ActiveDirectoryAttribute.ComputerDistinguishedName
+                GroupName,
+                ComputerName,
+                GroupDistinguishedName,
+                ComputerDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersProperties =
             {
-                ActiveDirectoryAttribute.ContainerGroupName,
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
-                ActiveDirectoryAttribute.UserDistinguishedName
+                ContainerGroupName,
+                UserName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersDirectReportsAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersDirectReportsProperties =
             {
-                ActiveDirectoryAttribute.ContainerGroupName,
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.DirectReportName,
-                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.DirectReportDistinguishedName
+                ContainerGroupName,
+                UserName,
+                DirectReportName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultGroupUsersGroupsAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersGroupsProperties =
             {
-                ActiveDirectoryAttribute.ContainerGroupName,
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.ContainerGroupDistinguishedName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
+                ContainerGroupName,
+                UserName,
+                GroupName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                GroupDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserProperties =
             {
-                ActiveDirectoryAttribute.UserSurname,
-                ActiveDirectoryAttribute.UserGivenName,
-                ActiveDirectoryAttribute.UserDisplayName,
-                ActiveDirectoryAttribute.UserSamAccountName,
-                ActiveDirectoryAttribute.UserIsActive,
-                ActiveDirectoryAttribute.UserIsAccountLockedOut,
-                ActiveDirectoryAttribute.UserLastLogon,
-                ActiveDirectoryAttribute.UserDescription,
-                ActiveDirectoryAttribute.UserTitle,
-                ActiveDirectoryAttribute.UserCompany,
-                ActiveDirectoryAttribute.UserManager,
-                ActiveDirectoryAttribute.UserHomeDrive,
-                ActiveDirectoryAttribute.UserHomeDirectory,
-                ActiveDirectoryAttribute.UserScriptPath,
-                ActiveDirectoryAttribute.UserEmailAddress,
-                ActiveDirectoryAttribute.UserStreetAddress,
-                ActiveDirectoryAttribute.UserCity,
-                ActiveDirectoryAttribute.UserState,
-                ActiveDirectoryAttribute.UserVoiceTelephoneNumber,
-                ActiveDirectoryAttribute.UserPager,
-                ActiveDirectoryAttribute.UserMobile,
-                ActiveDirectoryAttribute.UserFax,
-                ActiveDirectoryAttribute.UserVoip,
-                ActiveDirectoryAttribute.UserSip,
-                ActiveDirectoryAttribute.UserUserPrincipalName,
-                ActiveDirectoryAttribute.UserDistinguishedName
+                UserSurname,
+                UserGivenName,
+                UserDisplayName,
+                UserSamAccountName,
+                UserIsActive,
+                UserIsAccountLockedOut,
+                UserLastLogon,
+                UserDescription,
+                UserTitle,
+                UserCompany,
+                UserManager,
+                UserHomeDrive,
+                UserHomeDirectory,
+                UserScriptPath,
+                UserEmailAddress,
+                UserStreetAddress,
+                UserCity,
+                UserState,
+                UserVoiceTelephoneNumber,
+                UserPager,
+                UserMobile,
+                UserFax,
+                UserVoip,
+                UserSip,
+                UserUserPrincipalName,
+                UserDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserDirectReportsAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserDirectReportsProperties =
             {
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.DirectReportName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.DirectReportDistinguishedName
+                UserName,
+                DirectReportName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
             };
 
-        private static readonly ActiveDirectoryAttribute[]
-            DefaultUserGroupsAttributes =
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserGroupsProperties =
             {
-                ActiveDirectoryAttribute.UserName,
-                ActiveDirectoryAttribute.GroupName,
-                ActiveDirectoryAttribute.UserDistinguishedName,
-                ActiveDirectoryAttribute.GroupDistinguishedName
+                UserName,
+                GroupName,
+                UserDistinguishedName,
+                GroupDistinguishedName
             };
 
-        private readonly ActiveDirectoryScope _activeDirectoryScope;
+        private readonly Scope _activeDirectoryScope;
         private readonly DataPreparer _dataPreparer;
-
         private readonly IEnumerable<string> _distinguishedNames;
         private readonly PrincipalContext _principalContext;
 
         private CancellationTokenSource _cancellationTokenSource;
 
-        public ActiveDirectoryQuery(
+        public Query(
             QueryType queryType,
-            ActiveDirectoryScope activeDirectoryScope = null,
+            Scope activeDirectoryScope = null,
             IEnumerable<string> distinguishedNames = null)
         {
             QueryType = queryType;
@@ -218,7 +218,10 @@ namespace ActiveDirectoryToolWpf
             _cancellationTokenSource = new CancellationTokenSource();
 
             var task = Task.Run(
-                () => { Data = GetData(_dataPreparer); },
+                () =>
+                {
+                    Data = GetData(_dataPreparer);
+                },
                 _cancellationTokenSource.Token);
             await task;
         }
@@ -232,7 +235,7 @@ namespace ActiveDirectoryToolWpf
 
         private IEnumerable<ComputerPrincipal> GetComputerPrincipals()
         {
-            return _distinguishedNames.Select(GetComputerPrincipal).ToList();
+            return _distinguishedNames.Select(GetComputerPrincipal);
         }
 
         private static IEnumerable<ExpandoObject> GetData(
@@ -250,7 +253,7 @@ namespace ActiveDirectoryToolWpf
 
         private IEnumerable<GroupPrincipal> GetGroupPrincipals()
         {
-            return _distinguishedNames.Select(GetGroupPrincipal).ToList();
+            return _distinguishedNames.Select(GetGroupPrincipal);
         }
 
         private UserPrincipal GetUserPrincipal(string distinguishedName)
@@ -261,7 +264,7 @@ namespace ActiveDirectoryToolWpf
 
         private IEnumerable<UserPrincipal> GetUserPrincipals()
         {
-            return _distinguishedNames.Select(GetUserPrincipal).ToList();
+            return _distinguishedNames.Select(GetUserPrincipal);
         }
 
         private bool QueryTypeIsComputer()
@@ -312,9 +315,10 @@ namespace ActiveDirectoryToolWpf
                         {
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
-                                    ActiveDirectorySearcher.GetComputersGroups(
-                                        computerPrincipals, CancellationToken)),
-                            Attributes = DefaultComputerGroupsAttributes
+                                    Searcher.GetComputersGroups(
+                                        computerPrincipals,
+                                        CancellationToken)),
+                            Properties = DefaultComputerGroupsProperties
                         };
                     },
                     [ComputersSummaries] = () =>
@@ -324,7 +328,7 @@ namespace ActiveDirectoryToolWpf
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
                                     computerPrincipals),
-                            Attributes = DefaultComputerAttributes
+                            Properties = DefaultComputerProperties
                         };
                     }
                 };
@@ -354,9 +358,9 @@ namespace ActiveDirectoryToolWpf
                     {
                         Data = new Lazy<IEnumerable<object>>(
                             () =>
-                                ActiveDirectorySearcher.GetUsersDirectReports(
+                                Searcher.GetUsersDirectReports(
                                     userPrincipals, CancellationToken)),
-                        Attributes = DefaultUserDirectReportsAttributes
+                        Properties = DefaultUserDirectReportsProperties
                     };
                 },
                 [Groups] = () =>
@@ -365,9 +369,9 @@ namespace ActiveDirectoryToolWpf
                     {
                         Data = new Lazy<IEnumerable<object>>(
                             () =>
-                                ActiveDirectorySearcher.GetUsersGroups(
+                                Searcher.GetUsersGroups(
                                     userPrincipals, CancellationToken)),
-                        Attributes = DefaultUserGroupsAttributes
+                        Properties = DefaultUserGroupsProperties
                     };
                 },
                 [Summaries] = () =>
@@ -375,9 +379,8 @@ namespace ActiveDirectoryToolWpf
                     return new DataPreparer
                     {
                         Data = new Lazy<IEnumerable<object>>(
-                            () =>
-                                userPrincipals),
-                        Attributes = DefaultUserAttributes
+                            () => userPrincipals),
+                        Properties = DefaultUserProperties
                     };
                 }
             };
@@ -398,10 +401,10 @@ namespace ActiveDirectoryToolWpf
                         {
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
-                                    ActiveDirectorySearcher
+                                    Searcher
                                         .GetComputerPrincipals(
                                             groupPrincipals, CancellationToken)),
-                            Attributes = DefaultGroupComputersAttributes
+                            Properties = DefaultGroupComputersProperties
                         };
                     },
                     [GroupsSummaries] = () =>
@@ -411,7 +414,7 @@ namespace ActiveDirectoryToolWpf
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
                                     groupPrincipals),
-                            Attributes = DefaultGroupAttributes
+                            Properties = DefaultGroupProperties
                         };
                     },
                     [GroupsUsers] = () =>
@@ -420,9 +423,9 @@ namespace ActiveDirectoryToolWpf
                         {
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
-                                    ActiveDirectorySearcher.GetGroupsUsers(
+                                    Searcher.GetGroupsUsers(
                                         groupPrincipals, CancellationToken)),
-                            Attributes = DefaultGroupUsersAttributes
+                            Properties = DefaultGroupUsersProperties
                         };
                     },
                     [GroupsUsersDirectReports] = () =>
@@ -431,11 +434,11 @@ namespace ActiveDirectoryToolWpf
                         {
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
-                                    ActiveDirectorySearcher
+                                    Searcher
                                         .GetGroupsUsersDirectReports(
                                             groupPrincipals, CancellationToken)),
-                            Attributes =
-                                DefaultGroupUsersDirectReportsAttributes
+                            Properties =
+                                DefaultGroupUsersDirectReportsProperties
                         };
                     },
                     [GroupsUsersGroups] = () =>
@@ -444,10 +447,10 @@ namespace ActiveDirectoryToolWpf
                         {
                             Data = new Lazy<IEnumerable<object>>(
                                 () =>
-                                    ActiveDirectorySearcher
+                                    Searcher
                                         .GetGroupsUsersGroups(
                                             groupPrincipals, CancellationToken)),
-                            Attributes = DefaultGroupUsersGroupsAttributes
+                            Properties = DefaultGroupUsersGroupsProperties
                         };
                     }
                 };
@@ -457,7 +460,7 @@ namespace ActiveDirectoryToolWpf
         private DataPreparer SetUpOuDataPreparer()
         {
             Scope = _activeDirectoryScope.Context;
-            var activeDirectorySearcher = new ActiveDirectorySearcher(
+            var activeDirectorySearcher = new Searcher(
                 _activeDirectoryScope);
             var ouDataPreparers = new Dictionary<QueryType, Func<DataPreparer>>
             {
@@ -469,7 +472,7 @@ namespace ActiveDirectoryToolWpf
                             () =>
                                 activeDirectorySearcher.GetOuComputerPrincipals
                                     ()),
-                        Attributes = DefaultComputerAttributes
+                        Properties = DefaultComputerProperties
                     };
                 },
                 [OuGroups] = () =>
@@ -479,7 +482,7 @@ namespace ActiveDirectoryToolWpf
                         Data = new Lazy<IEnumerable<object>>(
                             () =>
                                 activeDirectorySearcher.GetOuGroupPrincipals()),
-                        Attributes = DefaultGroupAttributes
+                        Properties = DefaultGroupProperties
                     };
                 },
                 [OuGroupsUsers] = () =>
@@ -490,7 +493,7 @@ namespace ActiveDirectoryToolWpf
                             () =>
                                 activeDirectorySearcher.GetOuGroupsUsers(
                                     CancellationToken)),
-                        Attributes = DefaultGroupUsersAttributes
+                        Properties = DefaultGroupUsersProperties
                     };
                 },
                 [OuUsers] = () =>
@@ -500,7 +503,7 @@ namespace ActiveDirectoryToolWpf
                         Data = new Lazy<IEnumerable<object>>(
                             () =>
                                 activeDirectorySearcher.GetOuUserPrincipals()),
-                        Attributes = DefaultUserAttributes
+                        Properties = DefaultUserProperties
                     };
                 },
                 [OuUsersDirectReports] = () =>
@@ -512,7 +515,7 @@ namespace ActiveDirectoryToolWpf
                                 activeDirectorySearcher.GetOuUsersDirectReports
                                     (
                                         CancellationToken)),
-                        Attributes = DefaultUserDirectReportsAttributes
+                        Properties = DefaultUserDirectReportsProperties
                     };
                 },
                 [OuUsersGroups] = () =>
@@ -520,10 +523,9 @@ namespace ActiveDirectoryToolWpf
                     return new DataPreparer
                     {
                         Data = new Lazy<IEnumerable<object>>(
-                            () =>
-                                activeDirectorySearcher.GetOuUsersGroups(
-                                    CancellationToken)),
-                        Attributes = DefaultUserGroupsAttributes
+                            () => activeDirectorySearcher.GetOuUsersGroups(
+                                CancellationToken)),
+                        Properties = DefaultUserGroupsProperties
                     };
                 }
             };

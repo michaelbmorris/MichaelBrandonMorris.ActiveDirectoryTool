@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using CollectionExtensions;
+using Extensions.CollectionExtensions;
 using GalaSoft.MvvmLight.CommandWpf;
 using static System.Deployment.Application.ApplicationDeployment;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
-    public class ActiveDirectoryToolViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
         private const string ComputerDistinguishedName =
             "ComputerDistinguishedName";
@@ -56,22 +56,22 @@ namespace ActiveDirectoryToolWpf
         private string _messageContent;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
-        private ObservableCollection<ActiveDirectoryQuery> _queries;
+        private ObservableCollection<Query> _queries;
         private bool _viewIsEnabled;
 
-        public ActiveDirectoryToolViewModel()
+        public ViewModel()
         {
             SetViewVariables();
             try
             {
-                RootScope = new ActiveDirectoryScopeFetcher().Scope;
+                RootScope = new ScopeFetcher().Scope;
             }
             catch (PrincipalServerDownException)
             {
                 ShowMessage(
                     "The Active Directory server could not be contacted.");
             }
-            Queries = new ObservableCollection<ActiveDirectoryQuery>();
+            Queries = new ObservableCollection<Query>();
             _computerGetGroupsMenuItem = new MenuItem
             {
                 Header = "Computer - Get Groups",
@@ -174,7 +174,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ActiveDirectoryScope CurrentScope { get; set; }
+        public Scope CurrentScope { get; set; }
 
         public DataView Data
         {
@@ -240,7 +240,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ObservableCollection<ActiveDirectoryQuery> Queries
+        public ObservableCollection<Query> Queries
         {
             get { return _queries; }
             set
@@ -250,7 +250,7 @@ namespace ActiveDirectoryToolWpf
             }
         }
 
-        public ActiveDirectoryScope RootScope { get; }
+        public Scope RootScope { get; }
         private IList SelectedDataRowViews { get; set; }
         public ICommand SelectionChangedCommand { get; private set; }
         public string Version { get; private set; }
@@ -642,11 +642,11 @@ namespace ActiveDirectoryToolWpf
             IEnumerable<string> selectedItemDistinguishedNames = null)
         {
             await RunQuery(
-                new ActiveDirectoryQuery(
+                new Query(
                     queryType, CurrentScope, selectedItemDistinguishedNames));
         }
 
-        private async Task RunQuery(ActiveDirectoryQuery query)
+        private async Task RunQuery(Query query)
         {
             StartTask();
             try

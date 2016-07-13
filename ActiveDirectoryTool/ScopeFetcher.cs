@@ -1,17 +1,17 @@
 ﻿using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
-    public class ActiveDirectoryScopeFetcher
+    public class ScopeFetcher
     {
-        internal ActiveDirectoryScopeFetcher()
+        internal ScopeFetcher()
         {
             var rootPrincipalContext = new PrincipalContext(
                 ContextType.Domain);
             var rootDirectoryEntry = new DirectoryEntry(
                 rootPrincipalContext.ConnectedServer);
-            Scope = new ActiveDirectoryScope
+            Scope = new Scope
             {
                 Name = rootDirectoryEntry.Path,
                 Path = "LDAP://" + rootDirectoryEntry.Path
@@ -19,7 +19,7 @@ namespace ActiveDirectoryToolWpf
             FetchScopeList();
         }
 
-        public ActiveDirectoryScope Scope { get; set; }
+        public Scope Scope { get; set; }
 
         private void FetchScopeList()
         {

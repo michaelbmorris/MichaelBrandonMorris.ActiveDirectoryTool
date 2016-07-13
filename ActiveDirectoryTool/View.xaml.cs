@@ -1,14 +1,11 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using PrimitiveExtensions;
+using Extensions.PrimitiveExtensions;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
-    public partial class ActiveDirectoryToolView
+    public partial class View
     {
         private void DataGrid_AutoGeneratingColumn(
             object sender, DataGridAutoGeneratingColumnEventArgs e)

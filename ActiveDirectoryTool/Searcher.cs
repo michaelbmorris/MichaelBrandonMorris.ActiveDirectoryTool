@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Threading;
+using Extensions.PrincipalExtensions;
 
-namespace ActiveDirectoryToolWpf
+namespace ActiveDirectoryTool
 {
     public interface IComputerPrincipal
     {
@@ -56,15 +57,15 @@ namespace ActiveDirectoryToolWpf
         IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
-    public class ActiveDirectorySearcher
+    public class Searcher
     {
-        public ActiveDirectorySearcher(
-            ActiveDirectoryScope activeDirectoryScope)
+        public Searcher(
+            Scope activeDirectoryScope)
         {
             ActiveDirectoryScope = activeDirectoryScope;
         }
 
-        private ActiveDirectoryScope ActiveDirectoryScope { get; }
+        private Scope ActiveDirectoryScope { get; }
 
         private PrincipalContext PrincipalContext => new PrincipalContext(
             ContextType.Domain,
