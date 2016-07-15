@@ -57,23 +57,13 @@ namespace ActiveDirectoryTool
         IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
-    public class Searcher
+    public static class Searcher
     {
-        public Searcher(
-            Scope activeDirectoryScope)
-        {
-            ActiveDirectoryScope = activeDirectoryScope;
-        }
-
-        private Scope ActiveDirectoryScope { get; }
-
-        private PrincipalContext PrincipalContext => new PrincipalContext(
-            ContextType.Domain,
-            ActiveDirectoryScope.Domain,
-            ActiveDirectoryScope.Context);
+        private const char Asterix = '*';
 
         public static ComputerGroups GetComputerGroups(
-            ComputerPrincipal computerPrincipal)
+            ComputerPrincipal computerPrincipal,
+            CancellationToken cancellationToken)
         {
             return new ComputerGroups
             {
@@ -83,7 +73,8 @@ namespace ActiveDirectoryTool
         }
 
         public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            PrincipalContext principalContext)
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
         {
             IEnumerable<ComputerPrincipal> computers;
             using (var searcher = new PrincipalSearcher(
@@ -95,7 +86,8 @@ namespace ActiveDirectoryTool
         }
 
         public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            GroupPrincipal groupPrincipal)
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
         {
             return groupPrincipal.GetComputerPrincipals();
         }
@@ -108,7 +100,8 @@ namespace ActiveDirectoryTool
             foreach (var groupPrincipal in groupPrincipals)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                groupsComputers.Add(GetGroupComputers(groupPrincipal));
+                groupsComputers.Add(
+                    GetGroupComputers(groupPrincipal, cancellationToken));
             }
             return groupsComputers;
         }
@@ -125,7 +118,9 @@ namespace ActiveDirectoryTool
                     .GetAllComputerPrincipals())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    computersGroups.Add(GetComputerGroups(computerPrincipal));
+                    computersGroups.Add(
+                        GetComputerGroups(
+                            computerPrincipal, cancellationToken));
                 }
             }
             return computersGroups;
@@ -139,18 +134,21 @@ namespace ActiveDirectoryTool
             foreach (var computerPrincipal in computerPrincipals)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                computersGroups.Add(GetComputerGroups(computerPrincipal));
+                computersGroups.Add(
+                    GetComputerGroups(computerPrincipal, cancellationToken));
             }
             return computersGroups;
         }
 
         public static GroupComputers GetGroupComputers(
-            GroupPrincipal groupPrincipal)
+            GroupPrincipal groupPrincipal,
+            CancellationToken cancellationToken)
         {
             return new GroupComputers
             {
                 Group = groupPrincipal,
-                Computers = GetComputerPrincipals(groupPrincipal)
+                Computers = GetComputerPrincipals(
+                    groupPrincipal, cancellationToken)
             };
         }
 
@@ -177,7 +175,8 @@ namespace ActiveDirectoryTool
         }
 
         public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
-            PrincipalContext principalContext)
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
         {
             IEnumerable<GroupPrincipal> groupPrincipals;
             using (var searcher = new PrincipalSearcher(
@@ -193,7 +192,8 @@ namespace ActiveDirectoryTool
             CancellationToken cancellationToken)
         {
             return GetGroupsUsers(
-                GetGroupPrincipals(principalContext), cancellationToken);
+                GetGroupPrincipals(
+                    principalContext, cancellationToken), cancellationToken);
         }
 
         public static IEnumerable<GroupUsers> GetGroupsUsers(
@@ -267,39 +267,6 @@ namespace ActiveDirectoryTool
             };
         }
 
-        public IEnumerable<ComputerPrincipal> GetOuComputerPrincipals()
-        {
-            return GetComputerPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<GroupPrincipal> GetOuGroupPrincipals()
-        {
-            return GetGroupPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<GroupUsers> GetOuGroupsUsers(
-            CancellationToken cancellationToken)
-        {
-            return GetGroupsUsers(PrincipalContext, cancellationToken);
-        }
-
-        public IEnumerable<UserPrincipal> GetOuUserPrincipals()
-        {
-            return GetUserPrincipals(PrincipalContext);
-        }
-
-        public IEnumerable<UserDirectReports> GetOuUsersDirectReports(
-            CancellationToken cancellationToken)
-        {
-            return GetUsersDirectReports(PrincipalContext, cancellationToken);
-        }
-
-        public IEnumerable<UserGroups> GetOuUsersGroups(
-            CancellationToken cancellationToken)
-        {
-            return GetUsersGroups(PrincipalContext, cancellationToken);
-        }
-
         public static UserDirectReports GetUserDirectReports(
             UserPrincipal userPrincipal)
         {
@@ -329,7 +296,8 @@ namespace ActiveDirectoryTool
         }
 
         public static IEnumerable<UserPrincipal> GetUserPrincipals(
-            PrincipalContext principalContext)
+            PrincipalContext principalContext,
+            CancellationToken cancellationToken)
         {
             IEnumerable<UserPrincipal> userPrincipals;
             using (var searcher = new PrincipalSearcher(
@@ -377,7 +345,8 @@ namespace ActiveDirectoryTool
             CancellationToken cancellationToken)
         {
             return GetUsersDirectReports(
-                GetUserPrincipals(principalContext), cancellationToken);
+                GetUserPrincipals(
+                    principalContext, cancellationToken), cancellationToken);
         }
 
         public static IEnumerable<UserDirectReports> GetUsersDirectReports(
@@ -411,7 +380,8 @@ namespace ActiveDirectoryTool
             CancellationToken cancellationToken)
         {
             return GetUsersGroups(
-                GetUserPrincipals(principalContext), cancellationToken);
+                GetUserPrincipals(
+                    principalContext, cancellationToken), cancellationToken);
         }
 
         public static IEnumerable<UserGroups> GetUsersGroups(
@@ -425,6 +395,63 @@ namespace ActiveDirectoryTool
                 usersGroups.Add(GetUserGroups(userPrincipal));
             }
             return usersGroups;
+        }
+
+        public static IEnumerable<UserPrincipal> GetUserPrincipals(
+            PrincipalContext principalContext, string searchText)
+        {
+            var userPrincipals = new List<UserPrincipal>();
+            using (var searchPrincipal = new UserPrincipal(principalContext)
+            {
+                Name = Asterix + searchText + Asterix
+            })
+            {
+                using (var principalSearcher = new PrincipalSearcher(
+                    searchPrincipal))
+                {
+                    userPrincipals.AddRange(
+                        principalSearcher.GetAllUserPrincipals());
+                }
+            }
+            return userPrincipals;
+        }
+
+        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
+            PrincipalContext principalContext, string searchText)
+        {
+            var computerPrincipals = new List<ComputerPrincipal>();
+            using (var searchPrincipal = new ComputerPrincipal(principalContext)
+            {
+                Name = Asterix + searchText + Asterix
+            })
+            {
+                using (var principalSearcher = new PrincipalSearcher(
+                    searchPrincipal))
+                {
+                    computerPrincipals.AddRange(
+                        principalSearcher.GetAllComputerPrincipals());
+                }
+            }
+            return computerPrincipals;
+        }
+
+        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
+            PrincipalContext principalContext, string searchText)
+        {
+            var groupPrincipals = new List<GroupPrincipal>();
+            using (var searchPrincipal = new GroupPrincipal(principalContext)
+            {
+                Name = Asterix + searchText + Asterix
+            })
+            {
+                using (var principalSearcher = new PrincipalSearcher(
+                    searchPrincipal))
+                {
+                    groupPrincipals.AddRange(
+                        principalSearcher.GetAllGroupPrincipals());
+                }
+            }
+            return groupPrincipals;
         }
     }
 

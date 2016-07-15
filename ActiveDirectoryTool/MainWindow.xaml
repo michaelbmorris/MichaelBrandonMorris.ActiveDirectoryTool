@@ -1,10 +1,10 @@
-﻿<Window x:Class="ActiveDirectoryTool.View"
+﻿<Window x:Class="ActiveDirectoryTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:activeDirectoryToolWpf="clr-namespace:ActiveDirectoryTool"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:activeDirectoryTool="clr-namespace:ActiveDirectoryTool"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         DataContext="{StaticResource MainViewModel}"
@@ -40,7 +40,7 @@
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                         <i:Interaction.Behaviors>
-                            <activeDirectoryToolWpf:BindableSelectedItemBehavior
+                            <activeDirectoryTool:BindableSelectedItemBehavior 
                                 SelectedItem="{Binding CurrentScope, Mode=TwoWay}" />
                         </i:Interaction.Behaviors>
                     </TreeView>
@@ -95,33 +95,35 @@
                                Content="Search" />
                         <Separator DockPanel.Dock="Bottom" />
                         <TextBox DockPanel.Dock="Left"
+                                 Text="{Binding SearchText, 
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}"
                                  Margin="5,0,0,5"
                                  TextWrapping="NoWrap"
-                                 Width="200"
-                                 IsEnabled="False" />
+                                 Width="200" />
                         <RadioButton DockPanel.Dock="Left"
+                                     IsChecked="{Binding UserSearchIsChecked}"
                                      GroupName="SearchRadioButtons"
                                      Content="User"
-                                     Margin="5,3,0,5"
-                                     IsEnabled="False" />
+                                     Margin="5,3,0,5" />
                         <RadioButton DockPanel.Dock="Left"
+                                     IsChecked="{Binding GroupSearchIsChecked}"
                                      GroupName="SearchRadioButtons"
                                      Content="Group"
-                                     Margin="5,3,0,5"
-                                     IsEnabled="False" />
+                                     Margin="5,3,0,5" />
                         <RadioButton DockPanel.Dock="Left"
+                                     IsChecked="{Binding ComputerSearchIsChecked}"
                                      GroupName="SearchRadioButtons"
                                      Content="Computer"
-                                     Margin="5,3,0,5"
-                                     IsEnabled="False" />
+                                     Margin="5,3,0,5" />
                         <Button DockPanel.Dock="Left"
                                 Content="Search in Organizational Unit"
-                                Margin="5,0,0,5"
-                                IsEnabled="False" />
+                                Command="{Binding SearchOuCommand}"
+                                Margin="5,0,0,5" />
                         <Button DockPanel.Dock="Left"
+                                Command="{Binding SearchCommand}"
                                 Content="Search in Whole Active Directory"
-                                Margin="5,0,0,5"
-                                IsEnabled="False" />
+                                Margin="5,0,0,5" />
                     </DockPanel>
                 </Grid>
                 <Grid Grid.Row="2">
@@ -132,12 +134,6 @@
                                     Command="{Binding PreviousQueryCommand}"
                                     Margin="5 5 5 5"
                                     IsEnabled="{Binding ViewIsEnabled}"/>
-                            <!--<ComboBox DockPanel.Dock="Left"
-                                      Margin="5 5 5 5"
-                                      SelectedIndex="{Binding SelectedQueryIndex}"
-                                      ItemsSource="{Binding Queries}"
-                                      DisplayMemberPath="Name"
-                                      IsEnabled="{Binding ViewIsEnabled}" />-->
                         </DockPanel>
                         <DataGrid DockPanel.Dock="Top"
                                   IsEnabled="{Binding ViewIsEnabled}"

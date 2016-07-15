@@ -14,12 +14,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Extensions.CollectionExtensions;
+using Extensions.PrimitiveExtensions;
 using GalaSoft.MvvmLight.CommandWpf;
 using static System.Deployment.Application.ApplicationDeployment;
 
 namespace ActiveDirectoryTool
 {
-    public class ViewModel : INotifyPropertyChanged
+    internal class ViewModel : INotifyPropertyChanged
     {
         private const string ComputerDistinguishedName =
             "ComputerDistinguishedName";
@@ -58,6 +59,61 @@ namespace ActiveDirectoryTool
         private Visibility _progressBarVisibility;
         private ObservableCollection<Query> _queries;
         private bool _viewIsEnabled;
+
+        private bool _userSearchIsChecked;
+        private bool _computerSearchIsChecked;
+        private bool _groupSearchIsChecked;
+
+        public bool UserSearchIsChecked
+        {
+            get
+            {
+                return _userSearchIsChecked;
+            }
+            set
+            {
+                _userSearchIsChecked = value;
+                if (_userSearchIsChecked)
+                {
+                    ComputerSearchIsChecked = false;
+                    GroupSearchIsChecked = false;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool ComputerSearchIsChecked
+        {
+            get
+            {
+                return _computerSearchIsChecked;
+            }
+            set
+            {
+                _computerSearchIsChecked = value;
+                if (_computerSearchIsChecked)
+                {
+                    GroupSearchIsChecked = false;
+                    UserSearchIsChecked = false;
+                }
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool GroupSearchIsChecked
+        {
+            get { return _groupSearchIsChecked;}
+            set
+            {
+                _groupSearchIsChecked = value;
+                if (_groupSearchIsChecked)
+                {
+                    ComputerSearchIsChecked = false;
+                    UserSearchIsChecked = false;
+                }
+                NotifyPropertyChanged();
+            }
+        }
 
         public ViewModel()
         {
@@ -148,6 +204,23 @@ namespace ActiveDirectoryTool
                 NotifyPropertyChanged();
             }
         }
+
+        private string _searchText;
+
+        public string SearchText
+        {
+            get
+            {
+                return _searchText;
+            }
+            set
+            {
+                _searchText = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public ICommand SearchCommand { get; private set; }
 
         public ICommand CancelCommand { get; private set; }
 
@@ -435,13 +508,14 @@ namespace ActiveDirectoryTool
         private IEnumerable<string> GetComputersDistinguishedNames()
         {
             return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetComputerDistinguishedName(dataRowView)).ToList();
+                    select GetComputerDistinguishedName(dataRowView)).ToList();
         }
 
         private async void GetContextComputerGroupsCommandExecute()
         {
             await RunQuery(
                 QueryType.ComputersGroups,
+                CurrentScope,
                 GetComputersDistinguishedNames());
         }
 
@@ -449,6 +523,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.ComputersSummaries,
+                CurrentScope,
                 GetComputersDistinguishedNames());
         }
 
@@ -456,6 +531,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.DirectReportsDirectReports,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -463,6 +539,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.DirectReportsGroups,
+                CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
 
@@ -470,6 +547,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.DirectReportsSummaries,
+                CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
 
@@ -477,6 +555,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.GroupsComputers,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -484,6 +563,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.GroupsSummaries,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -491,6 +571,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.GroupsUsers,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -498,6 +579,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.GroupsUsersDirectReports,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -505,6 +587,7 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.GroupsUsersGroups,
+                CurrentScope,
                 GetGroupsDistinguishedNames());
         }
 
@@ -512,19 +595,24 @@ namespace ActiveDirectoryTool
         {
             await RunQuery(
                 QueryType.UsersDirectReports,
+                CurrentScope,
                 GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserGroupsCommandExecute()
         {
             await RunQuery(
-                QueryType.UsersGroups, GetUsersDistinguishedNames());
+                QueryType.UsersGroups,
+                CurrentScope,
+                GetUsersDistinguishedNames());
         }
 
         private async void GetContextUserSummaryCommandExecute()
         {
             await RunQuery(
-                QueryType.UsersSummaries, GetUsersDistinguishedNames());
+                QueryType.UsersSummaries, 
+                CurrentScope,
+                GetUsersDistinguishedNames());
         }
 
         private static string GetDirectReportDistinguishedName(
@@ -536,7 +624,7 @@ namespace ActiveDirectoryTool
         private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
             return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetDirectReportDistinguishedName(dataRowView)).ToList();
+                    select GetDirectReportDistinguishedName(dataRowView)).ToList();
         }
 
         private static string GetGroupDistinguishedName(
@@ -548,32 +636,32 @@ namespace ActiveDirectoryTool
         private IEnumerable<string> GetGroupsDistinguishedNames()
         {
             return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetGroupDistinguishedName(dataRowView)).ToList();
+                    select GetGroupDistinguishedName(dataRowView)).ToList();
         }
 
         private async void GetOuComputersCommandExecute()
         {
-            await RunQuery(QueryType.OuComputers);
+            await RunQuery(QueryType.OuComputers, CurrentScope);
         }
 
         private async void GetOuGroupsCommandExecute()
         {
-            await RunQuery(QueryType.OuGroups);
+            await RunQuery(QueryType.OuGroups, CurrentScope);
         }
 
         private async void GetOuUsersCommandExecute()
         {
-            await RunQuery(QueryType.OuUsers);
+            await RunQuery(QueryType.OuUsers, CurrentScope);
         }
 
         private async void GetOuUsersDirectReportsCommandExecute()
         {
-            await RunQuery(QueryType.OuUsersDirectReports);
+            await RunQuery(QueryType.OuUsersDirectReports, CurrentScope);
         }
 
         private async void GetOuUsersGroupsCommandExecute()
         {
-            await RunQuery(QueryType.OuUsersGroups);
+            await RunQuery(QueryType.OuUsersGroups, CurrentScope);
         }
 
         private static string GetUserDistinguishedName(DataRowView dataRowView)
@@ -584,7 +672,7 @@ namespace ActiveDirectoryTool
         private IEnumerable<string> GetUsersDistinguishedNames()
         {
             return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetUserDistinguishedName(dataRowView)).ToList();
+                    select GetUserDistinguishedName(dataRowView)).ToList();
         }
 
         private void HideMessage()
@@ -639,11 +727,16 @@ namespace ActiveDirectoryTool
 
         private async Task RunQuery(
             QueryType queryType,
-            IEnumerable<string> selectedItemDistinguishedNames = null)
+            Scope scope = null,
+            IEnumerable<string> selectedItemDistinguishedNames = null,
+            string searchText = null)
         {
             await RunQuery(
                 new Query(
-                    queryType, CurrentScope, selectedItemDistinguishedNames));
+                    queryType,
+                    scope,
+                    selectedItemDistinguishedNames,
+                    searchText));
         }
 
         private async Task RunQuery(Query query)
@@ -756,6 +849,53 @@ namespace ActiveDirectoryTool
 
             GetOuGroupsUsersCommand = new RelayCommand(
                 GetOuGroupsUsersCommandExecute, OuCommandCanExecute);
+
+            SearchCommand = new RelayCommand(
+                SearchCommandExecute, SearchCommandCanExecute);
+
+            SearchOuCommand = new RelayCommand(
+                SearchOuCommandExecute, SearchOuCommandCanExecute);
+        }
+
+        private QueryType GetSearchQueryType()
+        {
+            if (ComputerSearchIsChecked)
+                return QueryType.SearchComputer;
+            if (GroupSearchIsChecked)
+                return QueryType.SearchGroup;
+            if (UserSearchIsChecked)
+                return QueryType.SearchUser;
+            return QueryType.None;
+        }
+
+        private bool SearchTypeIsChecked()
+        {
+            return ComputerSearchIsChecked || 
+                   GroupSearchIsChecked ||
+                   UserSearchIsChecked;
+        }
+
+        private async void SearchOuCommandExecute()
+        {
+            await RunQuery(
+                GetSearchQueryType(), CurrentScope, searchText: SearchText);
+        }
+
+        private bool SearchOuCommandCanExecute()
+        {
+            return OuCommandCanExecute() && SearchCommandCanExecute();
+        }
+
+        public ICommand SearchOuCommand { get; private set; }
+
+        private async void SearchCommandExecute()
+        {
+            await RunQuery(GetSearchQueryType(), searchText: SearchText);
+        }
+
+        private bool SearchCommandCanExecute()
+        {
+            return !SearchText.IsNullOrWhiteSpace() && SearchTypeIsChecked();
         }
 
         private async void GetOuGroupsUsersCommandExecute()

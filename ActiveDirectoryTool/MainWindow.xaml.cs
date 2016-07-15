@@ -5,7 +5,7 @@ using Extensions.PrimitiveExtensions;
 
 namespace ActiveDirectoryTool
 {
-    public partial class View
+    public partial class MainWindow
     {
         private void DataGrid_AutoGeneratingColumn(
             object sender, DataGridAutoGeneratingColumnEventArgs e)
