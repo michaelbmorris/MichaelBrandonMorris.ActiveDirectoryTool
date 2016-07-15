@@ -73,11 +73,6 @@ namespace ActiveDirectoryTool
             set
             {
                 _userSearchIsChecked = value;
-                if (_userSearchIsChecked)
-                {
-                    ComputerSearchIsChecked = false;
-                    GroupSearchIsChecked = false;
-                }
                 NotifyPropertyChanged();
             }
         }
@@ -91,11 +86,6 @@ namespace ActiveDirectoryTool
             set
             {
                 _computerSearchIsChecked = value;
-                if (_computerSearchIsChecked)
-                {
-                    GroupSearchIsChecked = false;
-                    UserSearchIsChecked = false;
-                }
                 NotifyPropertyChanged();
             }
         }
@@ -106,11 +96,6 @@ namespace ActiveDirectoryTool
             set
             {
                 _groupSearchIsChecked = value;
-                if (_groupSearchIsChecked)
-                {
-                    ComputerSearchIsChecked = false;
-                    UserSearchIsChecked = false;
-                }
                 NotifyPropertyChanged();
             }
         }
@@ -493,6 +478,21 @@ namespace ActiveDirectoryTool
                     contextMenuItems.Add(_userGetGroupsMenuItem);
                     contextMenuItems.Add(_userGetSummaryMenuItem);
                     break;
+                case QueryType.None:
+                    break;
+                case QueryType.SearchComputer:
+                    contextMenuItems.Add(_computerGetGroupsMenuItem);
+                    break;
+                case QueryType.SearchGroup:
+                    contextMenuItems.Add(_groupGetComputersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersMenuItem);
+                    contextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+                    contextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+                    break;
+                case QueryType.SearchUser:
+                    contextMenuItems.Add(_userGetDirectReportsMenuItem);
+                    contextMenuItems.Add(_userGetGroupsMenuItem);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -749,6 +749,11 @@ namespace ActiveDirectoryTool
                 Data = Queries.Peek().Data.ToDataTable().AsDataView();
                 ContextMenuItems = GenerateContextMenuItems();
             }
+            catch (NullReferenceException e)
+            {
+                ShowMessage(e.Message);
+                ResetQuery();
+            }
             catch (OperationCanceledException)
             {
                 ShowMessage("Operation was cancelled.");
@@ -863,9 +868,7 @@ namespace ActiveDirectoryTool
                 return QueryType.SearchComputer;
             if (GroupSearchIsChecked)
                 return QueryType.SearchGroup;
-            if (UserSearchIsChecked)
-                return QueryType.SearchUser;
-            return QueryType.None;
+            return UserSearchIsChecked ? QueryType.SearchUser : QueryType.None;
         }
 
         private bool SearchTypeIsChecked()

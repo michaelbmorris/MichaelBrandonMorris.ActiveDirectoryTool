@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Linq;
@@ -171,6 +172,9 @@ namespace ActiveDirectoryTool
                 GroupDistinguishedName
             };
 
+        private static readonly PrincipalContext RootContext = 
+            new PrincipalContext(ContextType.Domain);
+
         private readonly Scope _activeDirectoryScope;
         private readonly DataPreparer _dataPreparer;
         private readonly IEnumerable<string> _distinguishedNames;
@@ -254,11 +258,11 @@ namespace ActiveDirectoryTool
             await task;
         }
 
-        private ComputerPrincipal GetComputerPrincipal(
+        private static ComputerPrincipal GetComputerPrincipal(
             string distinguishedName)
         {
             return ComputerPrincipal.FindByIdentity(
-                _principalContext, distinguishedName);
+                RootContext, distinguishedName);
         }
 
         private IEnumerable<ComputerPrincipal> GetComputerPrincipals()
@@ -272,11 +276,11 @@ namespace ActiveDirectoryTool
             return new List<ExpandoObject>(dataPreparer.GetResults());
         }
 
-        private GroupPrincipal GetGroupPrincipal(
+        private static GroupPrincipal GetGroupPrincipal(
             string distinguishedName)
         {
             return GroupPrincipal.FindByIdentity(
-                _principalContext, distinguishedName);
+                RootContext, distinguishedName);
         }
 
         private IEnumerable<GroupPrincipal> GetGroupPrincipals()
@@ -284,10 +288,10 @@ namespace ActiveDirectoryTool
             return _distinguishedNames.Select(GetGroupPrincipal);
         }
 
-        private UserPrincipal GetUserPrincipal(string distinguishedName)
+        private static UserPrincipal GetUserPrincipal(string distinguishedName)
         {
             return UserPrincipal.FindByIdentity(
-                _principalContext, distinguishedName);
+                RootContext, distinguishedName);
         }
 
         private IEnumerable<UserPrincipal> GetUserPrincipals()
@@ -516,7 +520,7 @@ namespace ActiveDirectoryTool
                     {
                         Data = new LazyEnumerableObject(
                             () => Searcher.GetUserPrincipals(
-                                    _principalContext, CancellationToken)),
+                                _principalContext, CancellationToken)),
                         Properties = DefaultUserProperties
                     };
                 },

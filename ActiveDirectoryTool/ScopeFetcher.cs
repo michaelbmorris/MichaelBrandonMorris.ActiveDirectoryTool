@@ -1,32 +1,43 @@
-﻿using System.DirectoryServices;
+﻿using System;
+using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 
 namespace ActiveDirectoryTool
 {
-    public class ScopeFetcher
+    internal class ScopeFetcher
     {
+        private const string LdapPrefix = "LDAP://";
+
+        private const string DirectorySearcherOuFilter =
+            "(objectCategory=organizationalUnit)";
+
         internal ScopeFetcher()
         {
-            var rootPrincipalContext = new PrincipalContext(
-                ContextType.Domain);
-            var rootDirectoryEntry = new DirectoryEntry(
-                rootPrincipalContext.ConnectedServer);
-            Scope = new Scope
+            using (var principalContext =
+                new PrincipalContext(ContextType.Domain))
             {
-                Name = rootDirectoryEntry.Path,
-                Path = "LDAP://" + rootDirectoryEntry.Path
-            };
+                using (var directoryEntry = new DirectoryEntry(
+                    principalContext.ConnectedServer))
+                {
+                    Scope = new Scope
+                    {
+                        Name = directoryEntry.Path,
+                        Path = "LDAP://" + directoryEntry.Path
+                    };
+                }
+                
+                
+            }
             FetchScopeList();
         }
 
-        public Scope Scope { get; set; }
+        internal Scope Scope { get; set; }
 
         private void FetchScopeList()
         {
             using (var directorySearcher = new DirectorySearcher(Scope.Path))
             {
-                directorySearcher.Filter =
-                    "(objectCategory=organizationalUnit)";
+                directorySearcher.Filter = DirectorySearcherOuFilter;
                 directorySearcher.PageSize = 1;
                 foreach (SearchResult result in directorySearcher.FindAll())
                 {
@@ -36,7 +47,9 @@ namespace ActiveDirectoryTool
                     });
                 }
             }
-            Scope.Children.Sort((a, b) => a.Name.CompareTo(b.Name));
+            Scope.Children.Sort(
+                (a, b) => string.Compare(
+                    a.Name, b.Name, StringComparison.Ordinal));
         }
     }
 }

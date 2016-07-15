@@ -892,7 +892,14 @@ namespace ActiveDirectoryTool
             foreach (var data in Data.Value)
             {
                 CancellationToken.ThrowIfCancellationRequested();
-                if (data is ComputerGroups)
+                if (data is User)
+                {
+                    var user = data as User;
+                    dynamic result = new ExpandoObject();
+                    result.Name = user.Name;
+                    results.Add(result);
+                }
+                else if (data is ComputerGroups)
                 {
                     var computerGroups = data as ComputerGroups;
                     results.AddRange(PrepareComputerGroups(computerGroups));

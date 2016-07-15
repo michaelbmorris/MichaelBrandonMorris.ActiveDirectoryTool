@@ -102,17 +102,17 @@
                                  TextWrapping="NoWrap"
                                  Width="200" />
                         <RadioButton DockPanel.Dock="Left"
-                                     IsChecked="{Binding UserSearchIsChecked}"
+                                     IsChecked="{Binding UserSearchIsChecked, Mode=TwoWay}"
                                      GroupName="SearchRadioButtons"
                                      Content="User"
                                      Margin="5,3,0,5" />
                         <RadioButton DockPanel.Dock="Left"
-                                     IsChecked="{Binding GroupSearchIsChecked}"
+                                     IsChecked="{Binding GroupSearchIsChecked, Mode=TwoWay}"
                                      GroupName="SearchRadioButtons"
                                      Content="Group"
                                      Margin="5,3,0,5" />
                         <RadioButton DockPanel.Dock="Left"
-                                     IsChecked="{Binding ComputerSearchIsChecked}"
+                                     IsChecked="{Binding ComputerSearchIsChecked, Mode=TwoWay}"
                                      GroupName="SearchRadioButtons"
                                      Content="Computer"
                                      Margin="5,3,0,5" />
