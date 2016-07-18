@@ -32,10 +32,10 @@
                 <Grid Grid.Column="0">
                     <TreeView x:Name="TreeView"
                               IsEnabled="{Binding ViewIsEnabled}"
-                              ItemsSource="{Binding RootScope.Children}">
+                              ItemsSource="{Binding RootScope.Children, Mode=OneTime}">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate
-                                ItemsSource="{Binding Children}">
+                                ItemsSource="{Binding Children, Mode=OneTime}">
                                 <TextBlock Text="{Binding}" />
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>

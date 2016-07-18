@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
+using System.Linq;
 using System.Threading;
 using Extensions.PrincipalExtensions;
 using ActiveDirectoryPropertyMapping = System.Collections.Generic.Dictionary
@@ -11,233 +11,182 @@ using static ActiveDirectoryTool.ActiveDirectoryProperty;
 
 namespace ActiveDirectoryTool
 {
-    public enum ActiveDirectoryProperty
-    {
-        ComputerAccountExpirationDate,
-        ComputerAccountLockoutTime,
-        ComputerAllowReversiblePasswordEncryption,
-        ComputerBadLogonCount,
-        ComputerCertificates,
-        ComputerContext,
-        ComputerContextType,
-        ComputerDelegationPermitted,
-        ComputerDescription,
-        ComputerDisplayName,
-        ComputerDistinguishedName,
-        ComputerEnabled,
-        ComputerGuid,
-        ComputerHomeDirectory,
-        ComputerHomeDrive,
-        ComputerLastBadPasswordAttempt,
-        ComputerLastLogon,
-        ComputerLastPasswordSet,
-        ComputerName,
-        ComputerPasswordNeverExpires,
-        ComputerPasswordNotRequired,
-        ComputerPermittedLogonTimes,
-        ComputerPermittedWorkstations,
-        ComputerSamAccountName,
-        ComputerScriptPath,
-        ComputerServicePrincipalNames,
-        ComputerSid,
-        ComputerSmartcardLogonRequired,
-        ComputerStructuralObjectClass,
-        ComputerUserCannotChangePassword,
-        ComputerUserPrincipalName,
-        ContainerGroupContext,
-        ContainerGroupContextType,
-        ContainerGroupDescription,
-        ContainerGroupDisplayName,
-        ContainerGroupDistinguishedName,
-        ContainerGroupGuid,
-        ContainerGroupIsSecurityGroup,
-        ContainerGroupManagedBy,
-        ContainerGroupMembers,
-        ContainerGroupName,
-        ContainerGroupSamAccountName,
-        ContainerGroupScope,
-        ContainerGroupSid,
-        ContainerGroupStructuralObjectClass,
-        ContainerGroupUserPrincipalName,
-        DirectReportUserAccountControl,
-        DirectReportAccountExpirationDate,
-        DirectReportAccountLockoutTime,
-        DirectReportAllowReversiblePasswordEncryption,
-        DirectReportAssistant,
-        DirectReportBadLogonCount,
-        DirectReportCertificates,
-        DirectReportCity,
-        DirectReportComment,
-        DirectReportCompany,
-        DirectReportContext,
-        DirectReportContextType,
-        DirectReportCountry,
-        DirectReportDelegationPermitted,
-        DirectReportDepartment,
-        DirectReportDescription,
-        DirectReportDisplayName,
-        DirectReportDistinguishedName,
-        DirectReportDivision,
-        DirectReportEmailAddress,
-        DirectReportEmployeeId,
-        DirectReportEnabled,
-        DirectReportFax,
-        DirectReportSuffix,
-        DirectReportGivenName,
-        DirectReportGuid,
-        DirectReportHomeAddress,
-        DirectReportHomeDirectory,
-        DirectReportHomeDrive,
-        DirectReportHomePhone,
-        DirectReportInitials,
-        DirectReportIsAccountLockedOut,
-        DirectReportIsActive,
-        DirectReportLastBadPasswordAttempt,
-        DirectReportLastLogon,
-        DirectReportLastPasswordSet,
-        DirectReportManager,
-        DirectReportMiddleName,
-        DirectReportMobile,
-        DirectReportName,
-        DirectReportNotes,
-        DirectReportPager,
-        DirectReportPasswordNeverExpires,
-        DirectReportPasswordNotRequired,
-        DirectReportPermittedLogonTimes,
-        DirectReportPermittedWorkstations,
-        DirectReportSamAccountName,
-        DirectReportScriptPath,
-        DirectReportSid,
-        DirectReportSip,
-        DirectReportSmartcardLogonRequired,
-        DirectReportState,
-        DirectReportStreetAddress,
-        DirectReportStructuralObjectClass,
-        DirectReportSurname,
-        DirectReportTitle,
-        DirectReportUserCannotChangePassword,
-        DirectReportUserPrincipalName,
-        DirectReportVoiceTelephoneNumber,
-        DirectReportVoip,
-        GroupContext,
-        GroupContextType,
-        GroupDescription,
-        GroupDisplayName,
-        GroupDistinguishedName,
-        GroupGuid,
-        GroupIsSecurityGroup,
-        GroupManagedBy,
-        GroupMembers,
-        GroupName,
-        GroupSamAccountName,
-        GroupScope,
-        GroupSid,
-        GroupStructuralObjectClass,
-        GroupUserPrincipalName,
-        UserUserAccountControl,
-        UserAccountExpirationDate,
-        UserAccountLockoutTime,
-        UserAllowReversiblePasswordEncryption,
-        UserAssistant,
-        UserBadLogonCount,
-        UserCertificates,
-        UserCity,
-        UserComment,
-        UserCompany,
-        UserContext,
-        UserContextType,
-        UserCountry,
-        UserDelegationPermitted,
-        UserDepartment,
-        UserDescription,
-        UserDisplayName,
-        UserDistinguishedName,
-        UserDivision,
-        UserEmailAddress,
-        UserEmployeeId,
-        UserEnabled,
-        UserFax,
-        UserSuffix,
-        UserGivenName,
-        UserGuid,
-        UserHomeAddress,
-        UserHomeDirectory,
-        UserHomeDrive,
-        UserHomePhone,
-        UserInitials,
-        UserIsAccountLockedOut,
-        UserIsActive,
-        UserLastBadPasswordAttempt,
-        UserLastLogon,
-        UserLastPasswordSet,
-        UserManager,
-        UserMiddleName,
-        UserMobile,
-        UserName,
-        UserNotes,
-        UserPager,
-        UserPasswordNeverExpires,
-        UserPasswordNotRequired,
-        UserPermittedLogonTimes,
-        UserPermittedWorkstations,
-        UserSamAccountName,
-        UserScriptPath,
-        UserSid,
-        UserSip,
-        UserSmartcardLogonRequired,
-        UserState,
-        UserStreetAddress,
-        UserStructuralObjectClass,
-        UserSurname,
-        UserTitle,
-        UserUserCannotChangePassword,
-        UserUserPrincipalName,
-        UserVoiceTelephoneNumber,
-        UserVoip
-    }
-
     public class DataPreparer
     {
-        public IEnumerable<ActiveDirectoryProperty> Properties { get; set; }
-        public CancellationToken CancellationToken { get; set; }
-        public Lazy<IEnumerable<object>> Data { get; set; }
-
-        private void AddAttributesToResult(
-            dynamic result,
-            ComputerPrincipal computerPrincipal = null,
-            GroupPrincipal groupPrincipal = null,
-            GroupPrincipal containerGroupPrincipal = null,
-            UserPrincipal directReportUserPrincipal = null,
-            UserPrincipal userPrincipal = null)
-        {
-            foreach (var property in Properties)
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerGroupsProperties =
             {
-                if (AddComputerAttributeToResult(
-                    computerPrincipal, property, result))
-                {
-                    continue;
-                }
+                ComputerName,
+                GroupName,
+                ComputerDistinguishedName,
+                GroupDistinguishedName
+            };
 
-                if (AddContainerGroupAttributeToResult(
-                    containerGroupPrincipal, property, result))
-                {
-                    continue;
-                }
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerProperties =
+            {
+                ComputerName,
+                ComputerDescription,
+                ComputerDistinguishedName
+            };
 
-                if (AddDirectReportAttributeToResult(
-                    directReportUserPrincipal, property, result))
-                {
-                    continue;
-                }
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupComputersProperties =
+            {
+                GroupName,
+                ComputerName,
+                GroupDistinguishedName,
+                ComputerDistinguishedName
+            };
 
-                if (AddGroupAttributeToResult(
-                    groupPrincipal, property, result))
-                {
-                    continue;
-                }
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupProperties =
+            {
+                GroupName,
+                GroupManagedBy,
+                GroupDescription,
+                GroupDistinguishedName
+            };
 
-                AddUserAttributeToResult(userPrincipal, property, result);
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersDirectReportsProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                DirectReportName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersGroupsProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                GroupName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserDirectReportsProperties =
+            {
+                UserName,
+                DirectReportName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserGroupsProperties =
+            {
+                UserName,
+                GroupName,
+                UserDistinguishedName,
+                GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserProperties =
+            {
+                UserSurname,
+                UserGivenName,
+                UserDisplayName,
+                UserSamAccountName,
+                UserIsActive,
+                UserIsAccountLockedOut,
+                UserLastLogon,
+                UserDescription,
+                UserTitle,
+                UserCompany,
+                UserManager,
+                UserHomeDrive,
+                UserHomeDirectory,
+                UserScriptPath,
+                UserEmailAddress,
+                UserStreetAddress,
+                UserCity,
+                UserState,
+                UserVoiceTelephoneNumber,
+                UserPager,
+                UserMobile,
+                UserFax,
+                UserVoip,
+                UserSip,
+                UserUserPrincipalName,
+                UserDistinguishedName
+            };
+
+        private readonly CancellationToken _cancellationToken;
+        private readonly IEnumerable<string> _distinguishedNames;
+        private readonly QueryType _queryType;
+        private readonly Scope _scope;
+
+        private IEnumerable<ActiveDirectoryProperty> _properties;
+
+        public DataPreparer(
+            QueryType queryType,
+            Scope scope,
+            IEnumerable<string> distinguishedNames,
+            CancellationToken cancellationToken)
+        {
+            _queryType = queryType;
+            _scope = scope;
+            _distinguishedNames = distinguishedNames;
+            _cancellationToken = cancellationToken;
+        }
+
+        public IEnumerable<ExpandoObject> GetData()
+        {
+            // ReSharper disable AccessToDisposedClosure
+            IEnumerable<ExpandoObject> data;
+            using (var principalContext = new PrincipalContext(
+                ContextType.Domain,
+                _scope.Domain,
+                _scope.Context))
+            {
+                var mapping = new Dictionary
+                    <QueryType, Func<IEnumerable<ExpandoObject>>>
+                {
+                    [QueryType.ComputersGroups] =
+                        () => GetComputersGroupsData(),
+                    [QueryType.ComputersSummaries] =
+                        () => GetComputersSummariesData(),
+                    [QueryType.DirectReportsDirectReports] =
+                        () => GetUsersDirectReportsData(),
+                    [QueryType.DirectReportsGroups] =
+                        () => GetUserssGroupsData(),
+                    [QueryType.DirectReportsSummaries] =
+                        () => GetUsersSummariesData(),
+                    [QueryType.GroupsComputers] =
+                        () => GetGroupsComputersData(),
+                    [QueryType.GroupsSummaries] =
+                        () => GetGroupsSummariesData(),
+                    [QueryType.GroupsUsers] = () => GetGroupsUsersData(),
+                    [QueryType.GroupsUsersDirectReports] =
+                        () => GetGroupsUsersDirectReportsData(),
+                    [QueryType.GroupsUsersGroups] =
+                        () => GetGroupsUsersGroupsData(),
+                    [QueryType.OuComputers] = () => GetOuComputersData(
+                        principalContext),
+                    [QueryType.OuGroupsUsers] = () => GetOuGroupsUsersData(
+                        principalContext)
+                };
+                data = mapping[_queryType]();
             }
+            return data;
+            // ReSharper restore AccessToDisposedClosure
         }
 
         private static bool AddComputerAttributeToResult(
@@ -414,7 +363,7 @@ namespace ActiveDirectoryTool
             {
                 [ContainerGroupContext] = () =>
                 {
-                    result.ContainerGroupContext = 
+                    result.ContainerGroupContext =
                         containerGroupPrincipal?.Context;
                 },
                 [ContainerGroupContextType] = () =>
@@ -462,7 +411,7 @@ namespace ActiveDirectoryTool
                 },
                 [ContainerGroupScope] = () =>
                 {
-                    result.ContainerGroupScope = 
+                    result.ContainerGroupScope =
                         containerGroupPrincipal?.GroupScope;
                 },
                 [ContainerGroupSid] = () =>
@@ -481,7 +430,7 @@ namespace ActiveDirectoryTool
                 },
                 [ContainerGroupMembers] = () =>
                 {
-                    result.ContainerGroupMembers = 
+                    result.ContainerGroupMembers =
                         containerGroupPrincipal?.Members;
                 }
             };
@@ -885,218 +834,447 @@ namespace ActiveDirectoryTool
             propertyMapping[property]();
         }
 
-        public IEnumerable<ExpandoObject> GetResults()
+        private static ComputerPrincipal FindComputerPrincipal(
+            string distinguishedName)
         {
-            var results = new List<ExpandoObject>();
-
-            foreach (var data in Data.Value)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                if (data is User)
-                {
-                    var user = data as User;
-                    dynamic result = new ExpandoObject();
-                    result.Name = user.Name;
-                    results.Add(result);
-                }
-                else if (data is ComputerGroups)
-                {
-                    var computerGroups = data as ComputerGroups;
-                    results.AddRange(PrepareComputerGroups(computerGroups));
-                }
-                else if (data is GroupComputers)
-                {
-                    var groupComputers = data as GroupComputers;
-                    results.AddRange(PrepareGroupComputers(groupComputers));
-                }
-                else if (data is GroupUsers)
-                {
-                    var groupUsers = data as GroupUsers;
-                    results.AddRange(PrepareGroupUsers(groupUsers));
-                }
-                else if (data is GroupUsersDirectReports)
-                {
-                    var groupUsersDirectReports =
-                        data as GroupUsersDirectReports;
-                    results.AddRange(
-                        PrepareGroupUsersDirectReports(
-                            groupUsersDirectReports));
-                }
-                else if (data is GroupUsersGroups)
-                {
-                    var groupUsersGroups = data as GroupUsersGroups;
-                    results.AddRange(
-                        PrepareGroupUsersGroups(groupUsersGroups));
-                }
-                else if (data is UserGroups)
-                {
-                    var userGroups = data as UserGroups;
-                    results.AddRange(PrepareUserGroups(userGroups));
-                }
-                else if (data is UserDirectReports)
-                {
-                    var userDirectReports = data as UserDirectReports;
-                    results.AddRange(
-                        PrepareUserDirectReports(
-                            userDirectReports));
-                }
-                else
-                {
-                    var computerPrincipal = data as ComputerPrincipal;
-                    var groupPrincipal = data as GroupPrincipal;
-                    var userPrincipal = data as UserPrincipal;
-                    dynamic result = new ExpandoObject();
-                    AddAttributesToResult(
-                        result,
-                        computerPrincipal: computerPrincipal,
-                        groupPrincipal: groupPrincipal,
-                        userPrincipal: userPrincipal);
-                    results.Add(result);
-                    var principal = data as Principal;
-                    principal?.Dispose();
-                }
-            }
-            return results;
+            using (var principalContext = GetPrincipalContext())
+                return ComputerPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName);
         }
 
-        private IEnumerable<ExpandoObject> PrepareComputerGroups(
-            ComputerGroups computerGroups)
+        private static GroupPrincipal FindGroupPrincipal(
+            string distinguishedName)
         {
-            var results = new List<ExpandoObject>();
-            if (computerGroups.Groups == null) return results;
-            foreach (var group in computerGroups.Groups)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                dynamic result = new ExpandoObject();
-                AddAttributesToResult(
-                    result,
-                    computerPrincipal: computerGroups.Computer,
-                    groupPrincipal: group);
-                results.Add(result);
-            }
-            return results;
+            using (var principalContext = GetPrincipalContext())
+                return GroupPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName);
         }
 
-        private IEnumerable<ExpandoObject> PrepareGroupComputers(
-            GroupComputers groupComputers)
+        private static UserPrincipal FindUserPrincipal(
+            string distinguishedName)
         {
-            var results = new List<ExpandoObject>();
-            if (groupComputers.Computers == null) return results;
-            foreach (var computer in groupComputers.Computers)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                dynamic result = new ExpandoObject();
-                AddAttributesToResult(
-                    result,
-                    computerPrincipal: computer,
-                    containerGroupPrincipal: groupComputers.Group);
-                results.Add(result);
-            }
-            return results;
+            using (var principalContext = GetPrincipalContext())
+                return UserPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName);
         }
 
-        private IEnumerable<ExpandoObject> PrepareGroupUsers(
-            GroupUsers groupUsers)
+        private static PrincipalContext GetPrincipalContext()
         {
-            var results = new List<ExpandoObject>();
-            if (groupUsers.Users == null) return results;
-            foreach (var user in groupUsers.Users)
-            {
-                CancellationToken.ThrowIfCancellationRequested();
-                dynamic result = new ExpandoObject();
-                AddAttributesToResult(
-                    result,
-                    userPrincipal: user,
-                    containerGroupPrincipal: groupUsers.Group);
-                results.Add(result);
-            }
-            return results;
+            return new PrincipalContext(ContextType.Domain);
         }
 
-        private IEnumerable<ExpandoObject> PrepareGroupUsersDirectReports(
-            GroupUsersDirectReports groupUsersDirectReports)
+        private void AddAttributesToResult(
+            dynamic result,
+            ComputerPrincipal computerPrincipal = null,
+            GroupPrincipal groupPrincipal = null,
+            GroupPrincipal containerGroupPrincipal = null,
+            UserPrincipal directReportUserPrincipal = null,
+            UserPrincipal userPrincipal = null)
         {
-            var results = new List<ExpandoObject>();
-            if (groupUsersDirectReports.UsersDirectReports == null)
-                return results;
-            foreach (var userDirectReports in groupUsersDirectReports
-                .UsersDirectReports)
+            foreach (var property in _properties)
             {
-                CancellationToken.ThrowIfCancellationRequested();
-                if (userDirectReports.DirectReports == null) continue;
-                foreach (var directReport in userDirectReports.DirectReports)
+                if (AddComputerAttributeToResult(
+                    computerPrincipal, property, result))
                 {
-                    CancellationToken.ThrowIfCancellationRequested();
-                    dynamic result = new ExpandoObject();
-                    AddAttributesToResult(
-                        result,
-                        containerGroupPrincipal: groupUsersDirectReports.Group,
-                        userPrincipal: userDirectReports.User,
-                        directReportUserPrincipal: directReport);
-                    results.Add(result);
+                    continue;
+                }
+
+                if (AddContainerGroupAttributeToResult(
+                    containerGroupPrincipal, property, result))
+                {
+                    continue;
+                }
+
+                if (AddDirectReportAttributeToResult(
+                    directReportUserPrincipal, property, result))
+                {
+                    continue;
+                }
+
+                if (AddGroupAttributeToResult(
+                    groupPrincipal, property, result))
+                {
+                    continue;
+                }
+
+                AddUserAttributeToResult(userPrincipal, property, result);
+            }
+        }
+
+        private dynamic GenerateData(
+            GroupPrincipal groupPrincipal,
+            UserPrincipal userPrincipal,
+            UserPrincipal directReportUserPrincipal)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(
+                data,
+                groupPrincipal: groupPrincipal,
+                userPrincipal: userPrincipal,
+                directReportUserPrincipal: directReportUserPrincipal);
+            return data;
+        }
+
+        private dynamic GenerateData(
+            GroupPrincipal groupPrincipal, ComputerPrincipal computerPrincipal)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(data, computerPrincipal, groupPrincipal);
+            return data;
+        }
+
+        private dynamic GenerateData(UserPrincipal userPrincipal)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(data, userPrincipal: userPrincipal);
+            return data;
+        }
+
+        private dynamic GenerateData(GroupPrincipal gp, UserPrincipal up)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(data, groupPrincipal: gp, userPrincipal: up);
+            return data;
+        }
+
+        private dynamic GenerateData(UserPrincipal u, GroupPrincipal g)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(data, userPrincipal: u, groupPrincipal: g);
+            return data;
+        }
+
+        private dynamic GenerateData(ComputerPrincipal cp, GroupPrincipal gp)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(
+                data, computerPrincipal: cp, groupPrincipal: gp);
+            return data;
+        }
+
+        private dynamic GenerateData(UserPrincipal up, UserPrincipal drup)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(
+                data, userPrincipal: up, directReportUserPrincipal: drup);
+            return data;
+        }
+
+        private dynamic GenerateData(GroupPrincipal gp)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(data, groupPrincipal: gp);
+            return data;
+        }
+
+        private dynamic GenerateData(ComputerPrincipal cp)
+        {
+            dynamic result = new ExpandoObject();
+            AddAttributesToResult(result, cp);
+            return result;
+        }
+
+        private dynamic GenerateData(
+            GroupPrincipal containerGroupPrincipal,
+            UserPrincipal userPrincipal,
+            GroupPrincipal groupPrincipal)
+        {
+            dynamic data = new ExpandoObject();
+            AddAttributesToResult(
+                data,
+                containerGroupPrincipal: containerGroupPrincipal,
+                userPrincipal: userPrincipal,
+                groupPrincipal: groupPrincipal);
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetComputersGroupsData()
+        {
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var computerPrincipal = FindComputerPrincipal(
+                    distinguishedName))
+                {
+                    if (computerPrincipal == null) continue;
+                    using (var groups = computerPrincipal.GetGroups())
+                    {
+                        data.AddRange(
+                            groups.GetGroupPrincipals().Select(
+                                g => GenerateData(computerPrincipal, g))
+                                .Cast<ExpandoObject>());
+                    }
                 }
             }
-            return results;
+            return data;
         }
 
-        private IEnumerable<ExpandoObject> PrepareGroupUsersGroups(
-            GroupUsersGroups groupUsersGroups)
+        private IEnumerable<ExpandoObject> GetComputersSummariesData()
         {
-            var results = new List<ExpandoObject>();
-            if (groupUsersGroups.UsersGroups == null) return results;
-            foreach (var userGroups in groupUsersGroups.UsersGroups)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                CancellationToken.ThrowIfCancellationRequested();
-                if (userGroups.Groups == null) continue;
-                foreach (var group in userGroups.Groups)
+                using (var computerPrincipal = FindComputerPrincipal(
+                    distinguishedName))
                 {
-                    CancellationToken.ThrowIfCancellationRequested();
-                    dynamic result = new ExpandoObject();
-                    AddAttributesToResult(
-                        result,
-                        containerGroupPrincipal: groupUsersGroups.Group,
-                        userPrincipal: userGroups.User,
-                        groupPrincipal: group);
-                    results.Add(result);
+                    if (computerPrincipal == null) continue;
+                    data.Add(GenerateData(computerPrincipal));
                 }
             }
-            return results;
+            return data;
         }
 
-        private IEnumerable<ExpandoObject> PrepareUserDirectReports(
-            UserDirectReports userDirectReports)
+        private IEnumerable<ExpandoObject> GetGroupsComputersData()
         {
-            var results = new List<ExpandoObject>();
-            if (userDirectReports.DirectReports == null) return results;
-            foreach (var directReport in userDirectReports.DirectReports)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                CancellationToken.ThrowIfCancellationRequested();
-                dynamic result = new ExpandoObject();
-                AddAttributesToResult(
-                    result,
-                    directReportUserPrincipal: directReport,
-                    userPrincipal: userDirectReports.User);
-                results.Add(result);
+                using (var groupPrincipal = FindGroupPrincipal(
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        data.AddRange(
+                            members.GetComputerPrincipals()
+                                .Select(c => GenerateData(groupPrincipal, c))
+                                .Cast<ExpandoObject>());
+                    }
+                }
             }
-            return results;
+            return data;
         }
 
-        private IEnumerable<ExpandoObject> PrepareUserGroups(
-            UserGroups userGroups)
+        private IEnumerable<ExpandoObject> GetGroupsSummariesData()
         {
-            var results = new List<ExpandoObject>();
-            if (userGroups.Groups == null) return results;
-            foreach (var group in userGroups.Groups)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                CancellationToken.ThrowIfCancellationRequested();
-                dynamic result = new ExpandoObject();
-                AddAttributesToResult(
-                    result,
-                    groupPrincipal: group,
-                    userPrincipal: userGroups.User);
-                results.Add(result);
+                using (var groupPrincipal = FindGroupPrincipal(
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    data.Add(GenerateData(groupPrincipal));
+                }
             }
-            return results;
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetGroupsUsersData()
+        {
+            _properties = DefaultGroupUsersProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var groupPrincipal = FindGroupPrincipal(
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        data.AddRange(
+                            members.GetUserPrincipals()
+                                .Select(u => GenerateData(groupPrincipal, u))
+                                .Cast<ExpandoObject>());
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetGroupsUsersDirectReportsData()
+        {
+            _properties = DefaultGroupUsersDirectReportsProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var groupPrincipal = FindGroupPrincipal(
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in
+                            members.GetUserPrincipals())
+                        {
+                            foreach (var directReportDistinguishedName in
+                                userPrincipal
+                                    .GetDirectReportDistinguishedNames())
+                            {
+                                using (var directReportUserPrincipal =
+                                    FindUserPrincipal(
+                                        directReportDistinguishedName))
+                                {
+                                    data.Add(
+                                        GenerateData(
+                                            groupPrincipal,
+                                            userPrincipal,
+                                            directReportUserPrincipal));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetGroupsUsersGroupsData()
+        {
+            _properties = DefaultGroupUsersGroupsProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var groupPrincipal = FindGroupPrincipal(
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in 
+                            members.GetUserPrincipals())
+                        {
+                            using (var groups = userPrincipal.GetGroups())
+                            {
+                                data.AddRange(
+                                    groups.GetGroupPrincipals()
+                                        .Select(
+                                            g => GenerateData(
+                                                groupPrincipal,
+                                                userPrincipal,
+                                                g))
+                                        .Cast<ExpandoObject>());
+                            }
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetOuComputersData(
+            PrincipalContext principalContext)
+        {
+            _properties = DefaultComputerProperties;
+            var data = new List<ExpandoObject>();
+            using (var computerPrincipal = new ComputerPrincipal(
+                principalContext))
+            {
+                using (var principalSearcher = new PrincipalSearcher(
+                    computerPrincipal))
+                {
+                    using (var principalSearchResult =
+                        principalSearcher.FindAll())
+                    {
+                        data.AddRange(
+                            principalSearchResult.GetComputerPrincipals()
+                                .Select(c => GenerateData(c))
+                                .Cast<ExpandoObject>());
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetOuGroupsUsersData(
+            PrincipalContext principalContext)
+        {
+            _properties = DefaultGroupUsersProperties;
+            var data = new List<ExpandoObject>();
+            using (var principal = new GroupPrincipal(principalContext))
+            {
+                using (var principalSearcher = new PrincipalSearcher(
+                    principal))
+                {
+                    using (var principalSearchResult =
+                        principalSearcher.FindAll())
+                    {
+                        foreach (var groupPrincipal in
+                            principalSearchResult.GetGroupPrincipals())
+                        {
+                            using (var users = groupPrincipal.GetMembers())
+                            {
+                                data.AddRange(
+                                    users.GetUserPrincipals().Select(
+                                        u => GenerateData(groupPrincipal, u))
+                                        .Cast<ExpandoObject>());
+                            }
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetUsersDirectReportsData()
+        {
+            _properties = DefaultUserDirectReportsProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var userPrincipal = FindUserPrincipal(
+                    distinguishedName))
+                {
+                    var directReportDistinguishedNames =
+                        userPrincipal.GetDirectReportDistinguishedNames();
+                    foreach (var directReportDistinguishedName in 
+                        directReportDistinguishedNames)
+                    {
+                        using (var directReportUserPrincipal =
+                            FindUserPrincipal(directReportDistinguishedName))
+                        {
+                            data.Add(
+                                GenerateData(
+                                    userPrincipal,
+                                    directReportUserPrincipal));
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetUserssGroupsData()
+        {
+            _properties = DefaultUserGroupsProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var userPrincipal = FindUserPrincipal(
+                    distinguishedName))
+                {
+                    using (var groups = userPrincipal.GetGroups())
+                    {
+                        data.AddRange(
+                            groups.GetGroupPrincipals()
+                                .Select(g => GenerateData(userPrincipal, g))
+                                .Cast<ExpandoObject>());
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetUsersSummariesData()
+        {
+            _properties = DefaultUserProperties;
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
+            {
+                using (var userPrincipal = FindUserPrincipal(
+                    distinguishedName))
+                {
+                    if (userPrincipal == null) continue;
+                    data.Add(GenerateData(userPrincipal));
+                }
+            }
+            return data;
         }
     }
 }

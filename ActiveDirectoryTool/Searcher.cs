@@ -58,7 +58,7 @@ namespace ActiveDirectoryTool
         IEnumerable<UserGroups> UsersGroups { get; set; }
     }
 
-    public static class Searcher
+    /*public static class Searcher
     {
         private const char Asterix = '*';
 
@@ -86,7 +86,7 @@ namespace ActiveDirectoryTool
                     computers = searcher.GetAllComputerPrincipals();
                 }
             }
-            
+
             return computers;
         }
 
@@ -108,6 +108,7 @@ namespace ActiveDirectoryTool
                 groupsComputers.Add(
                     GetGroupComputers(groupPrincipal, cancellationToken));
             }
+
             return groupsComputers;
         }
 
@@ -131,7 +132,7 @@ namespace ActiveDirectoryTool
                     }
                 }
             }
-            
+
             return computersGroups;
         }
 
@@ -146,6 +147,7 @@ namespace ActiveDirectoryTool
                 computersGroups.Add(
                     GetComputerGroups(computerPrincipal, cancellationToken));
             }
+
             return computersGroups;
         }
 
@@ -195,7 +197,7 @@ namespace ActiveDirectoryTool
                     groupPrincipals = searcher.GetAllGroupPrincipals();
                 }
             }
-            
+
             return groupPrincipals;
         }
 
@@ -223,6 +225,7 @@ namespace ActiveDirectoryTool
                         Users = GetUserPrincipals(groupPrincipal)
                     });
             }
+
             return groupsUsers;
         }
 
@@ -239,6 +242,7 @@ namespace ActiveDirectoryTool
                     GetGroupUsersDirectReports(
                         groupPrincipal, cancellationToken));
             }
+
             return groupsUsersDirectReports;
         }
 
@@ -253,6 +257,7 @@ namespace ActiveDirectoryTool
                 groupsUsersGroups.Add(
                     GetGroupUsersGroups(groupPrincipal, cancellationToken));
             }
+
             return groupsUsersGroups;
         }
 
@@ -285,13 +290,14 @@ namespace ActiveDirectoryTool
             return new UserDirectReports
             {
                 User = userPrincipal,
-                //DirectReports = userPrincipal.GetDirectReportUserPrincipals()
+                DirectReports = userPrincipal.GetDirectReportUserPrincipals()
             };
         }
 
         public static UserGroups GetUserGroups(UserPrincipal userPrincipal)
         {
             var groups = new List<GroupPrincipal>();
+
             try
             {
                 groups.AddRange(userPrincipal.GetGroupPrincipals());
@@ -300,6 +306,7 @@ namespace ActiveDirectoryTool
             {
                 Debug.WriteLine(e.Message);
             }
+
             return new UserGroups
             {
                 User = userPrincipal,
@@ -311,7 +318,6 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
         {
-            var stopwatch = Stopwatch.StartNew();
             var users = new List<User>();
             using (var up = new UserPrincipal(principalContext))
             {
@@ -325,8 +331,6 @@ namespace ActiveDirectoryTool
                 }
             }
 
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds / 1000);
             return users;
         }
 
@@ -334,7 +338,6 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
         {
-            var stopwatch = Stopwatch.StartNew();
             IEnumerable<UserPrincipal> userPrincipals;
             using (var searchPrincipal = new UserPrincipal(principalContext))
             {
@@ -344,8 +347,6 @@ namespace ActiveDirectoryTool
                 }
             }
 
-            stopwatch.Stop();
-            Debug.WriteLine(stopwatch.ElapsedMilliseconds / 1000);
             return userPrincipals;
         }
 
@@ -365,6 +366,7 @@ namespace ActiveDirectoryTool
                 cancellationToken.ThrowIfCancellationRequested();
                 userPrincipals.AddRange(GetUserPrincipals(groupPrincipal));
             }
+
             return userPrincipals;
         }
 
@@ -378,6 +380,7 @@ namespace ActiveDirectoryTool
                 cancellationToken.ThrowIfCancellationRequested();
                 usersDirectReports.Add(GetUserDirectReports(userPrincipal));
             }
+
             return usersDirectReports;
         }
 
@@ -385,8 +388,7 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
         {
-            return GetUsersDirectReports(
-                GetUserPrincipals(
+            return GetUsersDirectReports(GetUserPrincipals(
                     principalContext, cancellationToken), cancellationToken);
         }
 
@@ -400,6 +402,7 @@ namespace ActiveDirectoryTool
                 cancellationToken.ThrowIfCancellationRequested();
                 usersDirectReports.Add(GetUserDirectReports(userPrincipal));
             }
+
             return usersDirectReports;
         }
 
@@ -413,6 +416,7 @@ namespace ActiveDirectoryTool
                 cancellationToken.ThrowIfCancellationRequested();
                 usersGroups.Add(GetUserGroups(userPrincipal));
             }
+
             return usersGroups;
         }
 
@@ -420,8 +424,7 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext,
             CancellationToken cancellationToken)
         {
-            return GetUsersGroups(
-                GetUserPrincipals(
+            return GetUsersGroups(GetUserPrincipals(
                     principalContext, cancellationToken), cancellationToken);
         }
 
@@ -435,6 +438,7 @@ namespace ActiveDirectoryTool
                 cancellationToken.ThrowIfCancellationRequested();
                 usersGroups.Add(GetUserGroups(userPrincipal));
             }
+
             return usersGroups;
         }
 
@@ -454,6 +458,7 @@ namespace ActiveDirectoryTool
                         principalSearcher.GetAllUserPrincipals());
                 }
             }
+
             return userPrincipals;
         }
 
@@ -461,10 +466,11 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext, string searchText)
         {
             var computerPrincipals = new List<ComputerPrincipal>();
-            using (var searchPrincipal = new ComputerPrincipal(principalContext)
-            {
-                Name = Asterix + searchText + Asterix
-            })
+            using (var searchPrincipal = 
+                new ComputerPrincipal(principalContext)
+                {
+                    Name = Asterix + searchText + Asterix
+                })
             {
                 using (var principalSearcher = new PrincipalSearcher(
                     searchPrincipal))
@@ -493,57 +499,240 @@ namespace ActiveDirectoryTool
                         principalSearcher.GetAllGroupPrincipals());
                 }
             }
+
             return groupPrincipals;
         }
-    }
+    }*/
 
-    public class ComputerGroups : IComputer, IGroups
+    public class ComputerGroups : IComputer, IGroups, IDisposable
     {
         public ComputerPrincipal Computer { get; set; }
 
         public IEnumerable<GroupPrincipal> Groups { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                Computer?.Dispose();
+                foreach (var group in Groups)
+                {
+                    group?.Dispose();
+                }
+            }
+
+            Computer = null;
+            Groups = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public class GroupComputers : IComputers, IGroup
+    public class GroupComputers : IComputers, IGroup, IDisposable
     {
         public IEnumerable<ComputerPrincipal> Computers { get; set; }
 
         public GroupPrincipal Group { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                Group?.Dispose();
+                foreach (var computer in Computers)
+                {
+                    computer?.Dispose();
+                }
+            }
+
+            Group = null;
+            Computers = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public class GroupUsers : IGroup, IUsers
+    public class GroupUsers : IGroup, IUsers, IDisposable
     {
         public GroupPrincipal Group { get; set; }
 
         public IEnumerable<UserPrincipal> Users { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                Group?.Dispose();
+                foreach (var user in Users)
+                {
+                    user?.Dispose();
+                }
+            }
+
+            Group = null;
+            Users = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
     public class GroupUsersDirectReports : IGroup,
-        IUsersDirectReports
+        IUsersDirectReports, IDisposable
     {
         public GroupPrincipal Group { get; set; }
 
         public IEnumerable<UserDirectReports> UsersDirectReports { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                Group?.Dispose();
+                foreach (var userDirectReports in UsersDirectReports)
+                {
+                    userDirectReports?.Dispose();
+                }
+            }
+
+            Group = null;
+            UsersDirectReports = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public class GroupUsersGroups : IGroup, IUsersGroups
+    public class GroupUsersGroups : IGroup, IUsersGroups, IDisposable
     {
         public GroupPrincipal Group { get; set; }
 
         public IEnumerable<UserGroups> UsersGroups { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                Group?.Dispose();
+                foreach (var userGroups in UsersGroups)
+                {
+                    userGroups?.Dispose();
+                }
+            }
+
+            Group = null;
+            UsersGroups = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public class UserDirectReports : IDirectReports, IUser
+    public class UserDirectReports : IDirectReports, IUser, IDisposable
     {
         public IEnumerable<UserPrincipal> DirectReports { get; set; }
 
         public UserPrincipal User { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                User?.Dispose();
+                foreach (var directReport in DirectReports)
+                {
+                    directReport?.Dispose();
+                }
+            }
+
+            User = null;
+            DirectReports = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 
-    public class UserGroups : IGroups, IUser
+    public class UserGroups : IGroups, IUser, IDisposable
     {
         public IEnumerable<GroupPrincipal> Groups { get; set; }
 
         public UserPrincipal User { get; set; }
+
+        #region IDisposable Support
+        private bool _isDisposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+            if (disposing)
+            {
+                User?.Dispose();
+                foreach (var group in Groups)
+                {
+                    group?.Dispose();
+                }
+            }
+
+            User = null;
+            Groups = null;
+            _isDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+        #endregion
     }
 }

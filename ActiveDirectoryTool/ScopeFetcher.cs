@@ -11,6 +11,8 @@ namespace ActiveDirectoryTool
         private const string DirectorySearcherOuFilter =
             "(objectCategory=organizationalUnit)";
 
+        private const int PageSize = 1;
+
         internal ScopeFetcher()
         {
             using (var principalContext =
@@ -22,7 +24,7 @@ namespace ActiveDirectoryTool
                     Scope = new Scope
                     {
                         Name = directoryEntry.Path,
-                        Path = "LDAP://" + directoryEntry.Path
+                        Path = LdapPrefix + directoryEntry.Path
                     };
                 }
                 
@@ -38,7 +40,7 @@ namespace ActiveDirectoryTool
             using (var directorySearcher = new DirectorySearcher(Scope.Path))
             {
                 directorySearcher.Filter = DirectorySearcherOuFilter;
-                directorySearcher.PageSize = 1;
+                directorySearcher.PageSize = PageSize;
                 foreach (SearchResult result in directorySearcher.FindAll())
                 {
                     Scope.AddDirectoryScope(new OrganizationalUnit
@@ -47,8 +49,7 @@ namespace ActiveDirectoryTool
                     });
                 }
             }
-            Scope.Children.Sort(
-                (a, b) => string.Compare(
+            Scope.Children.Sort((a, b) => string.Compare(
                     a.Name, b.Name, StringComparison.Ordinal));
         }
     }

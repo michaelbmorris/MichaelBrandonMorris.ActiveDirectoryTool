@@ -28,7 +28,7 @@
     <TargetCulture>en</TargetCulture>
     <ProductName>Active Directory Tool</ProductName>
     <SuiteName>IT Tools</SuiteName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -113,6 +113,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AboutWindow.xaml.cs" />
+    <Compile Include="ActiveDirectoryProperty.cs" />
     <Compile Include="BindableSelectedItemBehavior.cs" />
     <Compile Include="DataFileWriter.cs" />
     <Compile Include="DataPreparer.cs" />
@@ -121,7 +122,6 @@
     <Compile Include="Scope.cs" />
     <Compile Include="ScopeFetcher.cs" />
     <Compile Include="Searcher.cs" />
-    <Compile Include="User.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -158,9 +158,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ActiveDirectoryToolHelp.chm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <Content Include="ActiveDirectoryToolHelp.chm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="ActiveDirectoryTool_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -173,7 +173,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="basicsplashscreen.jpg" />
+    <SplashScreen Include="basicsplashscreen.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
