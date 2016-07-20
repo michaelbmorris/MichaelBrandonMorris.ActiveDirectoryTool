@@ -42,6 +42,11 @@ namespace ActiveDirectoryTool
 
         private readonly MenuItem _computerGetGroupsMenuItem;
         private readonly MenuItem _computerGetSummaryMenuItem;
+        private readonly MenuItem _containerGroupGetComputersMenuItem; //TODO
+        private readonly MenuItem _containerGroupGetSummaryMenuItem; //TODO
+        private readonly MenuItem _containerGroupGetUsersDirectReportsMenuItem; //TODO
+        private readonly MenuItem _containerGroupGetUsersGroupsMenuItem; //TODO 
+        private readonly MenuItem _containerGroupGetUsersMenuItem; //TODO
         private readonly MenuItem _directReportGetDirectReportsMenuItem;
         private readonly MenuItem _directReportGetGroupsMenuItem;
         private readonly MenuItem _directReportGetSummaryMenuItem;
@@ -92,6 +97,7 @@ namespace ActiveDirectoryTool
                 Header = "Computer - Get Summary",
                 Command = GetComputerSummaryCommand
             };
+
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Direct Reports",
@@ -354,6 +360,11 @@ namespace ActiveDirectoryTool
         public ICommand WriteToFileCommand { get; private set; }
         private ICommand GetComputerGroupsCommand { get; set; }
         private ICommand GetComputerSummaryCommand { get; set; }
+        private ICommand GetContainerGroupComputersCommand { get; set; } //TODO
+        private ICommand GetContainerGroupSummaryCommand { get; set; } //TODO
+        private ICommand GetContainerGroupUsersCommand { get; set; } //TODO
+        private ICommand GetContainerGroupUsersDirectReportsCommand { get; set; } //TODO
+        private ICommand GetContainerGroupUsersGroupsCommand { get; set; } //TODO
         private ICommand GetDirectReportDirectReportsCommand { get; set; }
         private ICommand GetDirectReportGroupsCommand { get; set; }
         private ICommand GetDirectReportSummaryCommand { get; set; }
@@ -413,6 +424,10 @@ namespace ActiveDirectoryTool
             if (Data.Table.Columns.Contains(ComputerDistinguishedName))
             {
                 contextMenuItems.AddRange(GenerateComputerContextMenuItems());
+            }
+            if (Data.Table.Columns.Contains(ContainerGroupDistinguishedName))
+            {
+                // TODO
             }
             if (Data.Table.Columns.Contains(DirectReportDistinguishedName))
             {
@@ -735,11 +750,6 @@ namespace ActiveDirectoryTool
             {
                 ShowMessage("The selected query is too large to run.");
                 ResetQuery();
-            }
-            catch (ArgumentException)
-            {
-                ShowMessage(
-                    "There is an incorrectly formatted Active Directory Entry in the selected query context.");
             }
             FinishTask();
         }

@@ -12,20 +12,37 @@ namespace ActiveDirectoryTool
 {
     public class DataFileWriter
     {
+        private const char Comma = ',';
+        private const char Hyphen = '-';
         private const string DateTimeFormat = "yyyyMMddTHHmmss";
+        private const string CsvExtension = ".csv";
+        private const string OuPrefix = "OU=";
+        private const string DcPrefix = "DC=";
+        private const string DoubleHyphen = "--";
 
         private readonly string _outputPath = Path.Combine(
             GetFolderPath(MyDocuments), "ActiveDirectoryTool");
 
         public DataView Data { get; set; }
         public QueryType QueryType { get; set; }
-        public string Scope { get; set; }
+        public Scope Scope { get; set; }
 
         public string WriteToCsv()
         {
-            var fileName = Scope.Remove("OU=").Remove("DC=").Replace(',', '-')
-                           + "--" + QueryType + '-' +
-                           DateTime.Now.ToString(DateTimeFormat) + ".csv";
+            string fileName;
+            if (Scope == null)
+            {
+                fileName = QueryType + Hyphen +
+                           DateTime.Now.ToString(DateTimeFormat) + 
+                           CsvExtension;
+            }
+            else
+            {
+                fileName = Scope.Context.Remove(OuPrefix).Remove(DcPrefix)
+                    .Replace(Comma, Hyphen) + DoubleHyphen + QueryType +
+                           Hyphen + DateTime.Now.ToString(DateTimeFormat) +
+                           CsvExtension;
+            }
             var fullFileName = Path.Combine(_outputPath, fileName);
             var dataTable = Data.ToTable();
             var stringBuilder = new StringBuilder();
@@ -36,11 +53,13 @@ namespace ActiveDirectoryTool
 
             foreach (DataRow row in dataTable.Rows)
             {
-                var fields = row.ItemArray.Select(field => string.Concat(
+                var fields = row.ItemArray.Select(
+                    field => string.Concat(
                         "\"", field.ToString().Replace("\"", "\"\""), "\""));
                 stringBuilder.AppendLine(string.Join(",", fields));
             }
 
+            Debug.WriteLine(fullFileName);
             File.WriteAllText(fullFileName, stringBuilder.ToString());
             Process.Start(fullFileName);
             return fullFileName;

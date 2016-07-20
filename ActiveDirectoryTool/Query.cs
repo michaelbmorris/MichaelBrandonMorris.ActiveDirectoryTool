@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +10,11 @@ namespace ActiveDirectoryTool
         None,
         ComputersGroups,
         ComputersSummaries,
+        ContainerGroupsComputers,
+        ContainerGroupsUsers,
+        ContainerGroupsUsersDirectReports,
+        ContainerGroupsUsersGroups,
+        ContainerGroupsSummaries,
         DirectReportsDirectReports,
         DirectReportsGroups,
         DirectReportsSummaries,
@@ -42,7 +46,8 @@ namespace ActiveDirectoryTool
 
     public class Query
     {
-        private readonly Scope _activeDirectoryScope;
+        private const char Hyphen = '-';
+
         private readonly IEnumerable<string> _distinguishedNames;
         private readonly string _searchText;
 
@@ -50,12 +55,12 @@ namespace ActiveDirectoryTool
 
         public Query(
             QueryType queryType,
-            Scope activeDirectoryScope = null,
+            Scope scope = null,
             IEnumerable<string> distinguishedNames = null,
             string searchText = null)
         {
             QueryType = queryType;
-            _activeDirectoryScope = activeDirectoryScope;
+            Scope = scope;
             _distinguishedNames = distinguishedNames;
             _searchText = searchText;
         }
@@ -63,13 +68,11 @@ namespace ActiveDirectoryTool
         private CancellationToken CancellationToken
             => _cancellationTokenSource.Token;
 
+        public Scope Scope { get; }
+
         public IEnumerable<ExpandoObject> Data { get; private set; }
 
-        public string Name => Scope + " - " + QueryType;
-
         public QueryType QueryType { get; }
-
-        public string Scope { get;  }
 
         public void Cancel()
         {
@@ -89,7 +92,7 @@ namespace ActiveDirectoryTool
             {
                 Data = new Searcher(
                     QueryType,
-                    _activeDirectoryScope,
+                    Scope,
                     _distinguishedNames,
                     CancellationToken,
                     _searchText).GetData();
