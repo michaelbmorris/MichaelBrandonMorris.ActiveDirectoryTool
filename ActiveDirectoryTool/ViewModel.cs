@@ -29,33 +29,44 @@ namespace ActiveDirectoryTool
         private const string ContainerGroupDistinguishedName =
             "ContainerGroupDistinguishedName";
 
+        private const string ContainerGroupManagedByDistinguishedName =
+            "ContainerGroupManagedByDistinguishedName";
+
         private const string DirectReportDistinguishedName =
             "DirectReportDistinguishedName";
 
         private const string GroupDistinguishedName = "GroupDistinguishedName";
-        private const string HelpFile = "ActiveDirectoryToolHelp.chm";
 
-        private const string ManagerDistinguishedName =
-            "ManagerDistinguishedName";
+        private const string GroupManagedByDistinguishedName =
+            "GroupManagedByDistinguishedName";
+
+        private const string HelpFile = "ActiveDirectoryToolHelp.chm";
 
         private const string UserDistinguishedName = "UserDistinguishedName";
 
+        private const string UserManagerDistinguishedName =
+            "UserManagerDistinguishedName";
+
         private readonly MenuItem _computerGetGroupsMenuItem;
         private readonly MenuItem _computerGetSummaryMenuItem;
-        private readonly MenuItem _containerGroupGetComputersMenuItem; //TODO
-        private readonly MenuItem _containerGroupGetSummaryMenuItem; //TODO
+        private readonly MenuItem _containerGroupGetComputersMenuItem;
 
+        private readonly MenuItem
+            _containerGroupGetManagedByDirectReportsMenuItem;
+
+        private readonly MenuItem _containerGroupGetManagedByGroupsMenuItem;
+        private readonly MenuItem _containerGroupGetManagedBySummaryMenuItem;
+        private readonly MenuItem _containerGroupGetSummaryMenuItem;
         private readonly MenuItem _containerGroupGetUsersDirectReportsMenuItem;
-        //TODO
-
         private readonly MenuItem _containerGroupGetUsersGroupsMenuItem;
-        //TODO
-
-        private readonly MenuItem _containerGroupGetUsersMenuItem; //TODO
+        private readonly MenuItem _containerGroupGetUsersMenuItem;
         private readonly MenuItem _directReportGetDirectReportsMenuItem;
         private readonly MenuItem _directReportGetGroupsMenuItem;
         private readonly MenuItem _directReportGetSummaryMenuItem;
         private readonly MenuItem _groupGetComputersMenuItem;
+        private readonly MenuItem _groupGetManagedByDirectReportsMenuItem;
+        private readonly MenuItem _groupGetManagedByGroupsMenuItem;
+        private readonly MenuItem _groupGetManagedBySummaryMenuItem;
         private readonly MenuItem _groupGetSummaryMenuItem;
         private readonly MenuItem _groupGetUsersDirectReportsMenuItem;
         private readonly MenuItem _groupGetUsersGroupsMenuItem;
@@ -105,6 +116,16 @@ namespace ActiveDirectoryTool
             {
                 Header = "Computer - Get Summary",
                 Command = GetComputerSummaryCommand
+            };
+            _containerGroupGetComputersMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Computers",
+                Command = GetContainerGroupComputersCommand
+            };
+            _containerGroupGetManagedByDirectReportsMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Managed By's Direct Reports",
+                Command = GetContainerGroupManagedByDirectReportsCommand
             };
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
@@ -391,22 +412,17 @@ namespace ActiveDirectoryTool
         private ICommand GetComputerSummaryCommand { get; set; }
         private ICommand GetContainerGroupComputersCommand { get; set; }
 
-        //TODO
-        private ICommand GetContainerGroupSummaryCommand { get; set; }
+        private ICommand GetContainerGroupManagedByDirectReportsCommand { get;
+            set; }
 
-        //TODO
+        private ICommand GetContainerGroupSummaryCommand { get; set; }
         private ICommand GetContainerGroupUsersCommand { get; set; }
 
         private ICommand GetContainerGroupUsersDirectReportsCommand { get; set;
         }
 
-        //TODO
         private ICommand GetContainerGroupUsersGroupsCommand { get; set; }
-
-        //TODO
-        //TODO
         private ICommand GetDirectReportDirectReportsCommand { get; set; }
-
         private ICommand GetDirectReportGroupsCommand { get; set; }
         private ICommand GetDirectReportSummaryCommand { get; set; }
         private ICommand GetGroupComputersCommand { get; set; }
@@ -430,6 +446,19 @@ namespace ActiveDirectoryTool
             return dataRowView[ComputerDistinguishedName].ToString();
         }
 
+        private static string GetContainerGroupDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[ContainerGroupDistinguishedName].ToString();
+        }
+
+        private static string GetContainerGroupManagedByDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[ContainerGroupManagedByDistinguishedName]
+                .ToString();
+        }
+
         private static string GetDirectReportDistinguishedName(
             DataRowView dataRowView)
         {
@@ -445,7 +474,7 @@ namespace ActiveDirectoryTool
         private static string GetManagerDistinguishedName(
             DataRowView dataRowView)
         {
-            return dataRowView[ManagerDistinguishedName].ToString();
+            return dataRowView[UserManagerDistinguishedName].ToString();
         }
 
         private static string GetUserDistinguishedName(DataRowView dataRowView)
@@ -490,7 +519,9 @@ namespace ActiveDirectoryTool
             }
             if (Data.Table.Columns.Contains(ContainerGroupDistinguishedName))
             {
-                // TODO
+                contextMenuItems.Add(_containerGroupGetComputersMenuItem);
+                contextMenuItems.Add(
+                    _containerGroupGetManagedByDirectReportsMenuItem);
             }
             if (Data.Table.Columns.Contains(DirectReportDistinguishedName))
             {
@@ -502,7 +533,7 @@ namespace ActiveDirectoryTool
             {
                 contextMenuItems.AddRange(GenerateGroupContextMenuItems());
             }
-            if (Data.Table.Columns.Contains(ManagerDistinguishedName))
+            if (Data.Table.Columns.Contains(UserManagerDistinguishedName))
             {
                 contextMenuItems.Add(_managerGetDirectReportsMenuItem);
                 contextMenuItems.Add(_managerGetGroupsMenuItem);
@@ -535,13 +566,11 @@ namespace ActiveDirectoryTool
         {
             var userContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
-            if (queryType != DirectReportsDirectReports &&
-                queryType != UsersDirectReports)
+            if (queryType != UsersDirectReports)
                 userContextMenuItems.Add(_userGetDirectReportsMenuItem);
-            if (queryType != DirectReportsGroups && queryType != UsersGroups)
+            if (queryType != UsersGroups)
                 userContextMenuItems.Add(_userGetGroupsMenuItem);
-            if (queryType != DirectReportsSummaries &&
-                queryType != UsersSummaries)
+            if (queryType != UsersSummaries)
                 userContextMenuItems.Add(_userGetSummaryMenuItem);
             return userContextMenuItems;
         }
@@ -551,6 +580,38 @@ namespace ActiveDirectoryTool
             return SelectedDataRowViews.Cast<DataRowView>().Select(
                 GetComputerDistinguishedName).Where(
                     c => !c.IsNullOrWhiteSpace());
+        }
+
+        private async void GetContainerGroupComputersCommandExecute()
+        {
+            await RunQuery(
+                GroupsComputers,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void
+            GetContainerGroupManagedByDirectReportsCommandExecute()
+        {
+            await RunQuery(
+                UsersDirectReports,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
+        private IEnumerable<string> GetContainerGroupsDistinguishedNames()
+        {
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(GetContainerGroupDistinguishedName)
+                .Where(c => !c.IsNullOrWhiteSpace());
+        }
+
+        private IEnumerable<string>
+            GetContainerGroupsManagedByDistinguishedNames()
+        {
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetContainerGroupManagedByDistinguishedName).Where(
+                    s => !s.IsNullOrWhiteSpace());
         }
 
         private async void GetContextComputerGroupsCommandExecute()
@@ -572,7 +633,7 @@ namespace ActiveDirectoryTool
         private async void GetContextDirectReportDirectReportsCommandExecute()
         {
             await RunQuery(
-                DirectReportsDirectReports,
+                UsersDirectReports,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -580,7 +641,7 @@ namespace ActiveDirectoryTool
         private async void GetContextDirectReportGroupsCommandExecute()
         {
             await RunQuery(
-                DirectReportsGroups,
+                UsersGroups,
                 CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
@@ -588,7 +649,7 @@ namespace ActiveDirectoryTool
         private async void GetContextDirectReportSummaryCommandExecute()
         {
             await RunQuery(
-                DirectReportsSummaries,
+                UsersSummaries,
                 CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
@@ -673,7 +734,7 @@ namespace ActiveDirectoryTool
         private async void GetManagerDirectReportsCommandExecute()
         {
             await RunQuery(
-                ManagersDirectReports,
+                UsersDirectReports,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
@@ -681,7 +742,7 @@ namespace ActiveDirectoryTool
         private async void GetManagerGroupsCommandExecute()
         {
             await RunQuery(
-                ManagersGroups,
+                UsersGroups,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
@@ -696,7 +757,7 @@ namespace ActiveDirectoryTool
         private async void GetManagerSummaryCommandExecute()
         {
             await RunQuery(
-                ManagersSummaries,
+                UsersSummaries,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
@@ -963,6 +1024,12 @@ namespace ActiveDirectoryTool
 
             GetManagerSummaryCommand = new RelayCommand(
                 GetManagerSummaryCommandExecute);
+
+            GetContainerGroupComputersCommand = new RelayCommand(
+                GetContainerGroupComputersCommandExecute);
+
+            GetContainerGroupManagedByDirectReportsCommand = new RelayCommand(
+                GetContainerGroupManagedByDirectReportsCommandExecute);
         }
 
         private void SetViewVariables()

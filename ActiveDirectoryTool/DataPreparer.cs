@@ -267,10 +267,15 @@ namespace ActiveDirectoryTool
                     result.ContainerGroupIsSecurityGroup =
                         containerGroupPrincipal?.IsSecurityGroup;
                 },
-                [ContainerGroupManagedBy] = () =>
+                [ContainerGroupManagedByDistinguishedName] = () =>
                 {
                     result.ContainerGroupManagedBy =
-                        containerGroupPrincipal?.GetManagedBy();
+                        containerGroupPrincipal?.GetManagedByDistinguishedName();
+                },
+                [ContainerGroupManagedByName] = () =>
+                {
+                    result.ContainerGroupManagedByName =
+                        containerGroupPrincipal.GetManagedByName();
                 },
                 [ContainerGroupName] = () =>
                 {
@@ -622,7 +627,7 @@ namespace ActiveDirectoryTool
         }
 
         private static bool AddGroupProperty(
-            GroupPrincipal principal,
+            GroupPrincipal groupPrincipal,
             ActiveDirectoryProperty property,
             dynamic result)
         {
@@ -630,67 +635,73 @@ namespace ActiveDirectoryTool
             {
                 [GroupContext] = () =>
                     {
-                        result.GroupContext = principal.Context;
+                        result.GroupContext = groupPrincipal.Context;
                     },
                 [GroupContextType] = () =>
                 {
-                    result.GroupContextType = principal.ContextType;
+                    result.GroupContextType = groupPrincipal.ContextType;
                 },
                 [GroupDescription] = () =>
                 {
-                    result.GroupDescription = principal.Description;
+                    result.GroupDescription = groupPrincipal.Description;
                 },
                 [GroupDisplayName] = () =>
                 {
-                    result.GroupDisplayName = principal.DisplayName;
+                    result.GroupDisplayName = groupPrincipal.DisplayName;
                 },
                 [GroupDistinguishedName] = () =>
                 {
                     result.GroupDistinguishedName =
-                        principal.DistinguishedName;
+                        groupPrincipal.DistinguishedName;
                 },
                 [GroupGuid] = () =>
                 {
-                    result.GroupGuid = principal.Guid;
+                    result.GroupGuid = groupPrincipal.Guid;
                 },
                 [GroupIsSecurityGroup] = () =>
                 {
                     result.GroupIsSecurityGroup =
-                        principal.IsSecurityGroup;
+                        groupPrincipal.IsSecurityGroup;
                 },
-                [GroupManagedBy] = () =>
+                [GroupManagedByDistinguishedName] = () =>
                 {
-                    result.GroupManagedBy = principal.GetManagedBy();
+                    result.GroupManagedBy = 
+                        groupPrincipal.GetManagedByDistinguishedName();
+                },
+                [GroupManagedByName] = () =>
+                {
+                    result.GroupManagedByName =
+                        groupPrincipal.GetManagedByName();
                 },
                 [GroupName] = () =>
                 {
-                    result.GroupName = principal.Name;
+                    result.GroupName = groupPrincipal.Name;
                 },
                 [GroupSamAccountName] = () =>
                 {
-                    result.GroupSamAccountName = principal.SamAccountName;
+                    result.GroupSamAccountName = groupPrincipal.SamAccountName;
                 },
                 [ActiveDirectoryProperty.GroupScope] = () =>
                 {
-                    result.GroupScope = principal.GroupScope;
+                    result.GroupScope = groupPrincipal.GroupScope;
                 },
                 [GroupSid] = () =>
                 {
-                    result.GroupSid = principal.Sid;
+                    result.GroupSid = groupPrincipal.Sid;
                 },
                 [GroupStructuralObjectClass] = () =>
                 {
                     result.GroupStructuralObjectClass =
-                        principal.StructuralObjectClass;
+                        groupPrincipal.StructuralObjectClass;
                 },
                 [GroupUserPrincipalName] = () =>
                 {
                     result.GroupUserPrincipalName =
-                        principal.UserPrincipalName;
+                        groupPrincipal.UserPrincipalName;
                 },
                 [GroupMembers] = () =>
                 {
-                    result.GroupMembers = principal.Members;
+                    result.GroupMembers = groupPrincipal.Members;
                 }
             };
 

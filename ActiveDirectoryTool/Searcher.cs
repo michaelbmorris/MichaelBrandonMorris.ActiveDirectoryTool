@@ -42,9 +42,10 @@ namespace ActiveDirectoryTool
             DefaultGroupProperties =
             {
                 GroupName,
-                GroupManagedBy,
+                GroupManagedByName,
                 GroupDescription,
-                GroupDistinguishedName
+                GroupDistinguishedName,
+                GroupManagedByDistinguishedName
             };
 
         private static readonly ActiveDirectoryProperty[]
@@ -168,22 +169,6 @@ namespace ActiveDirectoryTool
                         () => GetComputersGroupsData(),
                     [QueryType.ComputersSummaries] =
                         () => GetComputersSummariesData(),
-                    [QueryType.ContainerGroupsComputers] = 
-                        () => GetGroupsComputersData(),
-                    [QueryType.ContainerGroupsSummaries] = 
-                        () => GetGroupsSummariesData(),
-                    [QueryType.ContainerGroupsUsers] = 
-                        () => GetGroupsUsersData(),
-                    [QueryType.ContainerGroupsUsersDirectReports] = 
-                        () => GetGroupsUsersDirectReportsData(),
-                    [QueryType.ContainerGroupsUsersGroups] = 
-                        () => GetGroupsUsersGroupsData(),
-                    [QueryType.DirectReportsDirectReports] =
-                        () => GetUsersDirectReportsData(),
-                    [QueryType.DirectReportsGroups] =
-                        () => GetUsersGroupsData(),
-                    [QueryType.DirectReportsSummaries] =
-                        () => GetUsersSummariesData(),
                     [QueryType.GroupsComputers] =
                         () => GetGroupsComputersData(),
                     [QueryType.GroupsSummaries] =
@@ -193,11 +178,6 @@ namespace ActiveDirectoryTool
                         () => GetGroupsUsersDirectReportsData(),
                     [QueryType.GroupsUsersGroups] =
                         () => GetGroupsUsersGroupsData(),
-                    [QueryType.ManagersDirectReports] = 
-                        () => GetUsersDirectReportsData(),
-                    [QueryType.ManagersGroups] = () => GetUsersGroupsData(),
-                    [QueryType.ManagersSummaries] = 
-                        () => GetUsersSummariesData(),
                     [QueryType.OuComputers] = () => GetOuComputersData(
                         principalContext),
                     [QueryType.OuGroups] = () => GetOuGroupsData(
