@@ -128,12 +128,17 @@
                 </Grid>
                 <Grid Grid.Row="2">
                     <DockPanel>
-                        <DockPanel DockPanel.Dock="Top">
+                        <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                             <Button DockPanel.Dock="Left"
                                     Content="Previous Query"
                                     Command="{Binding PreviousQueryCommand}"
                                     Margin="5 5 5 5"
                                     IsEnabled="{Binding ViewIsEnabled}"/>
+                            <CheckBox DockPanel.Dock="Right"
+                                      x:Name="ShowDistinguishedNamesCheckbox"
+                                      Checked="ShowDistinguishedNamesCheckbox_OnChecked"
+                                      Unchecked="ShowDistinguishedNamesCheckbox_OnUnchecked"
+                                      Margin="5 7 5 7">Show Distinguished Names</CheckBox>
                         </DockPanel>
                         <DataGrid DockPanel.Dock="Top"
                                   IsEnabled="{Binding ViewIsEnabled}"

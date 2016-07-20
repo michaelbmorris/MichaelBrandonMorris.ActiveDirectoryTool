@@ -23,6 +23,9 @@ namespace ActiveDirectoryTool
         GroupsUsersDirectReports,
         GroupsUsersGroups,
         GroupsSummaries,
+        ManagersDirectReports,
+        ManagersGroups,
+        ManagersSummaries,
         UsersDirectReports,
         UsersGroups,
         UsersSummaries,
@@ -46,8 +49,6 @@ namespace ActiveDirectoryTool
 
     public class Query
     {
-        private const char Hyphen = '-';
-
         private readonly IEnumerable<string> _distinguishedNames;
         private readonly string _searchText;
 

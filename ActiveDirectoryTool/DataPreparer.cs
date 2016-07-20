@@ -500,11 +500,6 @@ namespace ActiveDirectoryTool
                     result.DirectReportLastPasswordSet =
                         directReportUserPrincipal.LastPasswordSet;
                 },
-                [DirectReportManager] = () =>
-                {
-                    result.DirectReportManager =
-                        directReportUserPrincipal.GetManager();
-                },
                 [DirectReportMiddleName] = () =>
                 {
                     result.DirectReportMiddleName =
@@ -863,9 +858,14 @@ namespace ActiveDirectoryTool
                 {
                     result.UserLastPasswordSet = userPrincipal.LastPasswordSet;
                 },
-                [UserManager] = () =>
+                [ManagerDistinguishedName] = () =>
                 {
-                    result.UserManager = userPrincipal.GetManager();
+                    result.ManagerDistinguishedName = userPrincipal
+                        .GetManagerDistinguishedName();
+                },
+                [ManagerName] = () =>
+                {
+                    result.ManagerName = userPrincipal.GetManagerName();
                 },
                 [UserMiddleName] = () =>
                 {

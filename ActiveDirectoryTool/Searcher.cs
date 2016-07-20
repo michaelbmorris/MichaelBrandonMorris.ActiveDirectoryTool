@@ -109,7 +109,7 @@ namespace ActiveDirectoryTool
                 UserDescription,
                 UserTitle,
                 UserCompany,
-                UserManager,
+                ManagerName,
                 UserHomeDrive,
                 UserHomeDirectory,
                 UserScriptPath,
@@ -124,7 +124,8 @@ namespace ActiveDirectoryTool
                 UserVoip,
                 UserSip,
                 UserUserPrincipalName,
-                UserDistinguishedName
+                UserDistinguishedName,
+                ManagerDistinguishedName
             };
 
         private readonly CancellationToken _cancellationToken;
@@ -167,6 +168,16 @@ namespace ActiveDirectoryTool
                         () => GetComputersGroupsData(),
                     [QueryType.ComputersSummaries] =
                         () => GetComputersSummariesData(),
+                    [QueryType.ContainerGroupsComputers] = 
+                        () => GetGroupsComputersData(),
+                    [QueryType.ContainerGroupsSummaries] = 
+                        () => GetGroupsSummariesData(),
+                    [QueryType.ContainerGroupsUsers] = 
+                        () => GetGroupsUsersData(),
+                    [QueryType.ContainerGroupsUsersDirectReports] = 
+                        () => GetGroupsUsersDirectReportsData(),
+                    [QueryType.ContainerGroupsUsersGroups] = 
+                        () => GetGroupsUsersGroupsData(),
                     [QueryType.DirectReportsDirectReports] =
                         () => GetUsersDirectReportsData(),
                     [QueryType.DirectReportsGroups] =
@@ -182,6 +193,11 @@ namespace ActiveDirectoryTool
                         () => GetGroupsUsersDirectReportsData(),
                     [QueryType.GroupsUsersGroups] =
                         () => GetGroupsUsersGroupsData(),
+                    [QueryType.ManagersDirectReports] = 
+                        () => GetUsersDirectReportsData(),
+                    [QueryType.ManagersGroups] = () => GetUsersGroupsData(),
+                    [QueryType.ManagersSummaries] = 
+                        () => GetUsersSummariesData(),
                     [QueryType.OuComputers] = () => GetOuComputersData(
                         principalContext),
                     [QueryType.OuGroups] = () => GetOuGroupsData(

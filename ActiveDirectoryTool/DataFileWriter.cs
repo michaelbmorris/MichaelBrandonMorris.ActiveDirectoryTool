@@ -13,12 +13,12 @@ namespace ActiveDirectoryTool
     public class DataFileWriter
     {
         private const char Comma = ',';
-        private const char Hyphen = '-';
-        private const string DateTimeFormat = "yyyyMMddTHHmmss";
         private const string CsvExtension = ".csv";
-        private const string OuPrefix = "OU=";
+        private const string DateTimeFormat = "yyyyMMddTHHmmss";
         private const string DcPrefix = "DC=";
         private const string DoubleHyphen = "--";
+        private const char Hyphen = '-';
+        private const string OuPrefix = "OU=";
 
         private readonly string _outputPath = Path.Combine(
             GetFolderPath(MyDocuments), "ActiveDirectoryTool");
@@ -33,7 +33,7 @@ namespace ActiveDirectoryTool
             if (Scope == null)
             {
                 fileName = QueryType + Hyphen +
-                           DateTime.Now.ToString(DateTimeFormat) + 
+                           DateTime.Now.ToString(DateTimeFormat) +
                            CsvExtension;
             }
             else

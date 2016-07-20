@@ -16,8 +16,8 @@ using System.Windows.Input;
 using Extensions.CollectionExtensions;
 using Extensions.PrimitiveExtensions;
 using GalaSoft.MvvmLight.CommandWpf;
-using static System.Deployment.Application.ApplicationDeployment;
 using static ActiveDirectoryTool.QueryType;
+using static System.Deployment.Application.ApplicationDeployment;
 
 namespace ActiveDirectoryTool
 {
@@ -44,8 +44,13 @@ namespace ActiveDirectoryTool
         private readonly MenuItem _computerGetSummaryMenuItem;
         private readonly MenuItem _containerGroupGetComputersMenuItem; //TODO
         private readonly MenuItem _containerGroupGetSummaryMenuItem; //TODO
-        private readonly MenuItem _containerGroupGetUsersDirectReportsMenuItem; //TODO
-        private readonly MenuItem _containerGroupGetUsersGroupsMenuItem; //TODO 
+
+        private readonly MenuItem _containerGroupGetUsersDirectReportsMenuItem;
+        //TODO
+
+        private readonly MenuItem _containerGroupGetUsersGroupsMenuItem;
+        //TODO
+
         private readonly MenuItem _containerGroupGetUsersMenuItem; //TODO
         private readonly MenuItem _directReportGetDirectReportsMenuItem;
         private readonly MenuItem _directReportGetGroupsMenuItem;
@@ -55,6 +60,9 @@ namespace ActiveDirectoryTool
         private readonly MenuItem _groupGetUsersDirectReportsMenuItem;
         private readonly MenuItem _groupGetUsersGroupsMenuItem;
         private readonly MenuItem _groupGetUsersMenuItem;
+        private readonly MenuItem _managerGetDirectReportsMenuItem;
+        private readonly MenuItem _managerGetGroupsMenuItem;
+        private readonly MenuItem _managerGetSummaryMenuItem;
         private readonly MenuItem _userGetDirectReportsMenuItem;
         private readonly MenuItem _userGetGroupsMenuItem;
         private readonly MenuItem _userGetSummaryMenuItem;
@@ -71,6 +79,7 @@ namespace ActiveDirectoryTool
         private Visibility _progressBarVisibility;
         private ObservableCollection<Query> _queries;
         private string _searchText;
+        private bool _showDistinguishedNames;
         private bool _userSearchIsChecked;
         private bool _viewIsEnabled;
 
@@ -97,7 +106,6 @@ namespace ActiveDirectoryTool
                 Header = "Computer - Get Summary",
                 Command = GetComputerSummaryCommand
             };
-
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Direct Reports",
@@ -138,6 +146,21 @@ namespace ActiveDirectoryTool
                 Header = "Group - Get Summary",
                 Command = GetGroupSummaryCommand
             };
+            _managerGetDirectReportsMenuItem = new MenuItem
+            {
+                Header = "Manager - Get Direct Reports",
+                Command = GetManagerDirectReportsCommand
+            };
+            _managerGetGroupsMenuItem = new MenuItem
+            {
+                Header = "Manager - Get Groups",
+                Command = GetManagerGroupsCommand
+            };
+            _managerGetSummaryMenuItem = new MenuItem
+            {
+                Header = "Manager - Get Summary",
+                Command = GetManagerSummaryCommand
+            };
             _userGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "User - Get Direct Reports",
@@ -154,8 +177,6 @@ namespace ActiveDirectoryTool
                 Command = GetUserSummaryCommand
             };
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public Visibility CancelButtonVisibility
         {
@@ -230,15 +251,10 @@ namespace ActiveDirectoryTool
         }
 
         public ICommand GetOuComputersCommand { get; private set; }
-
         public ICommand GetOuGroupsCommand { get; private set; }
-
         public ICommand GetOuGroupsUsersCommand { get; private set; }
-
         public ICommand GetOuUsersCommand { get; private set; }
-
         public ICommand GetOuUsersDirectReportsCommand { get; private set; }
-
         public ICommand GetOuUsersGroupsCommand { get; private set; }
 
         public bool GroupSearchIsChecked
@@ -329,6 +345,19 @@ namespace ActiveDirectoryTool
 
         public ICommand SelectionChangedCommand { get; private set; }
 
+        public bool ShowDistinguishedNames
+        {
+            get
+            {
+                return _showDistinguishedNames;
+            }
+            set
+            {
+                _showDistinguishedNames = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public bool UserSearchIsChecked
         {
             get
@@ -360,12 +389,24 @@ namespace ActiveDirectoryTool
         public ICommand WriteToFileCommand { get; private set; }
         private ICommand GetComputerGroupsCommand { get; set; }
         private ICommand GetComputerSummaryCommand { get; set; }
-        private ICommand GetContainerGroupComputersCommand { get; set; } //TODO
-        private ICommand GetContainerGroupSummaryCommand { get; set; } //TODO
-        private ICommand GetContainerGroupUsersCommand { get; set; } //TODO
-        private ICommand GetContainerGroupUsersDirectReportsCommand { get; set; } //TODO
-        private ICommand GetContainerGroupUsersGroupsCommand { get; set; } //TODO
+        private ICommand GetContainerGroupComputersCommand { get; set; }
+
+        //TODO
+        private ICommand GetContainerGroupSummaryCommand { get; set; }
+
+        //TODO
+        private ICommand GetContainerGroupUsersCommand { get; set; }
+
+        private ICommand GetContainerGroupUsersDirectReportsCommand { get; set;
+        }
+
+        //TODO
+        private ICommand GetContainerGroupUsersGroupsCommand { get; set; }
+
+        //TODO
+        //TODO
         private ICommand GetDirectReportDirectReportsCommand { get; set; }
+
         private ICommand GetDirectReportGroupsCommand { get; set; }
         private ICommand GetDirectReportSummaryCommand { get; set; }
         private ICommand GetGroupComputersCommand { get; set; }
@@ -373,10 +414,15 @@ namespace ActiveDirectoryTool
         private ICommand GetGroupUsersCommand { get; set; }
         private ICommand GetGroupUsersDirectReportsCommand { get; set; }
         private ICommand GetGroupUsersGroupsCommand { get; set; }
+        private ICommand GetManagerDirectReportsCommand { get; set; }
+        private ICommand GetManagerGroupsCommand { get; set; }
+        private ICommand GetManagerSummaryCommand { get; set; }
         private ICommand GetUserDirectReportsCommand { get; set; }
         private ICommand GetUserGroupsCommand { get; set; }
         private ICommand GetUserSummaryCommand { get; set; }
         private IList SelectedDataRowViews { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private static string GetComputerDistinguishedName(
             DataRowView dataRowView)
@@ -394,6 +440,12 @@ namespace ActiveDirectoryTool
             DataRowView dataRowView)
         {
             return dataRowView[GroupDistinguishedName].ToString();
+        }
+
+        private static string GetManagerDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[ManagerDistinguishedName].ToString();
         }
 
         private static string GetUserDistinguishedName(DataRowView dataRowView)
@@ -415,6 +467,17 @@ namespace ActiveDirectoryTool
             ProgressBarVisibility = Visibility.Hidden;
             CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
+        }
+
+        private IEnumerable<MenuItem> GenerateComputerContextMenuItems()
+        {
+            var computerContextMenuItems = new List<MenuItem>();
+            var queryType = Queries.Peek().QueryType;
+            if (queryType != ComputersGroups)
+                computerContextMenuItems.Add(_computerGetGroupsMenuItem);
+            if (queryType != ComputersSummaries)
+                computerContextMenuItems.Add(_computerGetSummaryMenuItem);
+            return computerContextMenuItems;
         }
 
         private List<MenuItem> GenerateContextMenuItems()
@@ -441,23 +504,14 @@ namespace ActiveDirectoryTool
             }
             if (Data.Table.Columns.Contains(ManagerDistinguishedName))
             {
-                // TODO
+                contextMenuItems.Add(_managerGetDirectReportsMenuItem);
+                contextMenuItems.Add(_managerGetGroupsMenuItem);
+                contextMenuItems.Add(_managerGetSummaryMenuItem);
             }
             if (!Data.Table.Columns.Contains(UserDistinguishedName))
                 return contextMenuItems;
             contextMenuItems.AddRange(GenerateUserContextMenuItems());
             return contextMenuItems;
-        }
-
-        private IEnumerable<MenuItem> GenerateComputerContextMenuItems()
-        {
-            var computerContextMenuItems = new List<MenuItem>();
-            var queryType = Queries.Peek().QueryType;
-            if (queryType != ComputersGroups)
-                computerContextMenuItems.Add(_computerGetGroupsMenuItem);
-            if (queryType != ComputersSummaries)
-                computerContextMenuItems.Add(_computerGetSummaryMenuItem);
-            return computerContextMenuItems;
         }
 
         private IEnumerable<MenuItem> GenerateGroupContextMenuItems()
@@ -486,7 +540,7 @@ namespace ActiveDirectoryTool
                 userContextMenuItems.Add(_userGetDirectReportsMenuItem);
             if (queryType != DirectReportsGroups && queryType != UsersGroups)
                 userContextMenuItems.Add(_userGetGroupsMenuItem);
-            if (queryType != DirectReportsSummaries && 
+            if (queryType != DirectReportsSummaries &&
                 queryType != UsersSummaries)
                 userContextMenuItems.Add(_userGetSummaryMenuItem);
             return userContextMenuItems;
@@ -494,8 +548,9 @@ namespace ActiveDirectoryTool
 
         private IEnumerable<string> GetComputersDistinguishedNames()
         {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetComputerDistinguishedName(dataRowView)).ToList();
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetComputerDistinguishedName).Where(
+                    c => !c.IsNullOrWhiteSpace());
         }
 
         private async void GetContextComputerGroupsCommandExecute()
@@ -604,14 +659,46 @@ namespace ActiveDirectoryTool
 
         private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetDirectReportDistinguishedName(dataRowView)).ToList();
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetDirectReportDistinguishedName).Where(
+                    d => !d.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetGroupsDistinguishedNames()
         {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetGroupDistinguishedName(dataRowView)).ToList();
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetGroupDistinguishedName).Where(g => !g.IsNullOrWhiteSpace());
+        }
+
+        private async void GetManagerDirectReportsCommandExecute()
+        {
+            await RunQuery(
+                ManagersDirectReports,
+                CurrentScope,
+                GetManagersDistinguishedNames());
+        }
+
+        private async void GetManagerGroupsCommandExecute()
+        {
+            await RunQuery(
+                ManagersGroups,
+                CurrentScope,
+                GetManagersDistinguishedNames());
+        }
+
+        private IEnumerable<string> GetManagersDistinguishedNames()
+        {
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetManagerDistinguishedName).Where(
+                    m => !m.IsNullOrWhiteSpace());
+        }
+
+        private async void GetManagerSummaryCommandExecute()
+        {
+            await RunQuery(
+                ManagersSummaries,
+                CurrentScope,
+                GetManagersDistinguishedNames());
         }
 
         private async void GetOuComputersCommandExecute()
@@ -655,8 +742,8 @@ namespace ActiveDirectoryTool
 
         private IEnumerable<string> GetUsersDistinguishedNames()
         {
-            return (from DataRowView dataRowView in SelectedDataRowViews
-                select GetUserDistinguishedName(dataRowView)).ToList();
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetUserDistinguishedName).Where(u => !u.IsNullOrWhiteSpace());
         }
 
         private void HideMessage()
@@ -867,6 +954,15 @@ namespace ActiveDirectoryTool
 
             SearchOuCommand = new RelayCommand(
                 SearchOuCommandExecute, SearchOuCommandCanExecute);
+
+            GetManagerDirectReportsCommand = new RelayCommand(
+                GetManagerDirectReportsCommandExecute);
+
+            GetManagerGroupsCommand = new RelayCommand(
+                GetManagerGroupsCommandExecute);
+
+            GetManagerSummaryCommand = new RelayCommand(
+                GetManagerSummaryCommandExecute);
         }
 
         private void SetViewVariables()
