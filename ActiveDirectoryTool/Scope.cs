@@ -14,23 +14,6 @@ namespace ActiveDirectoryTool
         private const string LdapPrefix = "LDAP://";
         private const char Period = '.';
 
-        public static Scope GetDefaultScope()
-        {
-            using (var principalContext =
-                new PrincipalContext(ContextType.Domain))
-            {
-                using (var directoryEntry = new DirectoryEntry(
-                    principalContext.ConnectedServer))
-                {
-                    return new Scope
-                    {
-                        Name = directoryEntry.Path,
-                        Path = LdapPrefix + directoryEntry.Path
-                    };
-                }
-            }
-        }
-
         internal Scope()
         {
             Children = new List<Scope>();

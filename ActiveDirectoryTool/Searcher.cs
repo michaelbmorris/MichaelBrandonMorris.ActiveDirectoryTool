@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
@@ -142,7 +143,7 @@ namespace ActiveDirectoryTool
             string searchText)
         {
             _queryType = queryType;
-            _scope = scope ?? Scope.GetDefaultScope();
+            _scope = scope;
             _distinguishedNames = distinguishedNames;
             _cancellationToken = cancellationToken;
             _searchText = searchText;
@@ -153,10 +154,12 @@ namespace ActiveDirectoryTool
         {
             // ReSharper disable AccessToDisposedClosure
             IEnumerable<ExpandoObject> data;
-            using (var principalContext = new PrincipalContext(
-                ContextType.Domain,
-                _scope.Domain,
-                _scope.Context))
+            using (var principalContext = _scope == null ? 
+                GetPrincipalContext() :
+                new PrincipalContext(
+                    ContextType.Domain,
+                    _scope.Domain,
+                    _scope.Context))
             {
                 var mapping = new Dictionary
                     <QueryType, Func<IEnumerable<ExpandoObject>>>
@@ -611,20 +614,21 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext)
         {
             var data = new List<ExpandoObject>();
-            using (var principal = new ComputerPrincipal(principalContext)
+            using (var principal = new ComputerPrincipal(principalContext))
             {
-                Name = Asterix + _searchText + Asterix
-            })
-            using (var principalSearcher = new PrincipalSearcher(principal))
-            using (var principalSearchResult = principalSearcher.FindAll())
-            {
-                foreach (var computerPrincipal in principalSearchResult
-                    .GetComputerPrincipals())
+                principal.Name = Asterix + _searchText + Asterix;
+                using (var principalSearcher = new PrincipalSearcher(
+                    principal))
+                using (var principalSearchResult = principalSearcher.FindAll())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
-                    data.Add(
-                        _dataPreparer.PrepareData(
-                            DefaultComputerProperties, computerPrincipal));
+                    foreach (var computerPrincipal in principalSearchResult
+                        .GetComputerPrincipals())
+                    {
+                        _cancellationToken.ThrowIfCancellationRequested();
+                        data.Add(
+                            _dataPreparer.PrepareData(
+                                DefaultComputerProperties, computerPrincipal));
+                    }
                 }
             }
             return data;
@@ -634,21 +638,22 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext)
         {
             var data = new List<ExpandoObject>();
-            using (var principal = new UserPrincipal(principalContext)
+            using (var principal = new UserPrincipal(principalContext))
             {
-                Name = Asterix + _searchText + Asterix
-            })
-            using (var principalSearcher = new PrincipalSearcher(principal))
-            using (var principalSearchResult = principalSearcher.FindAll())
-            {
-                foreach (var userPrincipal in principalSearchResult
-                    .GetUserPrincipals())
+                principal.Name = Asterix + _searchText + Asterix;
+                using (var principalSearcher = new PrincipalSearcher(
+                    principal))
+                using (var principalSearchResult = principalSearcher.FindAll())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
-                    data.Add(
-                        _dataPreparer.PrepareData(
-                            DefaultUserProperties, 
-                            userPrincipal: userPrincipal));
+                    foreach (var userPrincipal in principalSearchResult
+                        .GetUserPrincipals())
+                    {
+                        _cancellationToken.ThrowIfCancellationRequested();
+                        data.Add(
+                            _dataPreparer.PrepareData(
+                                DefaultUserProperties,
+                                userPrincipal: userPrincipal));
+                    }
                 }
             }
             return data;
@@ -658,21 +663,22 @@ namespace ActiveDirectoryTool
             PrincipalContext principalContext)
         {
             var data = new List<ExpandoObject>();
-            using (var principal = new GroupPrincipal(principalContext)
+            using (var principal = new GroupPrincipal(principalContext))
             {
-                Name = Asterix + _searchText + Asterix
-            })
-            using (var principalSearcher = new PrincipalSearcher(principal))
-            using (var principalSearchResult = principalSearcher.FindAll())
-            {
-                foreach (var groupPrincipal in principalSearchResult
-                    .GetGroupPrincipals())
+                principal.Name = Asterix + _searchText + Asterix;
+                using (var principalSearcher = new PrincipalSearcher(
+                    principal))
+                using (var principalSearchResult = principalSearcher.FindAll())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
-                    data.Add(
-                        _dataPreparer.PrepareData(
-                            DefaultGroupProperties,
-                            groupPrincipal: groupPrincipal));
+                    foreach (var groupPrincipal in principalSearchResult
+                        .GetGroupPrincipals())
+                    {
+                        _cancellationToken.ThrowIfCancellationRequested();
+                        data.Add(
+                            _dataPreparer.PrepareData(
+                                DefaultGroupProperties,
+                                groupPrincipal: groupPrincipal));
+                    }
                 }
             }
             return data;
