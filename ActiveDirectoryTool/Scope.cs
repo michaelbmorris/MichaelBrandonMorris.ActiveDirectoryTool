@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices;
+using System.DirectoryServices.AccountManagement;
+using System.Windows.Documents;
 using Extensions.PrimitiveExtensions;
 
 namespace ActiveDirectoryTool
@@ -8,8 +11,25 @@ namespace ActiveDirectoryTool
     {
         private const char Comma = ',';
         private const string DomainComponentPrefix = "DC=";
-        private const string LdapProtocolPrefix = "LDAP://";
+        private const string LdapPrefix = "LDAP://";
         private const char Period = '.';
+
+        public static Scope GetDefaultScope()
+        {
+            using (var principalContext =
+                new PrincipalContext(ContextType.Domain))
+            {
+                using (var directoryEntry = new DirectoryEntry(
+                    principalContext.ConnectedServer))
+                {
+                    return new Scope
+                    {
+                        Name = directoryEntry.Path,
+                        Path = LdapPrefix + directoryEntry.Path
+                    };
+                }
+            }
+        }
 
         internal Scope()
         {
@@ -17,7 +37,7 @@ namespace ActiveDirectoryTool
         }
 
         public List<Scope> Children { get; set; }
-        internal string Context => Path.Remove(LdapProtocolPrefix);
+        internal string Context => Path.Remove(LdapPrefix);
 
         internal string Domain
             => Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)

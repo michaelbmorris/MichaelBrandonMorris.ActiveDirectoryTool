@@ -1,738 +1,772 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.DirectoryServices.AccountManagement;
-using System.Linq;
+using System.Dynamic;
 using System.Threading;
 using Extensions.PrincipalExtensions;
+using static ActiveDirectoryTool.ActiveDirectoryProperty;
 
 namespace ActiveDirectoryTool
 {
-    public interface IComputer
-    {
-        ComputerPrincipal Computer { get; set; }
-    }
-
-    public interface IComputers
-    {
-        IEnumerable<ComputerPrincipal> Computers { get; set; }
-    }
-
-    public interface IDirectReports
-    {
-        IEnumerable<UserPrincipal> DirectReports { get; set; }
-    }
-
-    public interface IGroup
-    {
-        GroupPrincipal Group { get; set; }
-    }
-
-    public interface IGroups
-    {
-        IEnumerable<GroupPrincipal> Groups { get; set; }
-    }
-
-    public interface IUser
-    {
-        UserPrincipal User { get; set; }
-    }
-
-    public interface IUserGroups
-    {
-        IEnumerable<UserGroups> UsersGroups { get; set; }
-    }
-
-    public interface IUsers
-    {
-        IEnumerable<UserPrincipal> Users { get; set; }
-    }
-
-    public interface IUsersDirectReports
-    {
-        IEnumerable<UserDirectReports> UsersDirectReports { get; set; }
-    }
-
-    public interface IUsersGroups
-    {
-        IEnumerable<UserGroups> UsersGroups { get; set; }
-    }
-
-    /*public static class Searcher
+    public class Searcher
     {
         private const char Asterix = '*';
 
-        public static ComputerGroups GetComputerGroups(
-            ComputerPrincipal computerPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new ComputerGroups
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerGroupsProperties =
             {
-                Computer = computerPrincipal,
-                Groups = computerPrincipal.GetGroupPrincipals()
+                ComputerName,
+                GroupName,
+                ComputerDistinguishedName,
+                GroupDistinguishedName
             };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultComputerProperties =
+            {
+                ComputerName,
+                ComputerDescription,
+                ComputerDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupComputersProperties =
+            {
+                GroupName,
+                ComputerName,
+                GroupDistinguishedName,
+                ComputerDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupProperties =
+            {
+                GroupName,
+                GroupManagedBy,
+                GroupDescription,
+                GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersDirectReportsProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                DirectReportName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersGroupsProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                GroupName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName,
+                GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultGroupUsersProperties =
+            {
+                ContainerGroupName,
+                UserName,
+                ContainerGroupDistinguishedName,
+                UserDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserDirectReportsProperties =
+            {
+                UserName,
+                DirectReportName,
+                UserDistinguishedName,
+                DirectReportDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserGroupsProperties =
+            {
+                UserName,
+                GroupName,
+                UserDistinguishedName,
+                GroupDistinguishedName
+            };
+
+        private static readonly ActiveDirectoryProperty[]
+            DefaultUserProperties =
+            {
+                UserSurname,
+                UserGivenName,
+                UserDisplayName,
+                UserSamAccountName,
+                UserIsActive,
+                UserIsAccountLockedOut,
+                UserLastLogon,
+                UserDescription,
+                UserTitle,
+                UserCompany,
+                UserManager,
+                UserHomeDrive,
+                UserHomeDirectory,
+                UserScriptPath,
+                UserEmailAddress,
+                UserStreetAddress,
+                UserCity,
+                UserState,
+                UserVoiceTelephoneNumber,
+                UserPager,
+                UserMobile,
+                UserFax,
+                UserVoip,
+                UserSip,
+                UserUserPrincipalName,
+                UserDistinguishedName
+            };
+
+        private readonly CancellationToken _cancellationToken;
+        private readonly IEnumerable<string> _distinguishedNames;
+        private readonly QueryType _queryType;
+        private readonly Scope _scope;
+        private readonly string _searchText;
+        private readonly DataPreparer _dataPreparer;
+
+        public Searcher(
+            QueryType queryType,
+            Scope scope,
+            IEnumerable<string> distinguishedNames,
+            CancellationToken cancellationToken,
+            string searchText)
+        {
+            _queryType = queryType;
+            _scope = scope ?? Scope.GetDefaultScope();
+            _distinguishedNames = distinguishedNames;
+            _cancellationToken = cancellationToken;
+            _searchText = searchText;
+            _dataPreparer = new DataPreparer(cancellationToken);
         }
 
-        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
+        public IEnumerable<ExpandoObject> GetData()
         {
-            IEnumerable<ComputerPrincipal> computers;
-            using (var computerPrincipal =
-                new ComputerPrincipal(principalContext))
+            // ReSharper disable AccessToDisposedClosure
+            IEnumerable<ExpandoObject> data;
+            using (var principalContext = new PrincipalContext(
+                ContextType.Domain,
+                _scope.Domain,
+                _scope.Context))
             {
-                using (var searcher = new PrincipalSearcher(computerPrincipal))
+                var mapping = new Dictionary
+                    <QueryType, Func<IEnumerable<ExpandoObject>>>
                 {
-                    computers = searcher.GetAllComputerPrincipals();
-                }
+                    [QueryType.ComputersGroups] =
+                        () => GetComputersGroupsData(),
+                    [QueryType.ComputersSummaries] =
+                        () => GetComputersSummariesData(),
+                    [QueryType.DirectReportsDirectReports] =
+                        () => GetUsersDirectReportsData(),
+                    [QueryType.DirectReportsGroups] =
+                        () => GetUsersGroupsData(),
+                    [QueryType.DirectReportsSummaries] =
+                        () => GetUsersSummariesData(),
+                    [QueryType.GroupsComputers] =
+                        () => GetGroupsComputersData(),
+                    [QueryType.GroupsSummaries] =
+                        () => GetGroupsSummariesData(),
+                    [QueryType.GroupsUsers] = () => GetGroupsUsersData(),
+                    [QueryType.GroupsUsersDirectReports] =
+                        () => GetGroupsUsersDirectReportsData(),
+                    [QueryType.GroupsUsersGroups] =
+                        () => GetGroupsUsersGroupsData(),
+                    [QueryType.OuComputers] = () => GetOuComputersData(
+                        principalContext),
+                    [QueryType.OuGroups] = () => GetOuGroupsData(
+                        principalContext),
+                    [QueryType.OuGroupsUsers] = () => GetOuGroupsUsersData(
+                        principalContext),
+                    [QueryType.OuUsers] = () => GetOuUsersData(
+                        principalContext),
+                    [QueryType.OuUsersDirectReports] =
+                        () => GetOuUsersDirectReportsData(principalContext),
+                    [QueryType.OuUsersGroups] = () => GetOuUsersGroupsData(
+                        principalContext),
+                    [QueryType.SearchComputer] = () => GetSearchComputerData(
+                        principalContext),
+                    [QueryType.SearchGroup] = () => GetSearchGroupData(
+                        principalContext),
+                    [QueryType.SearchUser] = () => GetSearchUserData(
+                        principalContext),
+                    [QueryType.UsersDirectReports] =
+                        () => GetUsersDirectReportsData(),
+                    [QueryType.UsersGroups] = () => GetUsersGroupsData(),
+                    [QueryType.UsersSummaries] = () => GetUsersSummariesData()
+                };
+                data = mapping[_queryType]();
             }
-
-            return computers;
+            return data;
+            // ReSharper restore AccessToDisposedClosure
         }
 
-        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
+        private static PrincipalContext GetPrincipalContext()
         {
-            return groupPrincipal.GetComputerPrincipals();
+            return new PrincipalContext(ContextType.Domain);
         }
 
-        public static IEnumerable<GroupComputers> GetComputerPrincipals(
-            IEnumerable<GroupPrincipal> groupPrincipals,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetComputersGroupsData()
         {
-            var groupsComputers = new List<GroupComputers>();
-            foreach (var groupPrincipal in groupPrincipals)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                groupsComputers.Add(
-                    GetGroupComputers(groupPrincipal, cancellationToken));
-            }
-
-            return groupsComputers;
-        }
-
-        public static IEnumerable<ComputerGroups> GetComputersGroups(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
-        {
-            var computersGroups = new List<ComputerGroups>();
-            using (var searchPrincipal =
-                new ComputerPrincipal(principalContext))
-            {
-                using (var searcher = new PrincipalSearcher(searchPrincipal))
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var computerPrincipal = ComputerPrincipal
+                    .FindByIdentity(
+                        principalContext,
+                        IdentityType.DistinguishedName,
+                        distinguishedName))
                 {
-                    foreach (var computerPrincipal in searcher
-                        .GetAllComputerPrincipals())
+                    if (computerPrincipal == null) continue;
+                    using (var groups = computerPrincipal.GetGroups())
                     {
-                        cancellationToken.ThrowIfCancellationRequested();
-                        computersGroups.Add(
-                            GetComputerGroups(
-                                computerPrincipal, cancellationToken));
+                        foreach (var groupPrincipal in 
+                            groups.GetGroupPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultComputerGroupsProperties,
+                                    computerPrincipal,
+                                    groupPrincipal));
+                        }
                     }
                 }
             }
-
-            return computersGroups;
+            return data;
         }
 
-        public static IEnumerable<ComputerGroups> GetComputersGroups(
-            IEnumerable<ComputerPrincipal> computerPrincipals,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetComputersSummariesData()
         {
-            var computersGroups = new List<ComputerGroups>();
-            foreach (var computerPrincipal in computerPrincipals)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                computersGroups.Add(
-                    GetComputerGroups(computerPrincipal, cancellationToken));
-            }
-
-            return computersGroups;
-        }
-
-        public static GroupComputers GetGroupComputers(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new GroupComputers
-            {
-                Group = groupPrincipal,
-                Computers = GetComputerPrincipals(
-                    groupPrincipal, cancellationToken)
-            };
-        }
-
-        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
-            IEnumerable<UserPrincipal> userPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var groupPrincipals = new HashSet<GroupPrincipal>();
-            foreach (var userPrincipal in userPrincipals)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                try
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var computerPrincipal = ComputerPrincipal
+                    .FindByIdentity(
+                        principalContext,
+                        IdentityType.DistinguishedName,
+                        distinguishedName))
                 {
-                    groupPrincipals.UnionWith(
-                        userPrincipal.GetGroupPrincipals());
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e.Message);
+                    if (computerPrincipal == null) continue;
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultComputerProperties,
+                            computerPrincipal));
                 }
             }
-
-            return groupPrincipals;
+            return data;
         }
 
-        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetGroupsComputersData()
         {
-            IEnumerable<GroupPrincipal> groupPrincipals;
-            using (var searchPrincipal = new GroupPrincipal(principalContext))
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                using (var searcher = new PrincipalSearcher(searchPrincipal))
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var groupPrincipal = GroupPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
                 {
-                    groupPrincipals = searcher.GetAllGroupPrincipals();
-                }
-            }
-
-            return groupPrincipals;
-        }
-
-        public static IEnumerable<GroupUsers> GetGroupsUsers(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
-        {
-            return GetGroupsUsers(
-                GetGroupPrincipals(
-                    principalContext, cancellationToken), cancellationToken);
-        }
-
-        public static IEnumerable<GroupUsers> GetGroupsUsers(
-            IEnumerable<GroupPrincipal> groupPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var groupsUsers = new List<GroupUsers>();
-            foreach (var groupPrincipal in groupPrincipals)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                groupsUsers.Add(
-                    new GroupUsers
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
                     {
-                        Group = groupPrincipal,
-                        Users = GetUserPrincipals(groupPrincipal)
-                    });
-            }
-
-            return groupsUsers;
-        }
-
-        public static IEnumerable<GroupUsersDirectReports>
-            GetGroupsUsersDirectReports(
-            IEnumerable<GroupPrincipal> groupPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var groupsUsersDirectReports = new List<GroupUsersDirectReports>();
-            foreach (var groupPrincipal in groupPrincipals)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                groupsUsersDirectReports.Add(
-                    GetGroupUsersDirectReports(
-                        groupPrincipal, cancellationToken));
-            }
-
-            return groupsUsersDirectReports;
-        }
-
-        public static IEnumerable<GroupUsersGroups> GetGroupsUsersGroups(
-            IEnumerable<GroupPrincipal> groupPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var groupsUsersGroups = new List<GroupUsersGroups>();
-            foreach (var groupPrincipal in groupPrincipals)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                groupsUsersGroups.Add(
-                    GetGroupUsersGroups(groupPrincipal, cancellationToken));
-            }
-
-            return groupsUsersGroups;
-        }
-
-        public static GroupUsersDirectReports GetGroupUsersDirectReports(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new GroupUsersDirectReports
-            {
-                Group = groupPrincipal,
-                UsersDirectReports = GetUsersDirectReports(
-                    groupPrincipal, cancellationToken)
-            };
-        }
-
-        public static GroupUsersGroups GetGroupUsersGroups(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
-        {
-            return new GroupUsersGroups
-            {
-                Group = groupPrincipal,
-                UsersGroups = GetUsersGroups(groupPrincipal, cancellationToken)
-            };
-        }
-
-        public static UserDirectReports GetUserDirectReports(
-            UserPrincipal userPrincipal)
-        {
-            return new UserDirectReports
-            {
-                User = userPrincipal,
-                DirectReports = userPrincipal.GetDirectReportUserPrincipals()
-            };
-        }
-
-        public static UserGroups GetUserGroups(UserPrincipal userPrincipal)
-        {
-            var groups = new List<GroupPrincipal>();
-
-            try
-            {
-                groups.AddRange(userPrincipal.GetGroupPrincipals());
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-
-            return new UserGroups
-            {
-                User = userPrincipal,
-                Groups = groups
-            };
-        }
-
-        public static IEnumerable<User> GetUsers(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
-        {
-            var users = new List<User>();
-            using (var up = new UserPrincipal(principalContext))
-            {
-                using (var ps = new PrincipalSearcher(up))
-                {
-                    using (var psr = ps.FindAll())
-                    {
-                        users.AddRange(
-                            from UserPrincipal u in psr select new User(u));
+                        foreach (var computerPrincipal in members
+                            .GetComputerPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultGroupComputersProperties,
+                                    containerGroupPrincipal: groupPrincipal,
+                                    computerPrincipal: computerPrincipal));
+                        }
                     }
                 }
             }
-
-            return users;
+            return data;
         }
 
-        public static IEnumerable<UserPrincipal> GetUserPrincipals(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetGroupsSummariesData()
         {
-            IEnumerable<UserPrincipal> userPrincipals;
-            using (var searchPrincipal = new UserPrincipal(principalContext))
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                using (var searcher = new PrincipalSearcher(searchPrincipal))
+                using (var principalContext = GetPrincipalContext())
+                using (var groupPrincipal = GroupPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
                 {
-                    userPrincipals = searcher.GetAllUserPrincipals();
+                    if (groupPrincipal == null) continue;
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultGroupProperties,
+                            groupPrincipal: groupPrincipal));
                 }
             }
-
-            return userPrincipals;
+            return data;
         }
 
-        public static IEnumerable<UserPrincipal> GetUserPrincipals(
-            GroupPrincipal groupPrincipal)
+        private IEnumerable<ExpandoObject> GetGroupsUsersData()
         {
-            return groupPrincipal.GetUserPrincipals();
-        }
-
-        public static IEnumerable<UserPrincipal> GetUserPrincipals(
-            IEnumerable<GroupPrincipal> groupPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var userPrincipals = new List<UserPrincipal>();
-            foreach (var groupPrincipal in groupPrincipals)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                userPrincipals.AddRange(GetUserPrincipals(groupPrincipal));
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var groupPrincipal = GroupPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in members
+                            .GetUserPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultGroupUsersDirectReportsProperties,
+                                    containerGroupPrincipal: groupPrincipal,
+                                    userPrincipal: userPrincipal));
+                        }
+                    }
+                }
             }
-
-            return userPrincipals;
+            return data;
         }
 
-        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetGroupsUsersDirectReportsData()
         {
-            var usersDirectReports = new List<UserDirectReports>();
-            foreach (var userPrincipal in groupPrincipal.GetUserPrincipals())
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                usersDirectReports.Add(GetUserDirectReports(userPrincipal));
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var groupPrincipal = GroupPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
+                {
+                    if (groupPrincipal == null) continue;
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in
+                            members.GetUserPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            if(userPrincipal == null) continue;
+                            foreach (var directReportDistinguishedName in
+                                userPrincipal
+                                    .GetDirectReportDistinguishedNames())
+                            {
+                                _cancellationToken
+                                    .ThrowIfCancellationRequested();
+                                using (var directReportUserPrincipal =
+                                    UserPrincipal.FindByIdentity(
+                                        principalContext,
+                                        IdentityType.DistinguishedName,
+                                        directReportDistinguishedName))
+                                {
+                                    data.Add(
+                                        _dataPreparer.PrepareData(
+                                            DefaultGroupUsersDirectReportsProperties,
+                                            containerGroupPrincipal:
+                                                groupPrincipal,
+                                            userPrincipal: userPrincipal,
+                                            directReportUserPrincipal:
+                                                directReportUserPrincipal));
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
-            return usersDirectReports;
+            return data;
         }
 
-        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetGroupsUsersGroupsData()
         {
-            return GetUsersDirectReports(GetUserPrincipals(
-                    principalContext, cancellationToken), cancellationToken);
-        }
-
-        public static IEnumerable<UserDirectReports> GetUsersDirectReports(
-            IEnumerable<UserPrincipal> userPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var usersDirectReports = new List<UserDirectReports>();
-            foreach (var userPrincipal in userPrincipals)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                usersDirectReports.Add(GetUserDirectReports(userPrincipal));
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var containerGroupPrincipal = GroupPrincipal
+                    .FindByIdentity(
+                        principalContext,
+                        IdentityType.DistinguishedName,
+                        distinguishedName))
+                {
+                    if (containerGroupPrincipal == null) continue;
+                    using (var members = containerGroupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in 
+                            members.GetUserPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            using (var groups = userPrincipal.GetGroups())
+                            {
+                                foreach (var groupPrincipal in groups
+                                    .GetGroupPrincipals())
+                                {
+                                    _cancellationToken.ThrowIfCancellationRequested();
+                                    data.Add(
+                                        _dataPreparer.PrepareData(
+                                            DefaultGroupUsersGroupsProperties,
+                                            containerGroupPrincipal:
+                                                containerGroupPrincipal,
+                                            userPrincipal: userPrincipal,
+                                            groupPrincipal: groupPrincipal));
+                                }
+                                
+                            }
+                        }
+                    }
+                }
             }
-
-            return usersDirectReports;
+            return data;
         }
 
-        public static IEnumerable<UserGroups> GetUsersGroups(
-            GroupPrincipal groupPrincipal,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetOuComputersData(
+            PrincipalContext principalContext)
         {
-            var usersGroups = new List<UserGroups>();
-            foreach (var userPrincipal in groupPrincipal.GetUserPrincipals())
+            var data = new List<ExpandoObject>();
+            using (var principal = new ComputerPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                usersGroups.Add(GetUserGroups(userPrincipal));
+                foreach (var computerPrincipal in principalSearchResult
+                    .GetComputerPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultComputerProperties,
+                            computerPrincipal));
+                }
             }
-
-            return usersGroups;
+            return data;
         }
 
-        public static IEnumerable<UserGroups> GetUsersGroups(
-            PrincipalContext principalContext,
-            CancellationToken cancellationToken)
+        private IEnumerable<ExpandoObject> GetOuGroupsData(
+            PrincipalContext principalContext)
         {
-            return GetUsersGroups(GetUserPrincipals(
-                    principalContext, cancellationToken), cancellationToken);
-        }
-
-        public static IEnumerable<UserGroups> GetUsersGroups(
-            IEnumerable<UserPrincipal> userPrincipals,
-            CancellationToken cancellationToken)
-        {
-            var usersGroups = new List<UserGroups>();
-            foreach (var userPrincipal in userPrincipals)
+            var data = new List<ExpandoObject>();
+            using (var principal = new GroupPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                usersGroups.Add(GetUserGroups(userPrincipal));
+                foreach (var groupPrincipal in principalSearchResult
+                    .GetGroupPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultGroupProperties,
+                            groupPrincipal: groupPrincipal));
+                }
             }
-
-            return usersGroups;
+            return data;
         }
 
-        public static IEnumerable<UserPrincipal> GetUserPrincipals(
-            PrincipalContext principalContext, string searchText)
+        private IEnumerable<ExpandoObject> GetOuGroupsUsersData(
+            PrincipalContext principalContext)
         {
-            var userPrincipals = new List<UserPrincipal>();
-            using (var searchPrincipal = new UserPrincipal(principalContext)
+            var data = new List<ExpandoObject>();
+            using (var principal = new GroupPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
             {
-                Name = Asterix + searchText + Asterix
+                foreach (var groupPrincipal in principalSearchResult
+                    .GetGroupPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    using (var members = groupPrincipal.GetMembers())
+                    {
+                        foreach (var userPrincipal in members
+                            .GetUserPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultGroupUsersProperties,
+                                    containerGroupPrincipal: groupPrincipal,
+                                    userPrincipal: userPrincipal));
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetOuUsersData(
+            PrincipalContext principalContext)
+        {
+            var data = new List<ExpandoObject>();
+            using (var principal = new UserPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
+            {
+                foreach (var userPrincipal in principalSearchResult
+                    .GetUserPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultUserProperties,
+                            userPrincipal: userPrincipal));
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetOuUsersDirectReportsData(
+            PrincipalContext principalContext)
+        {
+            var data = new List<ExpandoObject>();
+            using (var principal = new UserPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
+            {
+                foreach (var userPrincipal in principalSearchResult
+                    .GetUserPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    var directReportDistinguishedNames = userPrincipal
+                        .GetDirectReportDistinguishedNames();
+                    foreach (var directReportDistinguishedName in
+                        directReportDistinguishedNames)
+                    {
+                        _cancellationToken.ThrowIfCancellationRequested();
+                        using (var defaultPrincipalContext =
+                            GetPrincipalContext())
+                        using (var directReportUserPrincipal =
+                            UserPrincipal.FindByIdentity(
+                                defaultPrincipalContext,
+                                IdentityType.DistinguishedName,
+                                directReportDistinguishedName))
+                        {
+                            if (directReportUserPrincipal == null) continue;
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultUserDirectReportsProperties,
+                                    userPrincipal: userPrincipal,
+                                    directReportUserPrincipal:
+                                        directReportUserPrincipal));
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetOuUsersGroupsData(
+            PrincipalContext principalContext)
+        {
+            var data = new List<ExpandoObject>();
+            using (var principal = new UserPrincipal(principalContext))
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
+            {
+                foreach (var userPrincipal in principalSearchResult
+                    .GetUserPrincipals())
+                {
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    using (var groups = userPrincipal.GetGroups())
+                    {
+                        foreach (var groupPrincipal in groups
+                            .GetGroupPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultUserGroupsProperties,
+                                    userPrincipal: userPrincipal,
+                                    groupPrincipal: groupPrincipal));
+                        }
+                    }
+                }
+            }
+            return data;
+        }
+
+        private IEnumerable<ExpandoObject> GetSearchComputerData(
+            PrincipalContext principalContext)
+        {
+            var data = new List<ExpandoObject>();
+            using (var principal = new ComputerPrincipal(principalContext)
+            {
+                Name = Asterix + _searchText + Asterix
             })
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
             {
-                using (var principalSearcher = new PrincipalSearcher(
-                    searchPrincipal))
+                foreach (var computerPrincipal in principalSearchResult
+                    .GetComputerPrincipals())
                 {
-                    userPrincipals.AddRange(
-                        principalSearcher.GetAllUserPrincipals());
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultComputerProperties, computerPrincipal));
                 }
             }
-
-            return userPrincipals;
+            return data;
         }
 
-        public static IEnumerable<ComputerPrincipal> GetComputerPrincipals(
-            PrincipalContext principalContext, string searchText)
+        private IEnumerable<ExpandoObject> GetSearchUserData(
+            PrincipalContext principalContext)
         {
-            var computerPrincipals = new List<ComputerPrincipal>();
-            using (var searchPrincipal = 
-                new ComputerPrincipal(principalContext)
-                {
-                    Name = Asterix + searchText + Asterix
-                })
+            var data = new List<ExpandoObject>();
+            using (var principal = new UserPrincipal(principalContext)
             {
-                using (var principalSearcher = new PrincipalSearcher(
-                    searchPrincipal))
-                {
-                    computerPrincipals.AddRange(
-                        principalSearcher.GetAllComputerPrincipals());
-                }
-            }
-
-            return computerPrincipals;
-        }
-
-        public static IEnumerable<GroupPrincipal> GetGroupPrincipals(
-            PrincipalContext principalContext, string searchText)
-        {
-            var groupPrincipals = new List<GroupPrincipal>();
-            using (var searchPrincipal = new GroupPrincipal(principalContext)
-            {
-                Name = Asterix + searchText + Asterix
+                Name = Asterix + _searchText + Asterix
             })
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
             {
-                using (var principalSearcher = new PrincipalSearcher(
-                    searchPrincipal))
+                foreach (var userPrincipal in principalSearchResult
+                    .GetUserPrincipals())
                 {
-                    groupPrincipals.AddRange(
-                        principalSearcher.GetAllGroupPrincipals());
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultUserProperties, 
+                            userPrincipal: userPrincipal));
                 }
             }
-
-            return groupPrincipals;
+            return data;
         }
-    }*/
 
-    public class ComputerGroups : IComputer, IGroups, IDisposable
-    {
-        public ComputerPrincipal Computer { get; set; }
-
-        public IEnumerable<GroupPrincipal> Groups { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
+        private IEnumerable<ExpandoObject> GetSearchGroupData(
+            PrincipalContext principalContext)
         {
-            if (_isDisposed) return;
-            if (disposing)
+            var data = new List<ExpandoObject>();
+            using (var principal = new GroupPrincipal(principalContext)
             {
-                Computer?.Dispose();
-                foreach (var group in Groups)
+                Name = Asterix + _searchText + Asterix
+            })
+            using (var principalSearcher = new PrincipalSearcher(principal))
+            using (var principalSearchResult = principalSearcher.FindAll())
+            {
+                foreach (var groupPrincipal in principalSearchResult
+                    .GetGroupPrincipals())
                 {
-                    group?.Dispose();
+                    _cancellationToken.ThrowIfCancellationRequested();
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultGroupProperties,
+                            groupPrincipal: groupPrincipal));
                 }
             }
-
-            Computer = null;
-            Groups = null;
-            _isDisposed = true;
+            return data;
         }
 
-        public void Dispose()
+        private IEnumerable<ExpandoObject> GetUsersDirectReportsData()
         {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class GroupComputers : IComputers, IGroup, IDisposable
-    {
-        public IEnumerable<ComputerPrincipal> Computers { get; set; }
-
-        public GroupPrincipal Group { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                Group?.Dispose();
-                foreach (var computer in Computers)
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var userPrincipal = UserPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
                 {
-                    computer?.Dispose();
+                    if (userPrincipal == null) continue;
+                    var directReportDistinguishedNames =
+                        userPrincipal.GetDirectReportDistinguishedNames();
+                    foreach (var directReportDistinguishedName in 
+                        directReportDistinguishedNames)
+                    {
+                        _cancellationToken.ThrowIfCancellationRequested();
+                        using (var directReportUserPrincipal = UserPrincipal
+                            .FindByIdentity(
+                                principalContext,
+                                IdentityType.DistinguishedName,
+                                directReportDistinguishedName))
+                        {
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultUserDirectReportsProperties,
+                                    userPrincipal: userPrincipal,
+                                    directReportUserPrincipal:
+                                        directReportUserPrincipal));
+                        }
+                    }
                 }
             }
-
-            Group = null;
-            Computers = null;
-            _isDisposed = true;
+            return data;
         }
 
-        public void Dispose()
+        private IEnumerable<ExpandoObject> GetUsersGroupsData()
         {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class GroupUsers : IGroup, IUsers, IDisposable
-    {
-        public GroupPrincipal Group { get; set; }
-
-        public IEnumerable<UserPrincipal> Users { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                Group?.Dispose();
-                foreach (var user in Users)
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var userPrincipal = UserPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
                 {
-                    user?.Dispose();
+                    if (userPrincipal == null) continue;
+                    using (var groups = userPrincipal.GetGroups())
+                    {
+                        foreach (var groupPrincipal in groups
+                            .GetGroupPrincipals())
+                        {
+                            _cancellationToken.ThrowIfCancellationRequested();
+                            data.Add(
+                                _dataPreparer.PrepareData(
+                                    DefaultUserGroupsProperties,
+                                    userPrincipal: userPrincipal,
+                                    groupPrincipal: groupPrincipal));
+                        }
+                    }
                 }
             }
-
-            Group = null;
-            Users = null;
-            _isDisposed = true;
+            return data;
         }
 
-        public void Dispose()
+        private IEnumerable<ExpandoObject> GetUsersSummariesData()
         {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class GroupUsersDirectReports : IGroup,
-        IUsersDirectReports, IDisposable
-    {
-        public GroupPrincipal Group { get; set; }
-
-        public IEnumerable<UserDirectReports> UsersDirectReports { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
+            var data = new List<ExpandoObject>();
+            foreach (var distinguishedName in _distinguishedNames)
             {
-                Group?.Dispose();
-                foreach (var userDirectReports in UsersDirectReports)
+                _cancellationToken.ThrowIfCancellationRequested();
+                using (var principalContext = GetPrincipalContext())
+                using (var userPrincipal = UserPrincipal.FindByIdentity(
+                    principalContext,
+                    IdentityType.DistinguishedName,
+                    distinguishedName))
                 {
-                    userDirectReports?.Dispose();
+                    if (userPrincipal == null) continue;
+                    data.Add(
+                        _dataPreparer.PrepareData(
+                            DefaultUserProperties,
+                            userPrincipal: userPrincipal));
                 }
             }
-
-            Group = null;
-            UsersDirectReports = null;
-            _isDisposed = true;
+            return data;
         }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class GroupUsersGroups : IGroup, IUsersGroups, IDisposable
-    {
-        public GroupPrincipal Group { get; set; }
-
-        public IEnumerable<UserGroups> UsersGroups { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
-            {
-                Group?.Dispose();
-                foreach (var userGroups in UsersGroups)
-                {
-                    userGroups?.Dispose();
-                }
-            }
-
-            Group = null;
-            UsersGroups = null;
-            _isDisposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class UserDirectReports : IDirectReports, IUser, IDisposable
-    {
-        public IEnumerable<UserPrincipal> DirectReports { get; set; }
-
-        public UserPrincipal User { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
-            {
-                User?.Dispose();
-                foreach (var directReport in DirectReports)
-                {
-                    directReport?.Dispose();
-                }
-            }
-
-            User = null;
-            DirectReports = null;
-            _isDisposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
-    }
-
-    public class UserGroups : IGroups, IUser, IDisposable
-    {
-        public IEnumerable<GroupPrincipal> Groups { get; set; }
-
-        public UserPrincipal User { get; set; }
-
-        #region IDisposable Support
-        private bool _isDisposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_isDisposed) return;
-            if (disposing)
-            {
-                User?.Dispose();
-                foreach (var group in Groups)
-                {
-                    group?.Dispose();
-                }
-            }
-
-            User = null;
-            Groups = null;
-            _isDisposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-        }
-        #endregion
     }
 }

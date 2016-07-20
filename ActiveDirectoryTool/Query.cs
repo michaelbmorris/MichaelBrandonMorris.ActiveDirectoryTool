@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Extensions.CollectionExtensions;
-using static ActiveDirectoryTool.QueryType;
-using static ActiveDirectoryTool.SimplifiedQueryType;
-using static ActiveDirectoryTool.ActiveDirectoryProperty;
-
-using DataMapping = System.Collections.Generic.Dictionary<ActiveDirectoryTool.QueryType, System.Func<System.Collections.Generic.IEnumerable<System.Dynamic.ExpandoObject>>>;
 
 namespace ActiveDirectoryTool
 {
@@ -50,9 +42,6 @@ namespace ActiveDirectoryTool
 
     public class Query
     {
-        private static readonly PrincipalContext RootContext = 
-            new PrincipalContext(ContextType.Domain);
-
         private readonly Scope _activeDirectoryScope;
         private readonly IEnumerable<string> _distinguishedNames;
         private readonly string _searchText;
@@ -98,7 +87,12 @@ namespace ActiveDirectoryTool
 
             var task = Task.Run(() =>
             {
-                Data = new DataPreparer(QueryType, _activeDirectoryScope, _distinguishedNames, CancellationToken).GetData();
+                Data = new Searcher(
+                    QueryType,
+                    _activeDirectoryScope,
+                    _distinguishedNames,
+                    CancellationToken,
+                    _searchText).GetData();
             },
             _cancellationTokenSource.Token);
             await task;

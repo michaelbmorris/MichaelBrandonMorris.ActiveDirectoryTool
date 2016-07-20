@@ -114,14 +114,14 @@
     </ApplicationDefinition>
     <Compile Include="AboutWindow.xaml.cs" />
     <Compile Include="ActiveDirectoryProperty.cs" />
+    <Compile Include="DataPreparer.cs" />
     <Compile Include="BindableSelectedItemBehavior.cs" />
     <Compile Include="DataFileWriter.cs" />
-    <Compile Include="DataPreparer.cs" />
+    <Compile Include="Searcher.cs" />
     <Compile Include="OrganizationalUnit.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="Scope.cs" />
     <Compile Include="ScopeFetcher.cs" />
-    <Compile Include="Searcher.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AboutWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
