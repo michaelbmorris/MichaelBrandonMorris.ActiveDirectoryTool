@@ -340,7 +340,7 @@ namespace ActiveDirectoryTool
                             _cancellationToken.ThrowIfCancellationRequested();
                             data.Add(
                                 _dataPreparer.PrepareData(
-                                    DefaultGroupUsersDirectReportsProperties,
+                                    DefaultGroupUsersProperties,
                                     containerGroupPrincipal: groupPrincipal,
                                     userPrincipal: userPrincipal));
                         }

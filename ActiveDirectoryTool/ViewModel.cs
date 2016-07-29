@@ -127,6 +127,36 @@ namespace ActiveDirectoryTool
                 Header = "Container Group - Get Managed By's Direct Reports",
                 Command = GetContainerGroupManagedByDirectReportsCommand
             };
+            _containerGroupGetManagedByGroupsMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Managed By's Groups",
+                Command = GetContainerGroupManagedByGroupsCommand
+            };
+            _containerGroupGetManagedBySummaryMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Managed By Summary",
+                Command = GetContainerGroupManagedBySummaryCommand
+            };
+            _containerGroupGetSummaryMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Summary",
+                Command = GetContainerGroupSummaryCommand
+            };
+            _containerGroupGetUsersMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Users",
+                Command = GetContainerGroupUsersCommand
+            };
+            _containerGroupGetUsersDirectReportsMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Users' Direct Reports",
+                Command = GetContainerGroupUsersDirectReportsCommand
+            };
+            _containerGroupGetUsersGroupsMenuItem = new MenuItem
+            {
+                Header = "Container Group - Get Users' Groups",
+                Command = GetContainerGroupUsersGroupsCommand
+            };
             _directReportGetDirectReportsMenuItem = new MenuItem
             {
                 Header = "Direct Report - Get Direct Reports",
@@ -415,6 +445,10 @@ namespace ActiveDirectoryTool
         private ICommand GetContainerGroupManagedByDirectReportsCommand { get;
             set; }
 
+        private ICommand GetContainerGroupManagedByGroupsCommand { get; set; }
+
+        private ICommand GetContainerGroupManagedBySummaryCommand { get; set; }
+
         private ICommand GetContainerGroupSummaryCommand { get; set; }
         private ICommand GetContainerGroupUsersCommand { get; set; }
 
@@ -520,8 +554,21 @@ namespace ActiveDirectoryTool
             if (Data.Table.Columns.Contains(ContainerGroupDistinguishedName))
             {
                 contextMenuItems.Add(_containerGroupGetComputersMenuItem);
+                contextMenuItems.Add(_containerGroupGetSummaryMenuItem);
+                contextMenuItems.Add(_containerGroupGetUsersMenuItem);
+                contextMenuItems.Add(_containerGroupGetUsersGroupsMenuItem);
+                contextMenuItems.Add(
+                    _containerGroupGetUsersDirectReportsMenuItem);
+            }
+            if (Data.Table.Columns.Contains(
+                ContainerGroupManagedByDistinguishedName))
+            {
                 contextMenuItems.Add(
                     _containerGroupGetManagedByDirectReportsMenuItem);
+                contextMenuItems.Add(
+                    _containerGroupGetManagedByGroupsMenuItem);
+                contextMenuItems.Add(
+                    _containerGroupGetManagedBySummaryMenuItem);
             }
             if (Data.Table.Columns.Contains(DirectReportDistinguishedName))
             {
@@ -599,6 +646,22 @@ namespace ActiveDirectoryTool
                 GetContainerGroupsManagedByDistinguishedNames());
         }
 
+        private async void GetContainerGroupManagedByGroupsCommandExecute()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
+        private async void GetContainerGroupManagedBySummaryCommandExecute()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
         private IEnumerable<string> GetContainerGroupsDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
@@ -614,12 +677,36 @@ namespace ActiveDirectoryTool
                     s => !s.IsNullOrWhiteSpace());
         }
 
+        private async void GetContainerGroupSummaryCommandExecute()
+        {
+            await RunQuery(
+                GroupsSummaries,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void GetContainerGroupUsersCommandExecute()
+        {
+            await RunQuery(
+                GroupsUsers,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
         private async void GetContextComputerGroupsCommandExecute()
         {
             await RunQuery(
                 ComputersGroups,
                 CurrentScope,
                 GetComputersDistinguishedNames());
+        }
+
+        private async void GetContainerGroupUsersDirectReportsCommandExecute()
+        {
+            await RunQuery(
+                GroupsUsersDirectReports,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
         }
 
         private async void GetContextComputerSummaryCommandExecute()
@@ -1030,6 +1117,21 @@ namespace ActiveDirectoryTool
 
             GetContainerGroupManagedByDirectReportsCommand = new RelayCommand(
                 GetContainerGroupManagedByDirectReportsCommandExecute);
+
+            GetContainerGroupSummaryCommand = new RelayCommand(
+                GetContainerGroupSummaryCommandExecute);
+
+            GetContainerGroupUsersCommand = new RelayCommand(
+                GetContainerGroupUsersCommandExecute);
+
+            GetContainerGroupManagedByGroupsCommand = new RelayCommand(
+                GetContainerGroupManagedByGroupsCommandExecute);
+
+            GetContainerGroupManagedBySummaryCommand = new RelayCommand(
+                GetContainerGroupManagedBySummaryCommandExecute);
+
+            GetContainerGroupUsersDirectReportsCommand = new RelayCommand(
+                GetContainerGroupUsersDirectReportsCommandExecute);
         }
 
         private void SetViewVariables()

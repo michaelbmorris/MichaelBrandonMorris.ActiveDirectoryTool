@@ -20,7 +20,7 @@ namespace ActiveDirectoryTool
         private const char Hyphen = '-';
         private const string OuPrefix = "OU=";
 
-        private readonly string _outputPath = Path.Combine(
+        private static readonly string OutputDirectoryPath = Path.Combine(
             GetFolderPath(MyDocuments), "ActiveDirectoryTool");
 
         public DataView Data { get; set; }
@@ -43,7 +43,7 @@ namespace ActiveDirectoryTool
                            Hyphen + DateTime.Now.ToString(DateTimeFormat) +
                            CsvExtension;
             }
-            var fullFileName = Path.Combine(_outputPath, fileName);
+            var fullFileName = Path.Combine(OutputDirectoryPath, fileName);
             var dataTable = Data.ToTable();
             var stringBuilder = new StringBuilder();
 
@@ -59,7 +59,7 @@ namespace ActiveDirectoryTool
                 stringBuilder.AppendLine(string.Join(",", fields));
             }
 
-            Debug.WriteLine(fullFileName);
+            Directory.CreateDirectory(OutputDirectoryPath);
             File.WriteAllText(fullFileName, stringBuilder.ToString());
             Process.Start(fullFileName);
             return fullFileName;
