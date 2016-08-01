@@ -29,16 +29,8 @@ namespace ActiveDirectoryTool
         SearchUser
     }
 
-    internal enum SimplifiedQueryType
-    {
-        DirectReports,
-        Groups,
-        Summaries
-    }
-
     public class Query
     {
-        private readonly IEnumerable<string> _distinguishedNames;
         private readonly string _searchText;
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -46,23 +38,39 @@ namespace ActiveDirectoryTool
         public Query(
             QueryType queryType,
             Scope scope = null,
-            IEnumerable<string> distinguishedNames = null,
+            IList<string> distinguishedNames = null,
             string searchText = null)
         {
             QueryType = queryType;
             Scope = scope;
-            _distinguishedNames = distinguishedNames;
+            DistinguishedNames = distinguishedNames;
             _searchText = searchText;
+        }
+
+        public IEnumerable<ExpandoObject> Data
+        {
+            get;
+            private set;
+        }
+
+        public QueryType QueryType
+        {
+            get;
+        }
+
+        public Scope Scope
+        {
+            get;
         }
 
         private CancellationToken CancellationToken
             => _cancellationTokenSource.Token;
 
-        public Scope Scope { get; }
-
-        public IEnumerable<ExpandoObject> Data { get; private set; }
-
-        public QueryType QueryType { get; }
+        private IList<string> DistinguishedNames
+        {
+            get;
+            set;
+        }
 
         public void Cancel()
         {
@@ -78,17 +86,24 @@ namespace ActiveDirectoryTool
         {
             _cancellationTokenSource = new CancellationTokenSource();
 
-            var task = Task.Run(() =>
-            {
-                Data = new Searcher(
-                    QueryType,
-                    Scope,
-                    _distinguishedNames,
-                    CancellationToken,
-                    _searchText).GetData();
-            },
-            _cancellationTokenSource.Token);
+            var task = Task.Run(
+                () =>
+                {
+                    Data = new Searcher(
+                        QueryType,
+                        Scope,
+                        DistinguishedNames,
+                        CancellationToken,
+                        _searchText).GetData();
+                },
+                _cancellationTokenSource.Token);
+
             await task;
+        }
+
+        public override string ToString()
+        {
+            return QueryType.ToString();
         }
     }
 }

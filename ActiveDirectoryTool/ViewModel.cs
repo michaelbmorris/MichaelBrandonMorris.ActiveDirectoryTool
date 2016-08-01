@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Deployment.Application;
@@ -57,7 +56,7 @@ namespace ActiveDirectoryTool
         private string _messageContent;
         private Visibility _messageVisibility;
         private Visibility _progressBarVisibility;
-        private ObservableCollection<Query> _queries;
+        private Stack<Query> _queries;
         private string _searchText;
         private bool _showDistinguishedNames;
         private bool _userSearchIsChecked;
@@ -76,7 +75,7 @@ namespace ActiveDirectoryTool
                     "The Active Directory server could not be contacted.");
             }
 
-            Queries = new ObservableCollection<Query>();
+            Queries = new Stack<Query>();
         }
 
         public Visibility CancelButtonVisibility
@@ -276,7 +275,7 @@ namespace ActiveDirectoryTool
             }
         }
 
-        public ObservableCollection<Query> Queries
+        public Stack<Query> Queries
         {
             get
             {
@@ -1201,7 +1200,7 @@ namespace ActiveDirectoryTool
                 new Query(
                     queryType,
                     scope,
-                    selectedItemDistinguishedNames,
+                    selectedItemDistinguishedNames?.ToList(),
                     searchText));
         }
 
