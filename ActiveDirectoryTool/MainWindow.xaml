@@ -18,9 +18,9 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Help">
                 <MenuItem Header="About"
-                          Command="{Binding OpenAboutWindowCommand}" />
+                          Command="{Binding OpenAboutWindow}" />
                 <MenuItem Header="User Guide"
-                          Command="{Binding OpenHelpWindowCommand}" />
+                          Command="{Binding OpenHelpWindow}" />
             </MenuItem>
         </Menu>
         <Grid>
@@ -118,10 +118,10 @@
                                      Margin="5,3,0,5" />
                         <Button DockPanel.Dock="Left"
                                 Content="Search in Organizational Unit"
-                                Command="{Binding SearchOuCommand}"
+                                Command="{Binding SearchOu}"
                                 Margin="5,0,0,5" />
                         <Button DockPanel.Dock="Left"
-                                Command="{Binding SearchCommand}"
+                                Command="{Binding Search}"
                                 Content="Search in Whole Active Directory"
                                 Margin="5,0,0,5" />
                     </DockPanel>
@@ -131,7 +131,7 @@
                         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
                             <Button DockPanel.Dock="Left"
                                     Content="Previous Query"
-                                    Command="{Binding PreviousQueryCommand}"
+                                    Command="{Binding RunPreviousQuery}"
                                     Margin="5 5 5 5"
                                     IsEnabled="{Binding ViewIsEnabled}"/>
                             <CheckBox DockPanel.Dock="Right"

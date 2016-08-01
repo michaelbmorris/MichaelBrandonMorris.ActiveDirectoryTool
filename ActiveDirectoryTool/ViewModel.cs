@@ -44,39 +44,8 @@ namespace ActiveDirectoryTool
 
         private const string UserDistinguishedName = "UserDistinguishedName";
 
-        private const string UserManagerDistinguishedName =
-            "UserManagerDistinguishedName";
-
-        private readonly MenuItem _computerGetGroupsMenuItem;
-        private readonly MenuItem _computerGetSummaryMenuItem;
-        private readonly MenuItem _containerGroupGetComputersMenuItem;
-
-        private readonly MenuItem
-            _containerGroupGetManagedByDirectReportsMenuItem;
-
-        private readonly MenuItem _containerGroupGetManagedByGroupsMenuItem;
-        private readonly MenuItem _containerGroupGetManagedBySummaryMenuItem;
-        private readonly MenuItem _containerGroupGetSummaryMenuItem;
-        private readonly MenuItem _containerGroupGetUsersDirectReportsMenuItem;
-        private readonly MenuItem _containerGroupGetUsersGroupsMenuItem;
-        private readonly MenuItem _containerGroupGetUsersMenuItem;
-        private readonly MenuItem _directReportGetDirectReportsMenuItem;
-        private readonly MenuItem _directReportGetGroupsMenuItem;
-        private readonly MenuItem _directReportGetSummaryMenuItem;
-        private readonly MenuItem _groupGetComputersMenuItem;
-        private readonly MenuItem _groupGetManagedByDirectReportsMenuItem;
-        private readonly MenuItem _groupGetManagedByGroupsMenuItem;
-        private readonly MenuItem _groupGetManagedBySummaryMenuItem;
-        private readonly MenuItem _groupGetSummaryMenuItem;
-        private readonly MenuItem _groupGetUsersDirectReportsMenuItem;
-        private readonly MenuItem _groupGetUsersGroupsMenuItem;
-        private readonly MenuItem _groupGetUsersMenuItem;
-        private readonly MenuItem _managerGetDirectReportsMenuItem;
-        private readonly MenuItem _managerGetGroupsMenuItem;
-        private readonly MenuItem _managerGetSummaryMenuItem;
-        private readonly MenuItem _userGetDirectReportsMenuItem;
-        private readonly MenuItem _userGetGroupsMenuItem;
-        private readonly MenuItem _userGetSummaryMenuItem;
+        private const string ManagerDistinguishedName =
+            "ManagerDistinguishedName";
 
         private AboutWindow _aboutWindow;
         private Visibility _cancelButtonVisibility;
@@ -106,127 +75,8 @@ namespace ActiveDirectoryTool
                 ShowMessage(
                     "The Active Directory server could not be contacted.");
             }
+
             Queries = new ObservableCollection<Query>();
-            _computerGetGroupsMenuItem = new MenuItem
-            {
-                Header = "Computer - Get Groups",
-                Command = GetComputerGroupsCommand
-            };
-            _computerGetSummaryMenuItem = new MenuItem
-            {
-                Header = "Computer - Get Summary",
-                Command = GetComputerSummaryCommand
-            };
-            _containerGroupGetComputersMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Computers",
-                Command = GetContainerGroupComputersCommand
-            };
-            _containerGroupGetManagedByDirectReportsMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Managed By's Direct Reports",
-                Command = GetContainerGroupManagedByDirectReportsCommand
-            };
-            _containerGroupGetManagedByGroupsMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Managed By's Groups",
-                Command = GetContainerGroupManagedByGroupsCommand
-            };
-            _containerGroupGetManagedBySummaryMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Managed By Summary",
-                Command = GetContainerGroupManagedBySummaryCommand
-            };
-            _containerGroupGetSummaryMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Summary",
-                Command = GetContainerGroupSummaryCommand
-            };
-            _containerGroupGetUsersMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Users",
-                Command = GetContainerGroupUsersCommand
-            };
-            _containerGroupGetUsersDirectReportsMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Users' Direct Reports",
-                Command = GetContainerGroupUsersDirectReportsCommand
-            };
-            _containerGroupGetUsersGroupsMenuItem = new MenuItem
-            {
-                Header = "Container Group - Get Users' Groups",
-                Command = GetContainerGroupUsersGroupsCommand
-            };
-            _directReportGetDirectReportsMenuItem = new MenuItem
-            {
-                Header = "Direct Report - Get Direct Reports",
-                Command = GetDirectReportDirectReportsCommand
-            };
-            _directReportGetGroupsMenuItem = new MenuItem
-            {
-                Header = "Direct Report - Get Groups",
-                Command = GetDirectReportGroupsCommand
-            };
-            _directReportGetSummaryMenuItem = new MenuItem
-            {
-                Header = "Direct Report - Get Summary",
-                Command = GetDirectReportSummaryCommand
-            };
-            _groupGetComputersMenuItem = new MenuItem
-            {
-                Header = "Group - Get Computers",
-                Command = GetGroupComputersCommand
-            };
-            _groupGetUsersMenuItem = new MenuItem
-            {
-                Header = "Group - Get Users",
-                Command = GetGroupUsersCommand
-            };
-            _groupGetUsersDirectReportsMenuItem = new MenuItem
-            {
-                Header = "Group - Get Users' Direct Reports",
-                Command = GetGroupUsersDirectReportsCommand
-            };
-            _groupGetUsersGroupsMenuItem = new MenuItem
-            {
-                Header = "Group - Get Users' Groups",
-                Command = GetGroupUsersGroupsCommand
-            };
-            _groupGetSummaryMenuItem = new MenuItem
-            {
-                Header = "Group - Get Summary",
-                Command = GetGroupSummaryCommand
-            };
-            _managerGetDirectReportsMenuItem = new MenuItem
-            {
-                Header = "Manager - Get Direct Reports",
-                Command = GetManagerDirectReportsCommand
-            };
-            _managerGetGroupsMenuItem = new MenuItem
-            {
-                Header = "Manager - Get Groups",
-                Command = GetManagerGroupsCommand
-            };
-            _managerGetSummaryMenuItem = new MenuItem
-            {
-                Header = "Manager - Get Summary",
-                Command = GetManagerSummaryCommand
-            };
-            _userGetDirectReportsMenuItem = new MenuItem
-            {
-                Header = "User - Get Direct Reports",
-                Command = GetUserDirectReportsCommand
-            };
-            _userGetGroupsMenuItem = new MenuItem
-            {
-                Header = "User - Get Groups",
-                Command = GetUserGroupsCommand
-            };
-            _userGetSummaryMenuItem = new MenuItem
-            {
-                Header = "User - Get Summary",
-                Command = GetUserSummaryCommand
-            };
         }
 
         public Visibility CancelButtonVisibility
@@ -237,12 +87,16 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_cancelButtonVisibility == value)
+                {
+                    return;
+                }
                 _cancelButtonVisibility = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public ICommand CancelCommand { get; private set; }
+        public ICommand CancelCommand => new RelayCommand(ExecuteCancel);
 
         public bool ComputerSearchIsChecked
         {
@@ -252,6 +106,10 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_computerSearchIsChecked == value)
+                {
+                    return;
+                }
                 _computerSearchIsChecked = value;
                 NotifyPropertyChanged();
             }
@@ -265,10 +123,17 @@ namespace ActiveDirectoryTool
             }
             private set
             {
+                if (_contextMenuItems == value)
+                {
+                    return;
+                }
+
                 _contextMenuItems = value;
+
                 ContextMenuVisibility = _contextMenuItems.IsNullOrEmpty()
                     ? Visibility.Hidden
                     : Visibility.Visible;
+
                 NotifyPropertyChanged();
             }
         }
@@ -281,12 +146,21 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_contextMenuVisibility == value)
+                {
+                    return;
+                }
+
                 _contextMenuVisibility = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public Scope CurrentScope { get; set; }
+        public Scope CurrentScope
+        {
+            get;
+            set;
+        }
 
         public DataView Data
         {
@@ -296,17 +170,33 @@ namespace ActiveDirectoryTool
             }
             private set
             {
+                if (_data == value)
+                {
+                    return;
+                }
+
                 _data = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public ICommand GetOuComputersCommand { get; private set; }
-        public ICommand GetOuGroupsCommand { get; private set; }
-        public ICommand GetOuGroupsUsersCommand { get; private set; }
-        public ICommand GetOuUsersCommand { get; private set; }
-        public ICommand GetOuUsersDirectReportsCommand { get; private set; }
-        public ICommand GetOuUsersGroupsCommand { get; private set; }
+        public ICommand GetOuComputersCommand => new RelayCommand(
+            ExecuteGetOuComputers, CanExecuteOuCommand);
+
+        public ICommand GetOuGroupsCommand => new RelayCommand(
+            ExecuteGetOuGroups, CanExecuteOuCommand);
+
+        public ICommand GetOuGroupsUsersCommand => new RelayCommand(
+            ExecuteGetOuGroupsUsers, CanExecuteOuCommand);
+
+        public ICommand GetOuUsersCommand => new RelayCommand(
+            ExecuteGetOuUsers, CanExecuteOuCommand);
+
+        public ICommand GetOuUsersDirectReportsCommand => new RelayCommand(
+            ExecuteGetOuUsersDirectReports, CanExecuteOuCommand);
+
+        public ICommand GetOuUsersGroupsCommand => new RelayCommand(
+            ExecuteGetOuUsersGroups, CanExecuteOuCommand);
 
         public bool GroupSearchIsChecked
         {
@@ -316,6 +206,11 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_groupSearchIsChecked == value)
+                {
+                    return;
+                }
+
                 _groupSearchIsChecked = value;
                 NotifyPropertyChanged();
             }
@@ -329,6 +224,11 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_messageContent == value)
+                {
+                    return;
+                }
+
                 _messageContent = value;
                 NotifyPropertyChanged();
             }
@@ -342,14 +242,21 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_messageVisibility == value)
+                {
+                    return;
+                }
+
                 _messageVisibility = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public ICommand OpenAboutWindowCommand { get; private set; }
-        public ICommand OpenHelpWindowCommand { get; private set; }
-        public ICommand PreviousQueryCommand { get; private set; }
+        public ICommand OpenAboutWindow => new RelayCommand(
+            ExecuteOpenAboutWindow);
+
+        public ICommand OpenHelpWindow => new RelayCommand(
+            ExecuteOpenHelpWindow);
 
         public Visibility ProgressBarVisibility
         {
@@ -359,6 +266,11 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_progressBarVisibility == value)
+                {
+                    return;
+                }
+
                 _progressBarVisibility = value;
                 NotifyPropertyChanged();
             }
@@ -372,14 +284,29 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_queries == value)
+                {
+                    return;
+                }
+
                 _queries = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public Scope RootScope { get; }
-        public ICommand SearchCommand { get; private set; }
-        public ICommand SearchOuCommand { get; private set; }
+        public Scope RootScope
+        {
+            get;
+        }
+
+        public ICommand RunPreviousQuery => new RelayCommand(
+            ExecuteRunPreviousQuery, CanExecuteRunPreviousQuery);
+
+        public ICommand Search => new RelayCommand(
+            ExecuteSearch, CanExecuteSearch);
+
+        public ICommand SearchOu => new RelayCommand(
+            ExecuteSearchOu, CanExecuteSearchOu);
 
         public string SearchText
         {
@@ -389,12 +316,21 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_searchText == value)
+                {
+                    return;
+                }
+
                 _searchText = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public ICommand SelectionChangedCommand { get; private set; }
+        public ICommand SelectionChangedCommand => new RelayCommand<IList>(
+            items =>
+            {
+                SelectedDataRowViews = items;
+            });
 
         public bool ShowDistinguishedNames
         {
@@ -404,6 +340,11 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_showDistinguishedNames == value)
+                {
+                    return;
+                }
+
                 _showDistinguishedNames = value;
                 NotifyPropertyChanged();
             }
@@ -417,12 +358,21 @@ namespace ActiveDirectoryTool
             }
             set
             {
+                if (_userSearchIsChecked == value)
+                {
+                    return;
+                }
+
                 _userSearchIsChecked = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public string Version { get; private set; }
+        public string Version
+        {
+            get;
+            private set;
+        }
 
         public bool ViewIsEnabled
         {
@@ -432,47 +382,200 @@ namespace ActiveDirectoryTool
             }
             private set
             {
+                if (_viewIsEnabled == value)
+                {
+                    return;
+                }
+
                 _viewIsEnabled = value;
                 NotifyPropertyChanged();
             }
         }
 
-        public ICommand WriteToFileCommand { get; private set; }
-        private ICommand GetComputerGroupsCommand { get; set; }
-        private ICommand GetComputerSummaryCommand { get; set; }
-        private ICommand GetContainerGroupComputersCommand { get; set; }
+        public ICommand WriteToFileCommand => new RelayCommand(
+            ExecuteWriteToFile, CanExecuteWriteToFile);
 
-        private ICommand GetContainerGroupManagedByDirectReportsCommand { get;
-            set; }
+        private MenuItem GetContainerGroupsComputers => new MenuItem
+        {
+            Header = "Container Groups - Get Computers",
+            Command = new RelayCommand(ExecuteGetContainerGroupsComputers)
+        };
 
-        private ICommand GetContainerGroupManagedByGroupsCommand { get; set; }
+        private MenuItem GetContainerGroupsManagedByDirectReports =>
+            new MenuItem
+            {
+                Header = "Container Group - Get Managed By's Direct Reports",
+                Command = new RelayCommand(
+                    ExecuteGetContainerGroupsManagedByDirectReports)
+            };
 
-        private ICommand GetContainerGroupManagedBySummaryCommand { get; set; }
+        private MenuItem GetContainerGroupsManagedByGroups => new MenuItem
+        {
+            Header = "Container Groups - Get Managed By's Groups",
+            Command = new RelayCommand(
+                ExecuteGetContainerGroupsManagedByGroups)
+        };
 
-        private ICommand GetContainerGroupSummaryCommand { get; set; }
-        private ICommand GetContainerGroupUsersCommand { get; set; }
+        private MenuItem GetContainerGroupsManagedBySummaries => new MenuItem
+        {
+            Header = "Container Groups - Get Managed By's Summaries",
+            Command = new RelayCommand(
+                ExecuteGetContainerGroupsManagedBySummaries)
+        };
 
-        private ICommand GetContainerGroupUsersDirectReportsCommand { get; set;
+        private MenuItem GetContainerGroupsSummaries => new MenuItem
+        {
+            Header = "Container Groups - Get Summaries",
+            Command = new RelayCommand(ExecuteGetContainerGroupsSummaries)
+        };
+
+        private MenuItem GetContainerGroupsUsers => new MenuItem
+        {
+            Header = "Container Groups - Get Users",
+            Command = new RelayCommand(ExecuteGetContainerGroupsUsers)
+        };
+
+        private MenuItem GetContainerGroupsUsersDirectReports => new MenuItem
+        {
+            Header = "Container Groups - Get Users' Direct Reports",
+            Command = new RelayCommand(
+                ExecuteGetContainerGroupsUsersDirectReports)
+        };
+
+        private MenuItem GetDirectReportsDirectReports => new MenuItem
+        {
+            Header = "Direct Reports - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetDirectReportsDirectReports)
+        };
+
+        private MenuItem GetDirectReportsGroups => new MenuItem
+        {
+            Header = "Direct Reports - Get Groups",
+            Command = new RelayCommand(ExecuteGetDirectReportsGroups)
+        };
+
+        private MenuItem GetDirectReportsSummaries => new MenuItem
+        {
+            Header = "Direct Reports - Get Summaries",
+            Command = new RelayCommand(ExecuteGetDirectReportsSummaries)
+        };
+
+        private MenuItem GetGroupsComputers => new MenuItem
+        {
+            Header = "Groups - Get Computers",
+            Command = new RelayCommand(ExecuteGetGroupsComputers)
+        };
+
+        private MenuItem GetGroupsSummaries => new MenuItem
+        {
+            Header = "Groups - Get Summaries",
+            Command = new RelayCommand(ExecuteGetGroupsSummaries)
+        };
+
+        private MenuItem GetGroupsUsers => new MenuItem
+        {
+            Header = "Groups - Get Users",
+            Command = new RelayCommand(ExecuteGetGroupsUsers)
+        };
+
+        private MenuItem GetGroupsUsersDirectReports => new MenuItem
+        {
+            Header = "Groups - Get Users' Direct Reports",
+            Command = new RelayCommand(ExecuteGetGroupsUsersDirectReports)
+        };
+
+        private MenuItem GetGroupsUsersGroups => new MenuItem
+        {
+            Header = "Groups - Get Users' Groups",
+            Command = new RelayCommand(ExecuteGetGroupsUsersGroups)
+        };
+
+        private MenuItem GetManagersDirectReports => new MenuItem
+        {
+            Header = "Managers - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetManagersDirectReports)
+        };
+
+        private MenuItem GetManagersGroups => new MenuItem
+        {
+            Header = "Managers - Get Groups",
+            Command = new RelayCommand(ExecuteGetManagersGroups)
+        };
+
+        private MenuItem GetManagersSummaries => new MenuItem
+        {
+            Header = "Managers - Get Summaries",
+            Command = new RelayCommand(ExecuteGetManagersSummaries)
+        };
+
+        private MenuItem GetUsersDirectReports => new MenuItem
+        {
+            Header = "Users - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetUsersDirectReports)
+        };
+
+        private MenuItem GetUsersGroups => new MenuItem
+        {
+            Header = "Users - Get Groups",
+            Command = new RelayCommand(ExecuteGetUsersGroups)
+        };
+
+        private MenuItem GetUsersSummaries => new MenuItem
+        {
+            Header = "Users - Get Summaries",
+            Command = new RelayCommand(ExecuteGetUsersSummaries)
+        };
+
+        private MenuItem MenuItemGetComputersGroups => new MenuItem
+        {
+            Header = "Computers - Get Groups",
+            Command = new RelayCommand(ExecuteGetComputersGroups)
+        };
+
+        private MenuItem MenuItemGetComputersSummaries => new MenuItem
+        {
+            Header = "Computers - Get Summaries",
+            Command = new RelayCommand(ExecuteGetComputersSummaries)
+        };
+
+        private MenuItem MenuItemGetContainerGroupsUsersGroups => new MenuItem
+        {
+            Header = "Container Groups - Get Users' Groups",
+            Command = new RelayCommand(ExecuteGetContainerGroupsUsersGroups)
+        };
+
+        private MenuItem MenuItemGetGroupsManagedByDirectReports
+            => new MenuItem
+            {
+                Header = "Group - Get Managed By's Direct Reports",
+                Command = new RelayCommand(
+                    ExecuteGetGroupsManagedByDirectReports)
+            };
+
+        private MenuItem MenuItemGetGroupsManagedByGroups
+            => new MenuItem
+            {
+                Header = "Group - Get Managed By's Groups",
+                Command = new RelayCommand(ExecuteGetGroupsManagedByGroups)
+            };
+
+        private MenuItem MenuItemGetGroupsManagedBySummaries
+            => new MenuItem
+            {
+                Header = "Groups - Get Managed By Summaries",
+                Command = new RelayCommand(ExecuteGetGroupsManagedBySummaries)
+            };
+
+        private IList SelectedDataRowViews
+        {
+            get;
+            set;
         }
 
-        private ICommand GetContainerGroupUsersGroupsCommand { get; set; }
-        private ICommand GetDirectReportDirectReportsCommand { get; set; }
-        private ICommand GetDirectReportGroupsCommand { get; set; }
-        private ICommand GetDirectReportSummaryCommand { get; set; }
-        private ICommand GetGroupComputersCommand { get; set; }
-        private ICommand GetGroupSummaryCommand { get; set; }
-        private ICommand GetGroupUsersCommand { get; set; }
-        private ICommand GetGroupUsersDirectReportsCommand { get; set; }
-        private ICommand GetGroupUsersGroupsCommand { get; set; }
-        private ICommand GetManagerDirectReportsCommand { get; set; }
-        private ICommand GetManagerGroupsCommand { get; set; }
-        private ICommand GetManagerSummaryCommand { get; set; }
-        private ICommand GetUserDirectReportsCommand { get; set; }
-        private ICommand GetUserGroupsCommand { get; set; }
-        private ICommand GetUserSummaryCommand { get; set; }
-        private IList SelectedDataRowViews { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private static void ExecuteOpenHelpWindow() => Process.Start(
+            HelpFile);
 
         private static string GetComputerDistinguishedName(
             DataRowView dataRowView)
@@ -505,10 +608,16 @@ namespace ActiveDirectoryTool
             return dataRowView[GroupDistinguishedName].ToString();
         }
 
+        private static string GetGroupManagedByDistinguishedName(
+            DataRowView dataRowView)
+        {
+            return dataRowView[GroupManagedByDistinguishedName].ToString();
+        }
+
         private static string GetManagerDistinguishedName(
             DataRowView dataRowView)
         {
-            return dataRowView[UserManagerDistinguishedName].ToString();
+            return dataRowView[ManagerDistinguishedName].ToString();
         }
 
         private static string GetUserDistinguishedName(DataRowView dataRowView)
@@ -516,13 +625,330 @@ namespace ActiveDirectoryTool
             return dataRowView[UserDistinguishedName].ToString();
         }
 
-        private static void OpenHelpWindowCommandExecute() => Process.Start(
-            HelpFile);
+        private bool CanExecuteOuCommand()
+        {
+            return CurrentScope != null;
+        }
 
-        private void CancelCommandExecute()
+        private bool CanExecuteRunPreviousQuery()
+        {
+            return Queries.Multiple();
+        }
+
+        private bool CanExecuteSearch()
+        {
+            return !SearchText.IsNullOrWhiteSpace() && SearchTypeIsChecked();
+        }
+
+        private bool CanExecuteSearchOu()
+        {
+            return CanExecuteOuCommand() && CanExecuteSearch();
+        }
+
+        private bool CanExecuteWriteToFile()
+        {
+            return Data != null && Data.Count > 0;
+        }
+
+        private void ExecuteCancel()
         {
             Queries.Peek()?.Cancel();
             ResetQuery();
+        }
+
+        private async void ExecuteGetComputersGroups()
+        {
+            await RunQuery(
+                ComputersGroups,
+                CurrentScope,
+                GetComputersDistinguishedNames());
+        }
+
+        private async void ExecuteGetComputersSummaries()
+        {
+            await RunQuery(
+                ComputersSummaries,
+                CurrentScope,
+                GetComputersDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsComputers()
+        {
+            await RunQuery(
+                GroupsComputers,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsManagedByDirectReports()
+        {
+            await RunQuery(
+                GroupsUsersDirectReports,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsManagedByGroups()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsManagedBySummaries()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetContainerGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsSummaries()
+        {
+            await RunQuery(
+                GroupsSummaries,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsUsers()
+        {
+            await RunQuery(
+                GroupsUsers,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsUsersDirectReports()
+        {
+            await RunQuery(
+                GroupsUsersDirectReports,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetContainerGroupsUsersGroups()
+        {
+            await RunQuery(
+                GroupsUsersGroups,
+                CurrentScope,
+                GetContainerGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetDirectReportsDirectReports()
+        {
+            await RunQuery(
+                UsersDirectReports,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetDirectReportsGroups()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetDirectReportsDistinguishedNames());
+        }
+
+        private async void ExecuteGetDirectReportsSummaries()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetDirectReportsDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsComputers()
+        {
+            await RunQuery(
+                GroupsComputers,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsManagedByDirectReports()
+        {
+            await RunQuery(
+                UsersDirectReports,
+                CurrentScope,
+                GetGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsManagedByGroups()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsManagedBySummaries()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetGroupsManagedByDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsSummaries()
+        {
+            await RunQuery(
+                GroupsSummaries,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsUsers()
+        {
+            await RunQuery(
+                GroupsUsers,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsUsersDirectReports()
+        {
+            await RunQuery(
+                GroupsUsersDirectReports,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetGroupsUsersGroups()
+        {
+            await RunQuery(
+                GroupsUsersGroups,
+                CurrentScope,
+                GetGroupsDistinguishedNames());
+        }
+
+        private async void ExecuteGetManagersDirectReports()
+        {
+            await RunQuery(
+                UsersDirectReports,
+                CurrentScope,
+                GetManagersDistinguishedNames());
+        }
+
+        private async void ExecuteGetManagersGroups()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetManagersDistinguishedNames());
+        }
+
+        private async void ExecuteGetManagersSummaries()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetManagersDistinguishedNames());
+        }
+
+        private async void ExecuteGetOuComputers()
+        {
+            await RunQuery(OuComputers, CurrentScope);
+        }
+
+        private async void ExecuteGetOuGroups()
+        {
+            await RunQuery(OuGroups, CurrentScope);
+        }
+
+        private async void ExecuteGetOuGroupsUsers()
+        {
+            await RunQuery(OuGroupsUsers, CurrentScope);
+        }
+
+        private async void ExecuteGetOuUsers()
+        {
+            await RunQuery(OuUsers, CurrentScope);
+        }
+
+        private async void ExecuteGetOuUsersDirectReports()
+        {
+            await RunQuery(OuUsersDirectReports, CurrentScope);
+        }
+
+        private async void ExecuteGetOuUsersGroups()
+        {
+            await RunQuery(OuUsersGroups, CurrentScope);
+        }
+
+        private async void ExecuteGetUsersDirectReports()
+        {
+            await RunQuery(
+                UsersDirectReports,
+                CurrentScope,
+                GetUsersDistinguishedNames());
+        }
+
+        private async void ExecuteGetUsersGroups()
+        {
+            await RunQuery(
+                UsersGroups,
+                CurrentScope,
+                GetUsersDistinguishedNames());
+        }
+
+        private async void ExecuteGetUsersSummaries()
+        {
+            await RunQuery(
+                UsersSummaries,
+                CurrentScope,
+                GetUsersDistinguishedNames());
+        }
+
+        private void ExecuteOpenAboutWindow()
+        {
+            if (_aboutWindow == null || !_aboutWindow.IsVisible)
+            {
+                _aboutWindow = new AboutWindow();
+                _aboutWindow.Show();
+            }
+            else
+            {
+                _aboutWindow.Activate();
+            }
+        }
+
+        private async void ExecuteRunPreviousQuery()
+        {
+            Queries.Pop();
+            await RunQuery(Queries.Pop());
+        }
+
+        private async void ExecuteSearch()
+        {
+            await RunQuery(GetSearchQueryType(), searchText: SearchText);
+        }
+
+        private async void ExecuteSearchOu()
+        {
+            await RunQuery(
+                GetSearchQueryType(), CurrentScope, searchText: SearchText);
+        }
+
+        private async void ExecuteWriteToFile()
+        {
+            StartTask();
+            await Task.Run(
+                () =>
+                {
+                    var fileWriter = new DataFileWriter
+                    {
+                        Data = Data,
+                        Scope = Queries.First().Scope,
+                        QueryType = Queries.First().QueryType
+                    };
+
+                    ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
+                });
+
+            FinishTask();
         }
 
         private void FinishTask()
@@ -537,9 +963,15 @@ namespace ActiveDirectoryTool
             var computerContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
             if (queryType != ComputersGroups)
-                computerContextMenuItems.Add(_computerGetGroupsMenuItem);
+            {
+                computerContextMenuItems.Add(MenuItemGetComputersGroups);
+            }
+
             if (queryType != ComputersSummaries)
-                computerContextMenuItems.Add(_computerGetSummaryMenuItem);
+            {
+                computerContextMenuItems.Add(MenuItemGetComputersSummaries);
+            }
+
             return computerContextMenuItems;
         }
 
@@ -551,43 +983,48 @@ namespace ActiveDirectoryTool
             {
                 contextMenuItems.AddRange(GenerateComputerContextMenuItems());
             }
+
             if (Data.Table.Columns.Contains(ContainerGroupDistinguishedName))
             {
-                contextMenuItems.Add(_containerGroupGetComputersMenuItem);
-                contextMenuItems.Add(_containerGroupGetSummaryMenuItem);
-                contextMenuItems.Add(_containerGroupGetUsersMenuItem);
-                contextMenuItems.Add(_containerGroupGetUsersGroupsMenuItem);
-                contextMenuItems.Add(
-                    _containerGroupGetUsersDirectReportsMenuItem);
+                contextMenuItems.Add(GetContainerGroupsComputers);
+                contextMenuItems.Add(GetContainerGroupsSummaries);
+                contextMenuItems.Add(GetContainerGroupsUsers);
+                contextMenuItems.Add(MenuItemGetContainerGroupsUsersGroups);
+                contextMenuItems.Add(GetContainerGroupsUsersDirectReports);
             }
+
             if (Data.Table.Columns.Contains(
                 ContainerGroupManagedByDistinguishedName))
             {
-                contextMenuItems.Add(
-                    _containerGroupGetManagedByDirectReportsMenuItem);
-                contextMenuItems.Add(
-                    _containerGroupGetManagedByGroupsMenuItem);
-                contextMenuItems.Add(
-                    _containerGroupGetManagedBySummaryMenuItem);
+                contextMenuItems.Add(GetContainerGroupsManagedByDirectReports);
+                contextMenuItems.Add(GetContainerGroupsManagedByGroups);
+                contextMenuItems.Add(GetContainerGroupsManagedBySummaries);
             }
+
             if (Data.Table.Columns.Contains(DirectReportDistinguishedName))
             {
-                contextMenuItems.Add(_directReportGetDirectReportsMenuItem);
-                contextMenuItems.Add(_directReportGetGroupsMenuItem);
-                contextMenuItems.Add(_directReportGetSummaryMenuItem);
+                contextMenuItems.Add(GetDirectReportsDirectReports);
+                contextMenuItems.Add(GetDirectReportsGroups);
+                contextMenuItems.Add(GetDirectReportsSummaries);
             }
+
             if (Data.Table.Columns.Contains(GroupDistinguishedName))
             {
                 contextMenuItems.AddRange(GenerateGroupContextMenuItems());
             }
-            if (Data.Table.Columns.Contains(UserManagerDistinguishedName))
+
+            if (Data.Table.Columns.Contains(ManagerDistinguishedName))
             {
-                contextMenuItems.Add(_managerGetDirectReportsMenuItem);
-                contextMenuItems.Add(_managerGetGroupsMenuItem);
-                contextMenuItems.Add(_managerGetSummaryMenuItem);
+                contextMenuItems.Add(GetManagersDirectReports);
+                contextMenuItems.Add(GetManagersGroups);
+                contextMenuItems.Add(GetManagersSummaries);
             }
+
             if (!Data.Table.Columns.Contains(UserDistinguishedName))
+            {
                 return contextMenuItems;
+            }
+
             contextMenuItems.AddRange(GenerateUserContextMenuItems());
             return contextMenuItems;
         }
@@ -597,16 +1034,47 @@ namespace ActiveDirectoryTool
             var groupContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
             if (queryType != GroupsComputers)
-                groupContextMenuItems.Add(_groupGetComputersMenuItem);
+            {
+                groupContextMenuItems.Add(GetGroupsComputers);
+            }
+
             if (queryType != GroupsSummaries)
-                groupContextMenuItems.Add(_groupGetSummaryMenuItem);
+            {
+                groupContextMenuItems.Add(GetGroupsSummaries);
+            }
+
             if (queryType != GroupsUsers)
-                groupContextMenuItems.Add(_groupGetUsersMenuItem);
+            {
+                groupContextMenuItems.Add(GetGroupsUsers);
+            }
+
             if (queryType != GroupsUsersDirectReports)
-                groupContextMenuItems.Add(_groupGetUsersDirectReportsMenuItem);
+            {
+                groupContextMenuItems.Add(GetGroupsUsersDirectReports);
+            }
+
             if (queryType != GroupsUsersGroups)
-                groupContextMenuItems.Add(_groupGetUsersGroupsMenuItem);
+            {
+                groupContextMenuItems.Add(GetGroupsUsersGroups);
+            }
+
+            if (Data.Table.Columns.Contains(GroupManagedByDistinguishedName))
+            {
+                groupContextMenuItems.AddRange(
+                    GenerateGroupManagedByContextMenuItems());
+            }
+
             return groupContextMenuItems;
+        }
+
+        private IEnumerable<MenuItem> GenerateGroupManagedByContextMenuItems()
+        {
+            return new List<MenuItem>
+            {
+                MenuItemGetGroupsManagedByDirectReports,
+                MenuItemGetGroupsManagedByGroups,
+                MenuItemGetGroupsManagedBySummaries
+            };
         }
 
         private IEnumerable<MenuItem> GenerateUserContextMenuItems()
@@ -614,11 +1082,20 @@ namespace ActiveDirectoryTool
             var userContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
             if (queryType != UsersDirectReports)
-                userContextMenuItems.Add(_userGetDirectReportsMenuItem);
+            {
+                userContextMenuItems.Add(GetUsersDirectReports);
+            }
+
             if (queryType != UsersGroups)
-                userContextMenuItems.Add(_userGetGroupsMenuItem);
+            {
+                userContextMenuItems.Add(GetUsersGroups);
+            }
+
             if (queryType != UsersSummaries)
-                userContextMenuItems.Add(_userGetSummaryMenuItem);
+            {
+                userContextMenuItems.Add(GetUsersSummaries);
+            }
+
             return userContextMenuItems;
         }
 
@@ -627,39 +1104,6 @@ namespace ActiveDirectoryTool
             return SelectedDataRowViews.Cast<DataRowView>().Select(
                 GetComputerDistinguishedName).Where(
                     c => !c.IsNullOrWhiteSpace());
-        }
-
-        private async void GetContainerGroupComputersCommandExecute()
-        {
-            await RunQuery(
-                GroupsComputers,
-                CurrentScope,
-                GetContainerGroupsDistinguishedNames());
-        }
-
-        private async void
-            GetContainerGroupManagedByDirectReportsCommandExecute()
-        {
-            await RunQuery(
-                UsersDirectReports,
-                CurrentScope,
-                GetContainerGroupsManagedByDistinguishedNames());
-        }
-
-        private async void GetContainerGroupManagedByGroupsCommandExecute()
-        {
-            await RunQuery(
-                UsersGroups,
-                CurrentScope,
-                GetContainerGroupsManagedByDistinguishedNames());
-        }
-
-        private async void GetContainerGroupManagedBySummaryCommandExecute()
-        {
-            await RunQuery(
-                UsersSummaries,
-                CurrentScope,
-                GetContainerGroupsManagedByDistinguishedNames());
         }
 
         private IEnumerable<string> GetContainerGroupsDistinguishedNames()
@@ -677,134 +1121,6 @@ namespace ActiveDirectoryTool
                     s => !s.IsNullOrWhiteSpace());
         }
 
-        private async void GetContainerGroupSummaryCommandExecute()
-        {
-            await RunQuery(
-                GroupsSummaries,
-                CurrentScope,
-                GetContainerGroupsDistinguishedNames());
-        }
-
-        private async void GetContainerGroupUsersCommandExecute()
-        {
-            await RunQuery(
-                GroupsUsers,
-                CurrentScope,
-                GetContainerGroupsDistinguishedNames());
-        }
-
-        private async void GetContextComputerGroupsCommandExecute()
-        {
-            await RunQuery(
-                ComputersGroups,
-                CurrentScope,
-                GetComputersDistinguishedNames());
-        }
-
-        private async void GetContainerGroupUsersDirectReportsCommandExecute()
-        {
-            await RunQuery(
-                GroupsUsersDirectReports,
-                CurrentScope,
-                GetContainerGroupsDistinguishedNames());
-        }
-
-        private async void GetContextComputerSummaryCommandExecute()
-        {
-            await RunQuery(
-                ComputersSummaries,
-                CurrentScope,
-                GetComputersDistinguishedNames());
-        }
-
-        private async void GetContextDirectReportDirectReportsCommandExecute()
-        {
-            await RunQuery(
-                UsersDirectReports,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextDirectReportGroupsCommandExecute()
-        {
-            await RunQuery(
-                UsersGroups,
-                CurrentScope,
-                GetDirectReportsDistinguishedNames());
-        }
-
-        private async void GetContextDirectReportSummaryCommandExecute()
-        {
-            await RunQuery(
-                UsersSummaries,
-                CurrentScope,
-                GetDirectReportsDistinguishedNames());
-        }
-
-        private async void GetContextGroupComputersCommandExecute()
-        {
-            await RunQuery(
-                GroupsComputers,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextGroupSummaryCommandExecute()
-        {
-            await RunQuery(
-                GroupsSummaries,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextGroupUsersCommandExecute()
-        {
-            await RunQuery(
-                GroupsUsers,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextGroupUsersDirectReportsCommandExecute()
-        {
-            await RunQuery(
-                GroupsUsersDirectReports,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextGroupUsersGroupsCommandExecute()
-        {
-            await RunQuery(
-                GroupsUsersGroups,
-                CurrentScope,
-                GetGroupsDistinguishedNames());
-        }
-
-        private async void GetContextUserDirectReportsCommandExecute()
-        {
-            await RunQuery(
-                UsersDirectReports,
-                CurrentScope,
-                GetUsersDistinguishedNames());
-        }
-
-        private async void GetContextUserGroupsCommandExecute()
-        {
-            await RunQuery(
-                UsersGroups,
-                CurrentScope,
-                GetUsersDistinguishedNames());
-        }
-
-        private async void GetContextUserSummaryCommandExecute()
-        {
-            await RunQuery(
-                UsersSummaries,
-                CurrentScope,
-                GetUsersDistinguishedNames());
-        }
-
         private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>().Select(
@@ -818,20 +1134,11 @@ namespace ActiveDirectoryTool
                 GetGroupDistinguishedName).Where(g => !g.IsNullOrWhiteSpace());
         }
 
-        private async void GetManagerDirectReportsCommandExecute()
+        private IEnumerable<string> GetGroupsManagedByDistinguishedNames()
         {
-            await RunQuery(
-                UsersDirectReports,
-                CurrentScope,
-                GetManagersDistinguishedNames());
-        }
-
-        private async void GetManagerGroupsCommandExecute()
-        {
-            await RunQuery(
-                UsersGroups,
-                CurrentScope,
-                GetManagersDistinguishedNames());
+            return SelectedDataRowViews.Cast<DataRowView>().Select(
+                GetGroupManagedByDistinguishedName).Where(
+                    s => !s.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetManagersDistinguishedNames()
@@ -841,50 +1148,18 @@ namespace ActiveDirectoryTool
                     m => !m.IsNullOrWhiteSpace());
         }
 
-        private async void GetManagerSummaryCommandExecute()
-        {
-            await RunQuery(
-                UsersSummaries,
-                CurrentScope,
-                GetManagersDistinguishedNames());
-        }
-
-        private async void GetOuComputersCommandExecute()
-        {
-            await RunQuery(OuComputers, CurrentScope);
-        }
-
-        private async void GetOuGroupsCommandExecute()
-        {
-            await RunQuery(OuGroups, CurrentScope);
-        }
-
-        private async void GetOuGroupsUsersCommandExecute()
-        {
-            await RunQuery(OuGroupsUsers, CurrentScope);
-        }
-
-        private async void GetOuUsersCommandExecute()
-        {
-            await RunQuery(OuUsers, CurrentScope);
-        }
-
-        private async void GetOuUsersDirectReportsCommandExecute()
-        {
-            await RunQuery(OuUsersDirectReports, CurrentScope);
-        }
-
-        private async void GetOuUsersGroupsCommandExecute()
-        {
-            await RunQuery(OuUsersGroups, CurrentScope);
-        }
-
         private QueryType GetSearchQueryType()
         {
             if (ComputerSearchIsChecked)
+            {
                 return SearchComputer;
+            }
+
             if (GroupSearchIsChecked)
+            {
                 return SearchGroup;
+            }
+
             return UserSearchIsChecked ? SearchUser : None;
         }
 
@@ -908,37 +1183,12 @@ namespace ActiveDirectoryTool
                 new PropertyChangedEventArgs(propertyName));
         }
 
-        private void OpenAboutWindowCommandExecute()
-        {
-            if (_aboutWindow == null || !_aboutWindow.IsVisible)
-            {
-                _aboutWindow = new AboutWindow();
-                _aboutWindow.Show();
-            }
-            else
-                _aboutWindow.Activate();
-        }
-
-        private bool OuCommandCanExecute()
-        {
-            return CurrentScope != null;
-        }
-
-        private bool PreviousQueryCommandCanExecute()
-        {
-            return Queries.Multiple();
-        }
-
-        private async void PreviousQueryCommandExecute()
-        {
-            Queries.Pop();
-            await RunQuery(Queries.Pop());
-        }
-
         private void ResetQuery()
         {
             if (Queries.Any())
+            {
                 Queries.Pop();
+            }
         }
 
         private async Task RunQuery(
@@ -986,28 +1236,8 @@ namespace ActiveDirectoryTool
                 ShowMessage("The selected query is too large to run.");
                 ResetQuery();
             }
+
             FinishTask();
-        }
-
-        private bool SearchCommandCanExecute()
-        {
-            return !SearchText.IsNullOrWhiteSpace() && SearchTypeIsChecked();
-        }
-
-        private async void SearchCommandExecute()
-        {
-            await RunQuery(GetSearchQueryType(), searchText: SearchText);
-        }
-
-        private bool SearchOuCommandCanExecute()
-        {
-            return OuCommandCanExecute() && SearchCommandCanExecute();
-        }
-
-        private async void SearchOuCommandExecute()
-        {
-            await RunQuery(
-                GetSearchQueryType(), CurrentScope, searchText: SearchText);
         }
 
         private bool SearchTypeIsChecked()
@@ -1017,123 +1247,6 @@ namespace ActiveDirectoryTool
                    UserSearchIsChecked;
         }
 
-        private void SetUpCommands()
-        {
-            GetOuComputersCommand = new RelayCommand(
-                GetOuComputersCommandExecute, OuCommandCanExecute);
-
-            GetOuGroupsCommand = new RelayCommand(
-                GetOuGroupsCommandExecute, OuCommandCanExecute);
-
-            GetOuUsersCommand = new RelayCommand(
-                GetOuUsersCommandExecute, OuCommandCanExecute);
-
-            GetOuUsersDirectReportsCommand = new RelayCommand(
-                GetOuUsersDirectReportsCommandExecute, OuCommandCanExecute);
-
-            GetOuUsersGroupsCommand = new RelayCommand(
-                GetOuUsersGroupsCommandExecute, OuCommandCanExecute);
-
-            WriteToFileCommand = new RelayCommand(
-                WriteToFileCommandExecute, WriteToFileCommandCanExecute);
-
-            OpenAboutWindowCommand = new RelayCommand(
-                OpenAboutWindowCommandExecute);
-
-            OpenHelpWindowCommand = new RelayCommand(
-                OpenHelpWindowCommandExecute);
-
-            GetUserGroupsCommand = new RelayCommand(
-                GetContextUserGroupsCommandExecute);
-
-            GetComputerGroupsCommand = new RelayCommand(
-                GetContextComputerGroupsCommandExecute);
-
-            GetDirectReportDirectReportsCommand = new RelayCommand(
-                GetContextDirectReportDirectReportsCommandExecute);
-
-            GetDirectReportGroupsCommand = new RelayCommand(
-                GetContextDirectReportGroupsCommandExecute);
-
-            GetGroupComputersCommand = new RelayCommand(
-                GetContextGroupComputersCommandExecute);
-
-            GetGroupUsersCommand = new RelayCommand(
-                GetContextGroupUsersCommandExecute);
-
-            GetGroupUsersDirectReportsCommand = new RelayCommand(
-                GetContextGroupUsersDirectReportsCommandExecute);
-
-            GetUserDirectReportsCommand = new RelayCommand(
-                GetContextUserDirectReportsCommandExecute);
-
-            GetGroupUsersGroupsCommand = new RelayCommand(
-                GetContextGroupUsersGroupsCommandExecute);
-
-            GetDirectReportSummaryCommand = new RelayCommand(
-                GetContextDirectReportSummaryCommandExecute);
-
-            GetUserSummaryCommand = new RelayCommand(
-                GetContextUserSummaryCommandExecute);
-
-            GetComputerSummaryCommand = new RelayCommand(
-                GetContextComputerSummaryCommandExecute);
-
-            GetGroupSummaryCommand = new RelayCommand(
-                GetContextGroupSummaryCommandExecute);
-
-            CancelCommand = new RelayCommand(CancelCommandExecute);
-
-            PreviousQueryCommand = new RelayCommand(
-                PreviousQueryCommandExecute, PreviousQueryCommandCanExecute);
-
-            SelectionChangedCommand =
-                new RelayCommand<IList>(
-                    items =>
-                    {
-                        SelectedDataRowViews = items;
-                    });
-
-            GetOuGroupsUsersCommand = new RelayCommand(
-                GetOuGroupsUsersCommandExecute, OuCommandCanExecute);
-
-            SearchCommand = new RelayCommand(
-                SearchCommandExecute, SearchCommandCanExecute);
-
-            SearchOuCommand = new RelayCommand(
-                SearchOuCommandExecute, SearchOuCommandCanExecute);
-
-            GetManagerDirectReportsCommand = new RelayCommand(
-                GetManagerDirectReportsCommandExecute);
-
-            GetManagerGroupsCommand = new RelayCommand(
-                GetManagerGroupsCommandExecute);
-
-            GetManagerSummaryCommand = new RelayCommand(
-                GetManagerSummaryCommandExecute);
-
-            GetContainerGroupComputersCommand = new RelayCommand(
-                GetContainerGroupComputersCommandExecute);
-
-            GetContainerGroupManagedByDirectReportsCommand = new RelayCommand(
-                GetContainerGroupManagedByDirectReportsCommandExecute);
-
-            GetContainerGroupSummaryCommand = new RelayCommand(
-                GetContainerGroupSummaryCommandExecute);
-
-            GetContainerGroupUsersCommand = new RelayCommand(
-                GetContainerGroupUsersCommandExecute);
-
-            GetContainerGroupManagedByGroupsCommand = new RelayCommand(
-                GetContainerGroupManagedByGroupsCommandExecute);
-
-            GetContainerGroupManagedBySummaryCommand = new RelayCommand(
-                GetContainerGroupManagedBySummaryCommandExecute);
-
-            GetContainerGroupUsersDirectReportsCommand = new RelayCommand(
-                GetContainerGroupUsersDirectReportsCommandExecute);
-        }
-
         private void SetViewVariables()
         {
             ProgressBarVisibility = Visibility.Hidden;
@@ -1141,6 +1254,7 @@ namespace ActiveDirectoryTool
             CancelButtonVisibility = Visibility.Hidden;
             ViewIsEnabled = true;
             ContextMenuItems = null;
+
             try
             {
                 Version = CurrentDeployment.CurrentVersion.ToString();
@@ -1149,7 +1263,6 @@ namespace ActiveDirectoryTool
             {
                 Version = "Not Installed";
             }
-            SetUpCommands();
         }
 
         private void ShowMessage(string messageContent)
@@ -1164,28 +1277,6 @@ namespace ActiveDirectoryTool
             ViewIsEnabled = false;
             ProgressBarVisibility = Visibility.Visible;
             CancelButtonVisibility = Visibility.Visible;
-        }
-
-        private bool WriteToFileCommandCanExecute()
-        {
-            return Data != null && Data.Count > 0;
-        }
-
-        private async void WriteToFileCommandExecute()
-        {
-            StartTask();
-            await Task.Run(
-                () =>
-                {
-                    var fileWriter = new DataFileWriter
-                    {
-                        Data = Data,
-                        Scope = Queries.First().Scope,
-                        QueryType = Queries.First().QueryType
-                    };
-                    ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
-                });
-            FinishTask();
         }
     }
 }

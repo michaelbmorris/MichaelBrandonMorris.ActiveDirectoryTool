@@ -269,7 +269,7 @@ namespace ActiveDirectoryTool
                 },
                 [ContainerGroupManagedByDistinguishedName] = () =>
                 {
-                    result.ContainerGroupManagedBy =
+                    result.ContainerGroupManagedByDistinguishedName =
                         containerGroupPrincipal?.GetManagedByDistinguishedName();
                 },
                 [ContainerGroupManagedByName] = () =>
@@ -665,7 +665,7 @@ namespace ActiveDirectoryTool
                 },
                 [GroupManagedByDistinguishedName] = () =>
                 {
-                    result.GroupManagedBy = 
+                    result.GroupManagedByDistinguishedName = 
                         groupPrincipal.GetManagedByDistinguishedName();
                 },
                 [GroupManagedByName] = () =>
