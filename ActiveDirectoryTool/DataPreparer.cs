@@ -11,11 +11,14 @@ namespace ActiveDirectoryTool
 {
     internal class DataPreparer
     {
-        private readonly CancellationToken _cancellationToken;
+        private CancellationToken CancellationToken
+        {
+            get;
+        }
 
         internal DataPreparer(CancellationToken cancellationToken)
         {
-            _cancellationToken = cancellationToken;
+            CancellationToken = cancellationToken;
         }
 
         internal dynamic PrepareData(
@@ -30,7 +33,8 @@ namespace ActiveDirectoryTool
             dynamic result = new ExpandoObject();
             foreach (var property in properties)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
+
                 if (AddComputerProperty(
                     computerPrincipal, property, result))
                 {

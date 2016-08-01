@@ -31,8 +31,6 @@ namespace ActiveDirectoryTool
 
     public class Query
     {
-        private readonly string _searchText;
-
         private CancellationTokenSource _cancellationTokenSource;
 
         public Query(
@@ -44,7 +42,7 @@ namespace ActiveDirectoryTool
             QueryType = queryType;
             Scope = scope;
             DistinguishedNames = distinguishedNames;
-            _searchText = searchText;
+            SearchText = searchText;
         }
 
         public IEnumerable<ExpandoObject> Data
@@ -69,7 +67,11 @@ namespace ActiveDirectoryTool
         private IList<string> DistinguishedNames
         {
             get;
-            set;
+        }
+
+        private string SearchText
+        {
+            get;
         }
 
         public void Cancel()
@@ -94,7 +96,7 @@ namespace ActiveDirectoryTool
                         Scope,
                         DistinguishedNames,
                         CancellationToken,
-                        _searchText).GetData();
+                        SearchText).GetData();
                 },
                 _cancellationTokenSource.Token);
 

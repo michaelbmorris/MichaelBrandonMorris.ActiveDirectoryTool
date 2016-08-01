@@ -41,10 +41,10 @@ namespace ActiveDirectoryTool
 
         private const string HelpFile = "ActiveDirectoryToolHelp.chm";
 
-        private const string UserDistinguishedName = "UserDistinguishedName";
-
         private const string ManagerDistinguishedName =
             "ManagerDistinguishedName";
+
+        private const string UserDistinguishedName = "UserDistinguishedName";
 
         private AboutWindow _aboutWindow;
         private Visibility _cancelButtonVisibility;
@@ -393,6 +393,19 @@ namespace ActiveDirectoryTool
 
         public ICommand WriteToFileCommand => new RelayCommand(
             ExecuteWriteToFile, CanExecuteWriteToFile);
+
+        private AboutWindow AboutWindow
+        {
+            get
+            {
+                if (_aboutWindow == null || !_aboutWindow.IsVisible)
+                {
+                    _aboutWindow = new AboutWindow();
+                }
+
+                return _aboutWindow;
+            }
+        }
 
         private MenuItem GetContainerGroupsComputers => new MenuItem
         {
@@ -903,15 +916,8 @@ namespace ActiveDirectoryTool
 
         private void ExecuteOpenAboutWindow()
         {
-            if (_aboutWindow == null || !_aboutWindow.IsVisible)
-            {
-                _aboutWindow = new AboutWindow();
-                _aboutWindow.Show();
-            }
-            else
-            {
-                _aboutWindow.Activate();
-            }
+            AboutWindow.Show();
+            AboutWindow.Activate();
         }
 
         private async void ExecuteRunPreviousQuery()

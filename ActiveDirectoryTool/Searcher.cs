@@ -129,12 +129,35 @@ namespace ActiveDirectoryTool
                 ManagerDistinguishedName
             };
 
-        private readonly CancellationToken _cancellationToken;
-        private readonly IEnumerable<string> _distinguishedNames;
-        private readonly QueryType _queryType;
-        private readonly Scope _scope;
-        private readonly string _searchText;
-        private readonly DataPreparer _dataPreparer;
+        private CancellationToken CancellationToken
+        {
+            get;
+        }
+
+        private IEnumerable<string> DistinguishedNames
+        {
+            get;
+        }
+
+        private QueryType QueryType
+        {
+            get;
+        }
+
+        private Scope Scope
+        {
+            get;
+        }
+
+        private string SearchText
+        {
+            get;
+        }
+
+        private DataPreparer DataPreparer
+        {
+            get;
+        }
 
         public Searcher(
             QueryType queryType,
@@ -143,24 +166,24 @@ namespace ActiveDirectoryTool
             CancellationToken cancellationToken,
             string searchText)
         {
-            _queryType = queryType;
-            _scope = scope;
-            _distinguishedNames = distinguishedNames;
-            _cancellationToken = cancellationToken;
-            _searchText = searchText;
-            _dataPreparer = new DataPreparer(cancellationToken);
+            QueryType = queryType;
+            Scope = scope;
+            DistinguishedNames = distinguishedNames;
+            CancellationToken = cancellationToken;
+            SearchText = searchText;
+            DataPreparer = new DataPreparer(cancellationToken);
         }
 
         public IEnumerable<ExpandoObject> GetData()
         {
             // ReSharper disable AccessToDisposedClosure
             IEnumerable<ExpandoObject> data;
-            using (var principalContext = _scope == null ? 
+            using (var principalContext = Scope == null ? 
                 GetPrincipalContext() :
                 new PrincipalContext(
                     ContextType.Domain,
-                    _scope.Domain,
-                    _scope.Context))
+                    Scope.Domain,
+                    Scope.Context))
             {
                 var mapping = new Dictionary
                     <QueryType, Func<IEnumerable<ExpandoObject>>>
@@ -201,7 +224,7 @@ namespace ActiveDirectoryTool
                     [QueryType.UsersGroups] = () => GetUsersGroupsData(),
                     [QueryType.UsersSummaries] = () => GetUsersSummariesData()
                 };
-                data = mapping[_queryType]();
+                data = mapping[QueryType]();
             }
             return data;
             // ReSharper restore AccessToDisposedClosure
@@ -215,9 +238,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetComputersGroupsData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var computerPrincipal = ComputerPrincipal
                     .FindByIdentity(
@@ -231,9 +254,9 @@ namespace ActiveDirectoryTool
                         foreach (var groupPrincipal in 
                             groups.GetGroupPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultComputerGroupsProperties,
                                     computerPrincipal,
                                     groupPrincipal));
@@ -247,9 +270,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetComputersSummariesData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var computerPrincipal = ComputerPrincipal
                     .FindByIdentity(
@@ -259,7 +282,7 @@ namespace ActiveDirectoryTool
                 {
                     if (computerPrincipal == null) continue;
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultComputerProperties,
                             computerPrincipal));
                 }
@@ -270,9 +293,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetGroupsComputersData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var groupPrincipal = GroupPrincipal.FindByIdentity(
                     principalContext,
@@ -285,9 +308,9 @@ namespace ActiveDirectoryTool
                         foreach (var computerPrincipal in members
                             .GetComputerPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultGroupComputersProperties,
                                     containerGroupPrincipal: groupPrincipal,
                                     computerPrincipal: computerPrincipal));
@@ -301,7 +324,7 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetGroupsSummariesData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
                 using (var principalContext = GetPrincipalContext())
                 using (var groupPrincipal = GroupPrincipal.FindByIdentity(
@@ -311,7 +334,7 @@ namespace ActiveDirectoryTool
                 {
                     if (groupPrincipal == null) continue;
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultGroupProperties,
                             groupPrincipal: groupPrincipal));
                 }
@@ -322,9 +345,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetGroupsUsersData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var groupPrincipal = GroupPrincipal.FindByIdentity(
                     principalContext,
@@ -337,9 +360,9 @@ namespace ActiveDirectoryTool
                         foreach (var userPrincipal in members
                             .GetUserPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultGroupUsersProperties,
                                     containerGroupPrincipal: groupPrincipal,
                                     userPrincipal: userPrincipal));
@@ -353,9 +376,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetGroupsUsersDirectReportsData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var groupPrincipal = GroupPrincipal.FindByIdentity(
                     principalContext,
@@ -368,13 +391,13 @@ namespace ActiveDirectoryTool
                         foreach (var userPrincipal in
                             members.GetUserPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             if(userPrincipal == null) continue;
                             foreach (var directReportDistinguishedName in
                                 userPrincipal
                                     .GetDirectReportDistinguishedNames())
                             {
-                                _cancellationToken
+                                CancellationToken
                                     .ThrowIfCancellationRequested();
                                 using (var directReportUserPrincipal =
                                     UserPrincipal.FindByIdentity(
@@ -383,7 +406,7 @@ namespace ActiveDirectoryTool
                                         directReportDistinguishedName))
                                 {
                                     data.Add(
-                                        _dataPreparer.PrepareData(
+                                        DataPreparer.PrepareData(
                                             DefaultGroupUsersDirectReportsProperties,
                                             containerGroupPrincipal:
                                                 groupPrincipal,
@@ -402,9 +425,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetGroupsUsersGroupsData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var containerGroupPrincipal = GroupPrincipal
                     .FindByIdentity(
@@ -418,15 +441,15 @@ namespace ActiveDirectoryTool
                         foreach (var userPrincipal in 
                             members.GetUserPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             using (var groups = userPrincipal.GetGroups())
                             {
                                 foreach (var groupPrincipal in groups
                                     .GetGroupPrincipals())
                                 {
-                                    _cancellationToken.ThrowIfCancellationRequested();
+                                    CancellationToken.ThrowIfCancellationRequested();
                                     data.Add(
-                                        _dataPreparer.PrepareData(
+                                        DataPreparer.PrepareData(
                                             DefaultGroupUsersGroupsProperties,
                                             containerGroupPrincipal:
                                                 containerGroupPrincipal,
@@ -453,9 +476,9 @@ namespace ActiveDirectoryTool
                 foreach (var computerPrincipal in principalSearchResult
                     .GetComputerPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultComputerProperties,
                             computerPrincipal));
                 }
@@ -474,9 +497,9 @@ namespace ActiveDirectoryTool
                 foreach (var groupPrincipal in principalSearchResult
                     .GetGroupPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultGroupProperties,
                             groupPrincipal: groupPrincipal));
                 }
@@ -495,15 +518,15 @@ namespace ActiveDirectoryTool
                 foreach (var groupPrincipal in principalSearchResult
                     .GetGroupPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     using (var members = groupPrincipal.GetMembers())
                     {
                         foreach (var userPrincipal in members
                             .GetUserPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultGroupUsersProperties,
                                     containerGroupPrincipal: groupPrincipal,
                                     userPrincipal: userPrincipal));
@@ -525,9 +548,9 @@ namespace ActiveDirectoryTool
                 foreach (var userPrincipal in principalSearchResult
                     .GetUserPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultUserProperties,
                             userPrincipal: userPrincipal));
                 }
@@ -546,13 +569,13 @@ namespace ActiveDirectoryTool
                 foreach (var userPrincipal in principalSearchResult
                     .GetUserPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     var directReportDistinguishedNames = userPrincipal
                         .GetDirectReportDistinguishedNames();
                     foreach (var directReportDistinguishedName in
                         directReportDistinguishedNames)
                     {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                        CancellationToken.ThrowIfCancellationRequested();
                         using (var defaultPrincipalContext =
                             GetPrincipalContext())
                         using (var directReportUserPrincipal =
@@ -563,7 +586,7 @@ namespace ActiveDirectoryTool
                         {
                             if (directReportUserPrincipal == null) continue;
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultUserDirectReportsProperties,
                                     userPrincipal: userPrincipal,
                                     directReportUserPrincipal:
@@ -586,15 +609,15 @@ namespace ActiveDirectoryTool
                 foreach (var userPrincipal in principalSearchResult
                     .GetUserPrincipals())
                 {
-                    _cancellationToken.ThrowIfCancellationRequested();
+                    CancellationToken.ThrowIfCancellationRequested();
                     using (var groups = userPrincipal.GetGroups())
                     {
                         foreach (var groupPrincipal in groups
                             .GetGroupPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultUserGroupsProperties,
                                     userPrincipal: userPrincipal,
                                     groupPrincipal: groupPrincipal));
@@ -611,7 +634,7 @@ namespace ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new ComputerPrincipal(principalContext))
             {
-                principal.Name = Asterix + _searchText + Asterix;
+                principal.Name = Asterix + SearchText + Asterix;
                 using (var principalSearcher = new PrincipalSearcher(
                     principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
@@ -619,9 +642,9 @@ namespace ActiveDirectoryTool
                     foreach (var computerPrincipal in principalSearchResult
                         .GetComputerPrincipals())
                     {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                        CancellationToken.ThrowIfCancellationRequested();
                         data.Add(
-                            _dataPreparer.PrepareData(
+                            DataPreparer.PrepareData(
                                 DefaultComputerProperties, computerPrincipal));
                     }
                 }
@@ -635,7 +658,7 @@ namespace ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new UserPrincipal(principalContext))
             {
-                principal.Name = Asterix + _searchText + Asterix;
+                principal.Name = Asterix + SearchText + Asterix;
                 using (var principalSearcher = new PrincipalSearcher(
                     principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
@@ -643,9 +666,9 @@ namespace ActiveDirectoryTool
                     foreach (var userPrincipal in principalSearchResult
                         .GetUserPrincipals())
                     {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                        CancellationToken.ThrowIfCancellationRequested();
                         data.Add(
-                            _dataPreparer.PrepareData(
+                            DataPreparer.PrepareData(
                                 DefaultUserProperties,
                                 userPrincipal: userPrincipal));
                     }
@@ -660,7 +683,7 @@ namespace ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new GroupPrincipal(principalContext))
             {
-                principal.Name = Asterix + _searchText + Asterix;
+                principal.Name = Asterix + SearchText + Asterix;
                 using (var principalSearcher = new PrincipalSearcher(
                     principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
@@ -668,9 +691,9 @@ namespace ActiveDirectoryTool
                     foreach (var groupPrincipal in principalSearchResult
                         .GetGroupPrincipals())
                     {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                        CancellationToken.ThrowIfCancellationRequested();
                         data.Add(
-                            _dataPreparer.PrepareData(
+                            DataPreparer.PrepareData(
                                 DefaultGroupProperties,
                                 groupPrincipal: groupPrincipal));
                     }
@@ -682,9 +705,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetUsersDirectReportsData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var userPrincipal = UserPrincipal.FindByIdentity(
                     principalContext,
@@ -697,7 +720,7 @@ namespace ActiveDirectoryTool
                     foreach (var directReportDistinguishedName in 
                         directReportDistinguishedNames)
                     {
-                        _cancellationToken.ThrowIfCancellationRequested();
+                        CancellationToken.ThrowIfCancellationRequested();
                         using (var directReportUserPrincipal = UserPrincipal
                             .FindByIdentity(
                                 principalContext,
@@ -705,7 +728,7 @@ namespace ActiveDirectoryTool
                                 directReportDistinguishedName))
                         {
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultUserDirectReportsProperties,
                                     userPrincipal: userPrincipal,
                                     directReportUserPrincipal:
@@ -720,9 +743,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetUsersGroupsData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var userPrincipal = UserPrincipal.FindByIdentity(
                     principalContext,
@@ -735,9 +758,9 @@ namespace ActiveDirectoryTool
                         foreach (var groupPrincipal in groups
                             .GetGroupPrincipals())
                         {
-                            _cancellationToken.ThrowIfCancellationRequested();
+                            CancellationToken.ThrowIfCancellationRequested();
                             data.Add(
-                                _dataPreparer.PrepareData(
+                                DataPreparer.PrepareData(
                                     DefaultUserGroupsProperties,
                                     userPrincipal: userPrincipal,
                                     groupPrincipal: groupPrincipal));
@@ -751,9 +774,9 @@ namespace ActiveDirectoryTool
         private IEnumerable<ExpandoObject> GetUsersSummariesData()
         {
             var data = new List<ExpandoObject>();
-            foreach (var distinguishedName in _distinguishedNames)
+            foreach (var distinguishedName in DistinguishedNames)
             {
-                _cancellationToken.ThrowIfCancellationRequested();
+                CancellationToken.ThrowIfCancellationRequested();
                 using (var principalContext = GetPrincipalContext())
                 using (var userPrincipal = UserPrincipal.FindByIdentity(
                     principalContext,
@@ -762,7 +785,7 @@ namespace ActiveDirectoryTool
                 {
                     if (userPrincipal == null) continue;
                     data.Add(
-                        _dataPreparer.PrepareData(
+                        DataPreparer.PrepareData(
                             DefaultUserProperties,
                             userPrincipal: userPrincipal));
                 }
