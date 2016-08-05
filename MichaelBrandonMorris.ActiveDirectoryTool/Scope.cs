@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
-using System.DirectoryServices.AccountManagement;
-using System.Windows.Documents;
 using Extensions.PrimitiveExtensions;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public class Scope : IEquatable<Scope>
     {

@@ -3,7 +3,7 @@ using System.Dynamic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public enum QueryType
     {

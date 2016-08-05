@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public class BindableSelectedItemBehavior : Behavior<TreeView>
     {

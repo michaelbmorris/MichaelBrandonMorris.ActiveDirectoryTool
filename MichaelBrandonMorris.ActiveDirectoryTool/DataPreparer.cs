@@ -4,10 +4,9 @@ using System.Dynamic;
 using System.Threading;
 using Extensions.PrincipalExtensions;
 using ActiveDirectoryPropertyMapping = System.Collections.Generic.Dictionary
-    <ActiveDirectoryTool.ActiveDirectoryProperty, System.Action>;
-using static ActiveDirectoryTool.ActiveDirectoryProperty;
+    <MichaelBrandonMorris.ActiveDirectoryTool.ActiveDirectoryProperty, System.Action>;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     internal class DataPreparer
     {
@@ -72,153 +71,153 @@ namespace ActiveDirectoryTool
         {
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
-                [ComputerAccountExpirationDate] = () =>
+                [ActiveDirectoryProperty.ComputerAccountExpirationDate] = () =>
                 {
                     result.ComputerAccountExpirationDate =
                         computerPrincipal?.AccountExpirationDate;
                 },
-                [ComputerAccountLockoutTime] = () =>
+                [ActiveDirectoryProperty.ComputerAccountLockoutTime] = () =>
                 {
                     result.ComputerAccountLockoutTime =
                         computerPrincipal?.AccountLockoutTime;
                 },
-                [ComputerAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty.ComputerAllowReversiblePasswordEncryption] = () =>
                 {
                     result.ComputerAllowReversiblePasswordEncryption =
                         computerPrincipal?
                             .AllowReversiblePasswordEncryption;
                 },
-                [ComputerBadLogonCount] = () =>
+                [ActiveDirectoryProperty.ComputerBadLogonCount] = () =>
                 {
                     result.ComputerBadLogonCount =
                         computerPrincipal?.BadLogonCount;
                 },
-                [ComputerCertificates] = () =>
+                [ActiveDirectoryProperty.ComputerCertificates] = () =>
                 {
                     result.ComputerCertificates =
                         computerPrincipal?.Certificates;
                 },
-                [ComputerContext] = () =>
+                [ActiveDirectoryProperty.ComputerContext] = () =>
                 {
                     result.ComputerContext = computerPrincipal?.Context;
                 },
-                [ComputerContextType] = () =>
+                [ActiveDirectoryProperty.ComputerContextType] = () =>
                 {
                     result.ComputerContextType =
                         computerPrincipal?.ContextType;
                 },
-                [ComputerDelegationPermitted] = () =>
+                [ActiveDirectoryProperty.ComputerDelegationPermitted] = () =>
                 {
                     result.ComputerDelegationPermitted =
                         computerPrincipal?.DelegationPermitted;
                 },
-                [ComputerDescription] = () =>
+                [ActiveDirectoryProperty.ComputerDescription] = () =>
                 {
                     result.ComputerDescription =
                         computerPrincipal?.Description;
                 },
-                [ComputerDisplayName] = () =>
+                [ActiveDirectoryProperty.ComputerDisplayName] = () =>
                 {
                     result.ComputerDisplayName =
                         computerPrincipal?.DisplayName;
                 },
-                [ComputerDistinguishedName] = () =>
+                [ActiveDirectoryProperty.ComputerDistinguishedName] = () =>
                 {
                     result.ComputerDistinguishedName =
                         computerPrincipal?.DistinguishedName;
                 },
-                [ComputerEnabled] = () =>
+                [ActiveDirectoryProperty.ComputerEnabled] = () =>
                 {
                     result.ComputerEnabled = computerPrincipal?.Enabled;
                 },
-                [ComputerGuid] = () =>
+                [ActiveDirectoryProperty.ComputerGuid] = () =>
                 {
                     result.ComputerGuid = computerPrincipal?.Guid;
                 },
-                [ComputerHomeDirectory] = () =>
+                [ActiveDirectoryProperty.ComputerHomeDirectory] = () =>
                 {
                     result.ComputerHomeDirectory =
                         computerPrincipal?.HomeDirectory;
                 },
-                [ComputerHomeDrive] = () =>
+                [ActiveDirectoryProperty.ComputerHomeDrive] = () =>
                 {
                     result.ComputerHomeDrive =
                         computerPrincipal?.HomeDrive;
                 },
-                [ComputerLastBadPasswordAttempt] = () =>
+                [ActiveDirectoryProperty.ComputerLastBadPasswordAttempt] = () =>
                 {
                     result.ComputerLastBadPasswordAttempt =
                         computerPrincipal?.LastBadPasswordAttempt;
                 },
-                [ComputerLastLogon] = () =>
+                [ActiveDirectoryProperty.ComputerLastLogon] = () =>
                 {
                     result.ComputerLastLogon =
                         computerPrincipal?.LastLogon;
                 },
-                [ComputerLastPasswordSet] = () =>
+                [ActiveDirectoryProperty.ComputerLastPasswordSet] = () =>
                 {
                     result.LastPasswordSet =
                         computerPrincipal?.LastPasswordSet;
                 },
-                [ComputerName] = () =>
+                [ActiveDirectoryProperty.ComputerName] = () =>
                 {
                     result.ComputerName = computerPrincipal?.Name;
                 },
-                [ComputerPasswordNeverExpires] = () =>
+                [ActiveDirectoryProperty.ComputerPasswordNeverExpires] = () =>
                 {
                     result.ComputerPasswordNeverExpires =
                         computerPrincipal?.PasswordNeverExpires;
                 },
-                [ComputerPasswordNotRequired] = () =>
+                [ActiveDirectoryProperty.ComputerPasswordNotRequired] = () =>
                 {
                     result.ComputerPasswordNotRequired =
                         computerPrincipal?.PasswordNotRequired;
                 },
-                [ComputerPermittedLogonTimes] = () =>
+                [ActiveDirectoryProperty.ComputerPermittedLogonTimes] = () =>
                 {
                     result.ComputerPermittedLogonTimes =
                         computerPrincipal?.PermittedLogonTimes;
                 },
-                [ComputerPermittedWorkstations] = () =>
+                [ActiveDirectoryProperty.ComputerPermittedWorkstations] = () =>
                 {
                     result.ComputerPermittedWorkstations =
                         computerPrincipal?.PermittedWorkstations;
                 },
-                [ComputerSamAccountName] = () =>
+                [ActiveDirectoryProperty.ComputerSamAccountName] = () =>
                 {
                     result.ComputerSamAccountName =
                         computerPrincipal?.SamAccountName;
                 },
-                [ComputerScriptPath] = () =>
+                [ActiveDirectoryProperty.ComputerScriptPath] = () =>
                 {
                     result.ComputerScriptPath =
                         computerPrincipal?.ScriptPath;
                 },
-                [ComputerServicePrincipalNames] = () =>
+                [ActiveDirectoryProperty.ComputerServicePrincipalNames] = () =>
                 {
                     result.ComputerServicecomputerPrincipalNames =
                         computerPrincipal?.ServicePrincipalNames;
                 },
-                [ComputerSid] = () =>
+                [ActiveDirectoryProperty.ComputerSid] = () =>
                 {
                     result.ComputerSid = computerPrincipal?.Sid;
                 },
-                [ComputerSmartcardLogonRequired] = () =>
+                [ActiveDirectoryProperty.ComputerSmartcardLogonRequired] = () =>
                 {
                     result.ComputerSmartcardLogonRequired =
                         computerPrincipal?.SmartcardLogonRequired;
                 },
-                [ComputerStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.ComputerStructuralObjectClass] = () =>
                 {
                     result.ComputerStructuralObjectClass =
                         computerPrincipal?.StructuralObjectClass;
                 },
-                [ComputerUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.ComputerUserCannotChangePassword] = () =>
                 {
                     result.ComputerUserCannotChangePassword =
                         computerPrincipal?.UserCannotChangePassword;
                 },
-                [ComputerUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.ComputerUserPrincipalName] = () =>
                 {
                     result.ComputerUsercomputerPrincipalName =
                         computerPrincipal?.UserPrincipalName;
@@ -237,79 +236,79 @@ namespace ActiveDirectoryTool
         {
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
-                [ContainerGroupContext] = () =>
+                [ActiveDirectoryProperty.ContainerGroupContext] = () =>
                 {
                     result.ContainerGroupContext =
                         containerGroupPrincipal?.Context;
                 },
-                [ContainerGroupContextType] = () =>
+                [ActiveDirectoryProperty.ContainerGroupContextType] = () =>
                 {
                     result.ContainerGroupContextType =
                         containerGroupPrincipal?.ContextType;
                 },
-                [ContainerGroupDescription] = () =>
+                [ActiveDirectoryProperty.ContainerGroupDescription] = () =>
                 {
                     result.ContainerGroupDescription =
                         containerGroupPrincipal?.Description;
                 },
-                [ContainerGroupDisplayName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupDisplayName] = () =>
                 {
                     result.ContainerGroupDisplayName =
                         containerGroupPrincipal?.DisplayName;
                 },
-                [ContainerGroupDistinguishedName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupDistinguishedName] = () =>
                 {
                     result.ContainerGroupDistinguishedName =
                         containerGroupPrincipal?.DistinguishedName;
                 },
-                [ContainerGroupGuid] = () =>
+                [ActiveDirectoryProperty.ContainerGroupGuid] = () =>
                 {
                     result.ContainerGroupGuid = containerGroupPrincipal?.Guid;
                 },
-                [ContainerGroupIsSecurityGroup] = () =>
+                [ActiveDirectoryProperty.ContainerGroupIsSecurityGroup] = () =>
                 {
                     result.ContainerGroupIsSecurityGroup =
                         containerGroupPrincipal?.IsSecurityGroup;
                 },
-                [ContainerGroupManagedByDistinguishedName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupManagedByDistinguishedName] = () =>
                 {
                     result.ContainerGroupManagedByDistinguishedName =
                         containerGroupPrincipal?.GetManagedByDistinguishedName();
                 },
-                [ContainerGroupManagedByName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupManagedByName] = () =>
                 {
                     result.ContainerGroupManagedByName =
                         containerGroupPrincipal.GetManagedByName();
                 },
-                [ContainerGroupName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupName] = () =>
                 {
                     result.ContainerGroupName = containerGroupPrincipal?.Name;
                 },
-                [ContainerGroupSamAccountName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupSamAccountName] = () =>
                 {
                     result.ContainerGroupSamAccountName =
                         containerGroupPrincipal?.SamAccountName;
                 },
-                [ContainerGroupScope] = () =>
+                [ActiveDirectoryProperty.ContainerGroupScope] = () =>
                 {
                     result.ContainerGroupScope =
                         containerGroupPrincipal?.GroupScope;
                 },
-                [ContainerGroupSid] = () =>
+                [ActiveDirectoryProperty.ContainerGroupSid] = () =>
                 {
                     result.ContainerGroupSid = containerGroupPrincipal?.Sid;
                 },
-                [ContainerGroupStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.ContainerGroupStructuralObjectClass] = () =>
                 {
                     result.ContainerGroupStructuralObjectClass =
                         containerGroupPrincipal?.StructuralObjectClass;
                 },
-                [ContainerGroupUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupUserPrincipalName] = () =>
                 {
                     result.ContainerGroupUserPrincipalName =
                         containerGroupPrincipal?.UserPrincipalName;
                 },
-                [ContainerGroupMembers] = () =>
+                [ActiveDirectoryProperty.ContainerGroupMembers] = () =>
                 {
                     result.ContainerGroupMembers =
                         containerGroupPrincipal?.Members;
@@ -328,297 +327,297 @@ namespace ActiveDirectoryTool
         {
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
-                [DirectReportUserAccountControl] = () =>
+                [ActiveDirectoryProperty.DirectReportUserAccountControl] = () =>
                 {
                     result.DirectReportAccountControl =
                         directReportUserPrincipal.GetUserAccountControl();
                 },
-                [DirectReportAccountExpirationDate] = () =>
+                [ActiveDirectoryProperty.DirectReportAccountExpirationDate] = () =>
                 {
                     result.DirectReportAccountExpirationDate =
                         directReportUserPrincipal.AccountExpirationDate;
                 },
-                [DirectReportAccountLockoutTime] = () =>
+                [ActiveDirectoryProperty.DirectReportAccountLockoutTime] = () =>
                 {
                     result.DirectReportAccountLockoutTime =
                         directReportUserPrincipal.AccountLockoutTime;
                 },
-                [DirectReportAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty.DirectReportAllowReversiblePasswordEncryption] = () =>
                 {
                     result.DirectReportAllowReversiblePasswordEncryption =
                         directReportUserPrincipal
                             .AllowReversiblePasswordEncryption;
                 },
-                [DirectReportAssistant] = () =>
+                [ActiveDirectoryProperty.DirectReportAssistant] = () =>
                 {
                     result.DirectReportAssistant =
                         directReportUserPrincipal.GetAssistant();
                 },
-                [DirectReportBadLogonCount] = () =>
+                [ActiveDirectoryProperty.DirectReportBadLogonCount] = () =>
                 {
                     result.DirectReportBadLogonCount =
                         directReportUserPrincipal.BadLogonCount;
                 },
-                [DirectReportCertificates] = () =>
+                [ActiveDirectoryProperty.DirectReportCertificates] = () =>
                 {
                     result.DirectReportCertificates =
                         directReportUserPrincipal.Certificates;
                 },
-                [DirectReportCity] = () =>
+                [ActiveDirectoryProperty.DirectReportCity] = () =>
                 {
                     result.DirectReportCity =
                         directReportUserPrincipal.GetCity();
                 },
-                [DirectReportComment] = () =>
+                [ActiveDirectoryProperty.DirectReportComment] = () =>
                 {
                     result.DirectReportComment =
                         directReportUserPrincipal.GetComment();
                 },
-                [DirectReportCompany] = () =>
+                [ActiveDirectoryProperty.DirectReportCompany] = () =>
                 {
                     result.DirectReportCompany =
                         directReportUserPrincipal.GetCompany();
                 },
-                [DirectReportContext] = () =>
+                [ActiveDirectoryProperty.DirectReportContext] = () =>
                 {
                     result.DirectReportContext =
                         directReportUserPrincipal.Context;
                 },
-                [DirectReportContextType] = () =>
+                [ActiveDirectoryProperty.DirectReportContextType] = () =>
                 {
                     result.DirectReportContextType =
                         directReportUserPrincipal.ContextType;
                 },
-                [DirectReportCountry] = () =>
+                [ActiveDirectoryProperty.DirectReportCountry] = () =>
                 {
                     result.DirectReportCountry =
                         directReportUserPrincipal.GetCountry();
                 },
-                [DirectReportDelegationPermitted] = () =>
+                [ActiveDirectoryProperty.DirectReportDelegationPermitted] = () =>
                 {
                     result.DirectReportDelegationPermitted =
                         directReportUserPrincipal.DelegationPermitted;
                 },
-                [DirectReportDepartment] = () =>
+                [ActiveDirectoryProperty.DirectReportDepartment] = () =>
                 {
                     result.DirectReportDepartment =
                         directReportUserPrincipal.GetDepartment();
                 },
-                [DirectReportDescription] = () =>
+                [ActiveDirectoryProperty.DirectReportDescription] = () =>
                 {
                     result.DirectReportDescription =
                         directReportUserPrincipal.Description;
                 },
-                [DirectReportDisplayName] = () =>
+                [ActiveDirectoryProperty.DirectReportDisplayName] = () =>
                 {
                     result.DirectReportDisplayName =
                         directReportUserPrincipal.DisplayName;
                 },
-                [DirectReportDistinguishedName] = () =>
+                [ActiveDirectoryProperty.DirectReportDistinguishedName] = () =>
                 {
                     result.DirectReportDistinguishedName =
                         directReportUserPrincipal?.DistinguishedName;
                 },
-                [DirectReportDivision] = () =>
+                [ActiveDirectoryProperty.DirectReportDivision] = () =>
                 {
                     result.DirectReportDivision =
                         directReportUserPrincipal.GetDivision();
                 },
-                [DirectReportEmailAddress] = () =>
+                [ActiveDirectoryProperty.DirectReportEmailAddress] = () =>
                 {
                     result.DirectReportEmailAddress =
                         directReportUserPrincipal.EmailAddress;
                 },
-                [DirectReportEmployeeId] = () =>
+                [ActiveDirectoryProperty.DirectReportEmployeeId] = () =>
                 {
                     result.DirectReportEmployeeId =
                         directReportUserPrincipal.EmployeeId;
                 },
-                [DirectReportEnabled] = () =>
+                [ActiveDirectoryProperty.DirectReportEnabled] = () =>
                 {
                     result.DirectReportEnabled =
                         directReportUserPrincipal.Enabled;
                 },
-                [DirectReportFax] = () =>
+                [ActiveDirectoryProperty.DirectReportFax] = () =>
                 {
                     result.DirectReportFax =
                         directReportUserPrincipal.GetFax();
                 },
-                [DirectReportSuffix] = () =>
+                [ActiveDirectoryProperty.DirectReportSuffix] = () =>
                 {
                     result.DirectReportSuffix =
                         directReportUserPrincipal.GetSuffix();
                 },
-                [DirectReportGivenName] = () =>
+                [ActiveDirectoryProperty.DirectReportGivenName] = () =>
                 {
                     result.DirectReportGivenName =
                         directReportUserPrincipal.GivenName;
                 },
-                [DirectReportGuid] = () =>
+                [ActiveDirectoryProperty.DirectReportGuid] = () =>
                 {
                     result.DirectReportGuid =
                         directReportUserPrincipal.Guid;
                 },
-                [DirectReportHomeAddress] = () =>
+                [ActiveDirectoryProperty.DirectReportHomeAddress] = () =>
                 {
                     result.DirectReportHomeAddress =
                         directReportUserPrincipal.GetHomeAddress();
                 },
-                [DirectReportHomeDirectory] = () =>
+                [ActiveDirectoryProperty.DirectReportHomeDirectory] = () =>
                 {
                     result.DirectReportHomeDirectory =
                         directReportUserPrincipal.HomeDirectory;
                 },
-                [DirectReportHomeDrive] = () =>
+                [ActiveDirectoryProperty.DirectReportHomeDrive] = () =>
                 {
                     result.DirectReportHomeDrive =
                         directReportUserPrincipal.HomeDrive;
                 },
-                [DirectReportHomePhone] = () =>
+                [ActiveDirectoryProperty.DirectReportHomePhone] = () =>
                 {
                     result.DirectReportHomePhone =
                         directReportUserPrincipal.GetHomePhone();
                 },
-                [DirectReportInitials] = () =>
+                [ActiveDirectoryProperty.DirectReportInitials] = () =>
                 {
                     result.DirectReportInitials =
                         directReportUserPrincipal.GetInitials();
                 },
-                [DirectReportIsAccountLockedOut] = () =>
+                [ActiveDirectoryProperty.DirectReportIsAccountLockedOut] = () =>
                 {
                     result.DirectReportIsAccountLockedOut =
                         directReportUserPrincipal.IsAccountLockedOut();
                 },
-                [DirectReportIsActive] = () =>
+                [ActiveDirectoryProperty.DirectReportIsActive] = () =>
                 {
                     result.DirectReportIsActive =
                         directReportUserPrincipal.IsActive();
                 },
-                [DirectReportLastBadPasswordAttempt] = () =>
+                [ActiveDirectoryProperty.DirectReportLastBadPasswordAttempt] = () =>
                 {
                     result.DirectReportLastBadPasswordAttempt =
                         directReportUserPrincipal.LastBadPasswordAttempt;
                 },
-                [DirectReportLastLogon] = () =>
+                [ActiveDirectoryProperty.DirectReportLastLogon] = () =>
                 {
                     result.DirectReportLastLogon =
                         directReportUserPrincipal.LastLogon;
                 },
-                [DirectReportLastPasswordSet] = () =>
+                [ActiveDirectoryProperty.DirectReportLastPasswordSet] = () =>
                 {
                     result.DirectReportLastPasswordSet =
                         directReportUserPrincipal.LastPasswordSet;
                 },
-                [DirectReportMiddleName] = () =>
+                [ActiveDirectoryProperty.DirectReportMiddleName] = () =>
                 {
                     result.DirectReportMiddleName =
                         directReportUserPrincipal.MiddleName;
                 },
-                [DirectReportMobile] = () =>
+                [ActiveDirectoryProperty.DirectReportMobile] = () =>
                 {
                     result.DirectReportMobile =
                         directReportUserPrincipal.GetMobile();
                 },
-                [DirectReportName] = () =>
+                [ActiveDirectoryProperty.DirectReportName] = () =>
                 {
                     result.DirectReportName =
                         directReportUserPrincipal?.Name;
                 },
-                [DirectReportNotes] = () =>
+                [ActiveDirectoryProperty.DirectReportNotes] = () =>
                 {
                     result.DirectReportNotes =
                         directReportUserPrincipal.GetNotes();
                 },
-                [DirectReportPager] = () =>
+                [ActiveDirectoryProperty.DirectReportPager] = () =>
                 {
                     result.DirectReportPager =
                         directReportUserPrincipal.GetPager();
                 },
-                [DirectReportPasswordNeverExpires] = () =>
+                [ActiveDirectoryProperty.DirectReportPasswordNeverExpires] = () =>
                 {
                     result.DirectReportPasswordNeverExpires =
                         directReportUserPrincipal.PasswordNeverExpires;
                 },
-                [DirectReportPasswordNotRequired] = () =>
+                [ActiveDirectoryProperty.DirectReportPasswordNotRequired] = () =>
                 {
                     result.DirectReportPasswordNotRequired =
                         directReportUserPrincipal.PasswordNotRequired;
                 },
-                [DirectReportPermittedLogonTimes] = () =>
+                [ActiveDirectoryProperty.DirectReportPermittedLogonTimes] = () =>
                 {
                     result.DirectReportPermittedLogonTimes =
                         directReportUserPrincipal.PermittedLogonTimes;
                 },
-                [DirectReportPermittedWorkstations] = () =>
+                [ActiveDirectoryProperty.DirectReportPermittedWorkstations] = () =>
                 {
                     result.DirectReportPermittedWorkstations =
                         directReportUserPrincipal.PermittedWorkstations;
                 },
-                [DirectReportSamAccountName] = () =>
+                [ActiveDirectoryProperty.DirectReportSamAccountName] = () =>
                 {
                     result.DirectReportSamAccountName =
                         directReportUserPrincipal.SamAccountName;
                 },
-                [DirectReportScriptPath] = () =>
+                [ActiveDirectoryProperty.DirectReportScriptPath] = () =>
                 {
                     result.DirectReportScriptPath =
                         directReportUserPrincipal.ScriptPath;
                 },
-                [DirectReportSid] = () =>
+                [ActiveDirectoryProperty.DirectReportSid] = () =>
                 {
                     result.DirectReportSid = directReportUserPrincipal.Sid;
                 },
-                [DirectReportSip] = () =>
+                [ActiveDirectoryProperty.DirectReportSip] = () =>
                 {
                     result.DirectReportSip =
                         directReportUserPrincipal.GetSip();
                 },
-                [DirectReportSmartcardLogonRequired] = () =>
+                [ActiveDirectoryProperty.DirectReportSmartcardLogonRequired] = () =>
                 {
                     result.DirectReportSmartcardLogonRequired =
                         directReportUserPrincipal.SmartcardLogonRequired;
                 },
-                [DirectReportState] = () =>
+                [ActiveDirectoryProperty.DirectReportState] = () =>
                 {
                     result.DirectReportState =
                         directReportUserPrincipal.GetState();
                 },
-                [DirectReportStreetAddress] = () =>
+                [ActiveDirectoryProperty.DirectReportStreetAddress] = () =>
                 {
                     result.DirectReportStreetAddress =
                         directReportUserPrincipal.GetStreetAddress();
                 },
-                [DirectReportStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.DirectReportStructuralObjectClass] = () =>
                 {
                     result.DirectReportStructuralObjectClass =
                         directReportUserPrincipal.StructuralObjectClass;
                 },
-                [DirectReportSurname] = () =>
+                [ActiveDirectoryProperty.DirectReportSurname] = () =>
                 {
                     result.DirectReportSurname =
                         directReportUserPrincipal.Surname;
                 },
-                [DirectReportTitle] = () =>
+                [ActiveDirectoryProperty.DirectReportTitle] = () =>
                 {
                     result.DirectReportTitle =
                         directReportUserPrincipal.GetTitle();
                 },
-                [DirectReportUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.DirectReportUserCannotChangePassword] = () =>
                 {
                     result.DirectReportUserCannotChangePassword =
                         directReportUserPrincipal.UserCannotChangePassword;
                 },
-                [DirectReportUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.DirectReportUserPrincipalName] = () =>
                 {
                     result.DirectReportdirectReportUserPrincipalName =
                         directReportUserPrincipal.UserPrincipalName;
                 },
-                [DirectReportVoiceTelephoneNumber] = () =>
+                [ActiveDirectoryProperty.DirectReportVoiceTelephoneNumber] = () =>
                 {
                     result.DirectReportVoiceTelephoneNumber =
                         directReportUserPrincipal.VoiceTelephoneNumber;
                 },
-                [DirectReportVoip] = () =>
+                [ActiveDirectoryProperty.DirectReportVoip] = () =>
                 {
                     result.DirectReportVoip =
                         directReportUserPrincipal.GetVoip();
@@ -637,51 +636,51 @@ namespace ActiveDirectoryTool
         {
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
-                [GroupContext] = () =>
+                [ActiveDirectoryProperty.GroupContext] = () =>
                     {
                         result.GroupContext = groupPrincipal.Context;
                     },
-                [GroupContextType] = () =>
+                [ActiveDirectoryProperty.GroupContextType] = () =>
                 {
                     result.GroupContextType = groupPrincipal.ContextType;
                 },
-                [GroupDescription] = () =>
+                [ActiveDirectoryProperty.GroupDescription] = () =>
                 {
                     result.GroupDescription = groupPrincipal.Description;
                 },
-                [GroupDisplayName] = () =>
+                [ActiveDirectoryProperty.GroupDisplayName] = () =>
                 {
                     result.GroupDisplayName = groupPrincipal.DisplayName;
                 },
-                [GroupDistinguishedName] = () =>
+                [ActiveDirectoryProperty.GroupDistinguishedName] = () =>
                 {
                     result.GroupDistinguishedName =
                         groupPrincipal.DistinguishedName;
                 },
-                [GroupGuid] = () =>
+                [ActiveDirectoryProperty.GroupGuid] = () =>
                 {
                     result.GroupGuid = groupPrincipal.Guid;
                 },
-                [GroupIsSecurityGroup] = () =>
+                [ActiveDirectoryProperty.GroupIsSecurityGroup] = () =>
                 {
                     result.GroupIsSecurityGroup =
                         groupPrincipal.IsSecurityGroup;
                 },
-                [GroupManagedByDistinguishedName] = () =>
+                [ActiveDirectoryProperty.GroupManagedByDistinguishedName] = () =>
                 {
                     result.GroupManagedByDistinguishedName = 
                         groupPrincipal.GetManagedByDistinguishedName();
                 },
-                [GroupManagedByName] = () =>
+                [ActiveDirectoryProperty.GroupManagedByName] = () =>
                 {
                     result.GroupManagedByName =
                         groupPrincipal.GetManagedByName();
                 },
-                [GroupName] = () =>
+                [ActiveDirectoryProperty.GroupName] = () =>
                 {
                     result.GroupName = groupPrincipal.Name;
                 },
-                [GroupSamAccountName] = () =>
+                [ActiveDirectoryProperty.GroupSamAccountName] = () =>
                 {
                     result.GroupSamAccountName = groupPrincipal.SamAccountName;
                 },
@@ -689,21 +688,21 @@ namespace ActiveDirectoryTool
                 {
                     result.GroupScope = groupPrincipal.GroupScope;
                 },
-                [GroupSid] = () =>
+                [ActiveDirectoryProperty.GroupSid] = () =>
                 {
                     result.GroupSid = groupPrincipal.Sid;
                 },
-                [GroupStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.GroupStructuralObjectClass] = () =>
                 {
                     result.GroupStructuralObjectClass =
                         groupPrincipal.StructuralObjectClass;
                 },
-                [GroupUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.GroupUserPrincipalName] = () =>
                 {
                     result.GroupUserPrincipalName =
                         groupPrincipal.UserPrincipalName;
                 },
-                [GroupMembers] = () =>
+                [ActiveDirectoryProperty.GroupMembers] = () =>
                 {
                     result.GroupMembers = groupPrincipal.Members;
                 }
@@ -721,266 +720,266 @@ namespace ActiveDirectoryTool
         {
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
-                [UserUserAccountControl] = () =>
+                [ActiveDirectoryProperty.UserUserAccountControl] = () =>
                 {
                     result.UserAccountControl =
                         userPrincipal.GetUserAccountControl();
                 },
-                [UserAccountExpirationDate] = () =>
+                [ActiveDirectoryProperty.UserAccountExpirationDate] = () =>
                 {
                     result.UserAccountExpirationDate =
                         userPrincipal.AccountExpirationDate;
                 },
-                [UserAccountLockoutTime] = () =>
+                [ActiveDirectoryProperty.UserAccountLockoutTime] = () =>
                 {
                     result.UserAccountLockoutTime =
                         userPrincipal.AccountLockoutTime;
                 },
-                [UserAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty.UserAllowReversiblePasswordEncryption] = () =>
                 {
                     result.UserAllowReversiblePasswordEncryption =
                         userPrincipal.AllowReversiblePasswordEncryption;
                 },
-                [UserAssistant] = () =>
+                [ActiveDirectoryProperty.UserAssistant] = () =>
                 {
                     result.UserAssistant = userPrincipal.GetAssistant();
                 },
-                [UserBadLogonCount] = () =>
+                [ActiveDirectoryProperty.UserBadLogonCount] = () =>
                 {
                     result.UserBadLogonCount = userPrincipal.BadLogonCount;
                 },
-                [UserCertificates] = () =>
+                [ActiveDirectoryProperty.UserCertificates] = () =>
                 {
                     result.UserCertificates = userPrincipal.Certificates;
                 },
-                [UserCity] = () =>
+                [ActiveDirectoryProperty.UserCity] = () =>
                 {
                     result.UserCity = userPrincipal.GetCity();
                 },
-                [UserComment] = () =>
+                [ActiveDirectoryProperty.UserComment] = () =>
                 {
                     result.UserComment = userPrincipal.GetComment();
                 },
-                [UserCompany] = () =>
+                [ActiveDirectoryProperty.UserCompany] = () =>
                 {
                     result.UserCompany = userPrincipal.GetCompany();
                 },
-                [UserContext] = () =>
+                [ActiveDirectoryProperty.UserContext] = () =>
                 {
                     result.UserContext = userPrincipal.Context;
                 },
-                [UserContextType] = () =>
+                [ActiveDirectoryProperty.UserContextType] = () =>
                 {
                     result.UserContextType = userPrincipal.ContextType;
                 },
-                [UserCountry] = () =>
+                [ActiveDirectoryProperty.UserCountry] = () =>
                 {
                     result.UserCountry = userPrincipal.GetCountry();
                 },
-                [UserDelegationPermitted] = () =>
+                [ActiveDirectoryProperty.UserDelegationPermitted] = () =>
                 {
                     result.UserDelegationPermitted =
                         userPrincipal.DelegationPermitted;
                 },
-                [UserDepartment] = () =>
+                [ActiveDirectoryProperty.UserDepartment] = () =>
                 {
                     result.UserDepartment = userPrincipal.GetDepartment();
                 },
-                [UserDescription] = () =>
+                [ActiveDirectoryProperty.UserDescription] = () =>
                 {
                     result.UserDescription = userPrincipal.Description;
                 },
-                [UserDisplayName] = () =>
+                [ActiveDirectoryProperty.UserDisplayName] = () =>
                 {
                     result.UserDisplayName = userPrincipal.DisplayName;
                 },
-                [UserDistinguishedName] = () =>
+                [ActiveDirectoryProperty.UserDistinguishedName] = () =>
                 {
                     result.UserDistinguishedName =
                         userPrincipal.DistinguishedName;
                 },
-                [UserDivision] = () =>
+                [ActiveDirectoryProperty.UserDivision] = () =>
                 {
                     result.UserDivision = userPrincipal.GetDivision();
                 },
-                [UserEmailAddress] = () =>
+                [ActiveDirectoryProperty.UserEmailAddress] = () =>
                 {
                     result.UserEmailAddress = userPrincipal.EmailAddress;
                 },
-                [UserEmployeeId] = () =>
+                [ActiveDirectoryProperty.UserEmployeeId] = () =>
                 {
                     result.UserEmployeeId = userPrincipal.EmployeeId;
                 },
-                [UserEnabled] = () =>
+                [ActiveDirectoryProperty.UserEnabled] = () =>
                 {
                     result.UserEnabled = userPrincipal.Enabled;
                 },
-                [UserFax] = () =>
+                [ActiveDirectoryProperty.UserFax] = () =>
                 {
                     result.UserFax = userPrincipal.GetFax();
                 },
-                [UserSuffix] = () =>
+                [ActiveDirectoryProperty.UserSuffix] = () =>
                 {
                     result.UserSuffix = userPrincipal.GetSuffix();
                 },
-                [UserGivenName] = () =>
+                [ActiveDirectoryProperty.UserGivenName] = () =>
                 {
                     result.UserGivenName = userPrincipal.GivenName;
                 },
-                [UserGuid] = () =>
+                [ActiveDirectoryProperty.UserGuid] = () =>
                 {
                     result.UserGuid = userPrincipal.Guid;
                 },
-                [UserHomeAddress] = () =>
+                [ActiveDirectoryProperty.UserHomeAddress] = () =>
                 {
                     result.UserHomeAddress = userPrincipal.GetHomeAddress();
                 },
-                [UserHomeDirectory] = () =>
+                [ActiveDirectoryProperty.UserHomeDirectory] = () =>
                 {
                     result.UserHomeDirectory = userPrincipal.HomeDirectory;
                 },
-                [UserHomeDrive] = () =>
+                [ActiveDirectoryProperty.UserHomeDrive] = () =>
                 {
                     result.UserHomeDrive = userPrincipal.HomeDrive;
                 },
-                [UserHomePhone] = () =>
+                [ActiveDirectoryProperty.UserHomePhone] = () =>
                 {
                     result.UserHomePhone = userPrincipal.GetHomePhone();
                 },
-                [UserInitials] = () =>
+                [ActiveDirectoryProperty.UserInitials] = () =>
                 {
                     result.UserInitials = userPrincipal.GetInitials();
                 },
-                [UserIsAccountLockedOut] = () =>
+                [ActiveDirectoryProperty.UserIsAccountLockedOut] = () =>
                 {
                     result.UserIsAccountLockedOut =
                         userPrincipal.IsAccountLockedOut();
                 },
-                [UserIsActive] = () =>
+                [ActiveDirectoryProperty.UserIsActive] = () =>
                 {
                     result.UserIsActive = userPrincipal.IsActive();
                 },
-                [UserLastBadPasswordAttempt] = () =>
+                [ActiveDirectoryProperty.UserLastBadPasswordAttempt] = () =>
                 {
                     result.UserLastBadPasswordAttempt =
                         userPrincipal.LastBadPasswordAttempt;
                 },
-                [UserLastLogon] = () =>
+                [ActiveDirectoryProperty.UserLastLogon] = () =>
                 {
                     result.UserLastLogon = userPrincipal.LastLogon;
                 },
-                [UserLastPasswordSet] = () =>
+                [ActiveDirectoryProperty.UserLastPasswordSet] = () =>
                 {
                     result.UserLastPasswordSet = userPrincipal.LastPasswordSet;
                 },
-                [ManagerDistinguishedName] = () =>
+                [ActiveDirectoryProperty.ManagerDistinguishedName] = () =>
                 {
                     result.ManagerDistinguishedName = userPrincipal
                         .GetManagerDistinguishedName();
                 },
-                [ManagerName] = () =>
+                [ActiveDirectoryProperty.ManagerName] = () =>
                 {
                     result.ManagerName = userPrincipal.GetManagerName();
                 },
-                [UserMiddleName] = () =>
+                [ActiveDirectoryProperty.UserMiddleName] = () =>
                 {
                     result.UserMiddleName = userPrincipal.MiddleName;
                 },
-                [UserMobile] = () =>
+                [ActiveDirectoryProperty.UserMobile] = () =>
                 {
                     result.UserMobile = userPrincipal.GetMobile();
                 },
-                [UserName] = () =>
+                [ActiveDirectoryProperty.UserName] = () =>
                 {
                     result.UserName = userPrincipal.Name;
                 },
-                [UserNotes] = () =>
+                [ActiveDirectoryProperty.UserNotes] = () =>
                 {
                     result.UserNotes = userPrincipal.GetNotes();
                 },
-                [UserPager] = () =>
+                [ActiveDirectoryProperty.UserPager] = () =>
                 {
                     result.UserPager = userPrincipal.GetPager();
                 },
-                [UserPasswordNeverExpires] = () =>
+                [ActiveDirectoryProperty.UserPasswordNeverExpires] = () =>
                 {
                     result.UserPasswordNeverExpires =
                         userPrincipal.PasswordNeverExpires;
                 },
-                [UserPasswordNotRequired] = () =>
+                [ActiveDirectoryProperty.UserPasswordNotRequired] = () =>
                 {
                     result.UserPasswordNotRequired =
                         userPrincipal.PasswordNotRequired;
                 },
-                [UserPermittedLogonTimes] = () =>
+                [ActiveDirectoryProperty.UserPermittedLogonTimes] = () =>
                 {
                     result.UserPermittedLogonTimes =
                         userPrincipal.PermittedLogonTimes;
                 },
-                [UserPermittedWorkstations] = () =>
+                [ActiveDirectoryProperty.UserPermittedWorkstations] = () =>
                 {
                     result.UserPermittedWorkstations =
                         userPrincipal.PermittedWorkstations;
                 },
-                [UserSamAccountName] = () =>
+                [ActiveDirectoryProperty.UserSamAccountName] = () =>
                 {
                     result.UserSamAccountName = userPrincipal.SamAccountName;
                 },
-                [UserScriptPath] = () =>
+                [ActiveDirectoryProperty.UserScriptPath] = () =>
                 {
                     result.UserScriptPath = userPrincipal.ScriptPath;
                 },
-                [UserSid] = () =>
+                [ActiveDirectoryProperty.UserSid] = () =>
                 {
                     result.UserSid = userPrincipal.Sid;
                 },
-                [UserSip] = () =>
+                [ActiveDirectoryProperty.UserSip] = () =>
                 {
                     result.UserSip = userPrincipal.GetSip();
                 },
-                [UserSmartcardLogonRequired] = () =>
+                [ActiveDirectoryProperty.UserSmartcardLogonRequired] = () =>
                 {
                     result.UserSmartcardLogonRequired =
                         userPrincipal.SmartcardLogonRequired;
                 },
-                [UserState] = () =>
+                [ActiveDirectoryProperty.UserState] = () =>
                 {
                     result.UserState = userPrincipal.GetState();
                 },
-                [UserStreetAddress] = () =>
+                [ActiveDirectoryProperty.UserStreetAddress] = () =>
                 {
                     result.UserStreetAddress =
                         userPrincipal.GetStreetAddress();
                 },
-                [UserStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.UserStructuralObjectClass] = () =>
                 {
                     result.UserStructuralObjectClass =
                         userPrincipal.StructuralObjectClass;
                 },
-                [UserSurname] = () =>
+                [ActiveDirectoryProperty.UserSurname] = () =>
                 {
                     result.UserSurname = userPrincipal.Surname;
                 },
-                [UserTitle] = () =>
+                [ActiveDirectoryProperty.UserTitle] = () =>
                 {
                     result.UserTitle = userPrincipal.GetTitle();
                 },
-                [UserUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.UserUserCannotChangePassword] = () =>
                 {
                     result.UserUserCannotChangePassword =
                         userPrincipal.UserCannotChangePassword;
                 },
-                [UserUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.UserUserPrincipalName] = () =>
                 {
                     result.UserUserPrincipalName =
                         userPrincipal.UserPrincipalName;
                 },
-                [UserVoiceTelephoneNumber] = () =>
+                [ActiveDirectoryProperty.UserVoiceTelephoneNumber] = () =>
                 {
                     result.UserVoiceTelephoneNumber =
                         userPrincipal.VoiceTelephoneNumber;
                 },
-                [UserVoip] = () =>
+                [ActiveDirectoryProperty.UserVoip] = () =>
                 {
                     result.UserVoip = userPrincipal.GetVoip();
                 }

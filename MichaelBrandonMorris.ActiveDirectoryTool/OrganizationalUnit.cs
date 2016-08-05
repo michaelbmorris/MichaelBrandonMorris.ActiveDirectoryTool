@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public class OrganizationalUnit
     {

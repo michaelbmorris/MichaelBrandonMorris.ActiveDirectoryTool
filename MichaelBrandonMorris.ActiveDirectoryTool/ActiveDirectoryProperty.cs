@@ -1,4 +1,4 @@
-﻿namespace ActiveDirectoryTool
+﻿namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public enum ActiveDirectoryProperty
     {

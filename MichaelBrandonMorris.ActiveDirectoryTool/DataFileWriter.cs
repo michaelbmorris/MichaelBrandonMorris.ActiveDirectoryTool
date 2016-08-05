@@ -5,10 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Extensions.PrimitiveExtensions;
-using static System.Environment;
-using static System.Environment.SpecialFolder;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public class DataFileWriter
     {
@@ -21,7 +19,7 @@ namespace ActiveDirectoryTool
         private const string OuPrefix = "OU=";
 
         private static readonly string OutputDirectoryPath = Path.Combine(
-            GetFolderPath(MyDocuments), "ActiveDirectoryTool");
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ActiveDirectoryTool");
 
         public DataView Data { get; set; }
         public QueryType QueryType { get; set; }

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -15,10 +15,8 @@ using System.Windows.Input;
 using Extensions.CollectionExtensions;
 using Extensions.PrimitiveExtensions;
 using GalaSoft.MvvmLight.CommandWpf;
-using static ActiveDirectoryTool.QueryType;
-using static System.Deployment.Application.ApplicationDeployment;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     internal class ViewModel : INotifyPropertyChanged
     {
@@ -671,7 +669,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetComputersGroups()
         {
             await RunQuery(
-                ComputersGroups,
+                QueryType.ComputersGroups,
                 CurrentScope,
                 GetComputersDistinguishedNames());
         }
@@ -679,7 +677,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetComputersSummaries()
         {
             await RunQuery(
-                ComputersSummaries,
+                QueryType.ComputersSummaries,
                 CurrentScope,
                 GetComputersDistinguishedNames());
         }
@@ -687,7 +685,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsComputers()
         {
             await RunQuery(
-                GroupsComputers,
+                QueryType.GroupsComputers,
                 CurrentScope,
                 GetContainerGroupsDistinguishedNames());
         }
@@ -695,7 +693,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsManagedByDirectReports()
         {
             await RunQuery(
-                GroupsUsersDirectReports,
+                QueryType.GroupsUsersDirectReports,
                 CurrentScope,
                 GetContainerGroupsManagedByDistinguishedNames());
         }
@@ -703,7 +701,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsManagedByGroups()
         {
             await RunQuery(
-                UsersGroups,
+                QueryType.UsersGroups,
                 CurrentScope,
                 GetContainerGroupsManagedByDistinguishedNames());
         }
@@ -711,7 +709,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsManagedBySummaries()
         {
             await RunQuery(
-                UsersSummaries,
+                QueryType.UsersSummaries,
                 CurrentScope,
                 GetContainerGroupsManagedByDistinguishedNames());
         }
@@ -719,7 +717,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsSummaries()
         {
             await RunQuery(
-                GroupsSummaries,
+                QueryType.GroupsSummaries,
                 CurrentScope,
                 GetContainerGroupsDistinguishedNames());
         }
@@ -727,7 +725,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsUsers()
         {
             await RunQuery(
-                GroupsUsers,
+                QueryType.GroupsUsers,
                 CurrentScope,
                 GetContainerGroupsDistinguishedNames());
         }
@@ -735,7 +733,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsUsersDirectReports()
         {
             await RunQuery(
-                GroupsUsersDirectReports,
+                QueryType.GroupsUsersDirectReports,
                 CurrentScope,
                 GetContainerGroupsDistinguishedNames());
         }
@@ -743,7 +741,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetContainerGroupsUsersGroups()
         {
             await RunQuery(
-                GroupsUsersGroups,
+                QueryType.GroupsUsersGroups,
                 CurrentScope,
                 GetContainerGroupsDistinguishedNames());
         }
@@ -751,7 +749,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetDirectReportsDirectReports()
         {
             await RunQuery(
-                UsersDirectReports,
+                QueryType.UsersDirectReports,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -759,7 +757,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetDirectReportsGroups()
         {
             await RunQuery(
-                UsersGroups,
+                QueryType.UsersGroups,
                 CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
@@ -767,7 +765,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetDirectReportsSummaries()
         {
             await RunQuery(
-                UsersSummaries,
+                QueryType.UsersSummaries,
                 CurrentScope,
                 GetDirectReportsDistinguishedNames());
         }
@@ -775,7 +773,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsComputers()
         {
             await RunQuery(
-                GroupsComputers,
+                QueryType.GroupsComputers,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -783,7 +781,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsManagedByDirectReports()
         {
             await RunQuery(
-                UsersDirectReports,
+                QueryType.UsersDirectReports,
                 CurrentScope,
                 GetGroupsManagedByDistinguishedNames());
         }
@@ -791,7 +789,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsManagedByGroups()
         {
             await RunQuery(
-                UsersGroups,
+                QueryType.UsersGroups,
                 CurrentScope,
                 GetGroupsManagedByDistinguishedNames());
         }
@@ -799,7 +797,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsManagedBySummaries()
         {
             await RunQuery(
-                UsersSummaries,
+                QueryType.UsersSummaries,
                 CurrentScope,
                 GetGroupsManagedByDistinguishedNames());
         }
@@ -807,7 +805,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsSummaries()
         {
             await RunQuery(
-                GroupsSummaries,
+                QueryType.GroupsSummaries,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -815,7 +813,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsUsers()
         {
             await RunQuery(
-                GroupsUsers,
+                QueryType.GroupsUsers,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -823,7 +821,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsUsersDirectReports()
         {
             await RunQuery(
-                GroupsUsersDirectReports,
+                QueryType.GroupsUsersDirectReports,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -831,7 +829,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetGroupsUsersGroups()
         {
             await RunQuery(
-                GroupsUsersGroups,
+                QueryType.GroupsUsersGroups,
                 CurrentScope,
                 GetGroupsDistinguishedNames());
         }
@@ -839,7 +837,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetManagersDirectReports()
         {
             await RunQuery(
-                UsersDirectReports,
+                QueryType.UsersDirectReports,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
@@ -847,7 +845,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetManagersGroups()
         {
             await RunQuery(
-                UsersGroups,
+                QueryType.UsersGroups,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
@@ -855,45 +853,45 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetManagersSummaries()
         {
             await RunQuery(
-                UsersSummaries,
+                QueryType.UsersSummaries,
                 CurrentScope,
                 GetManagersDistinguishedNames());
         }
 
         private async void ExecuteGetOuComputers()
         {
-            await RunQuery(OuComputers, CurrentScope);
+            await RunQuery(QueryType.OuComputers, CurrentScope);
         }
 
         private async void ExecuteGetOuGroups()
         {
-            await RunQuery(OuGroups, CurrentScope);
+            await RunQuery(QueryType.OuGroups, CurrentScope);
         }
 
         private async void ExecuteGetOuGroupsUsers()
         {
-            await RunQuery(OuGroupsUsers, CurrentScope);
+            await RunQuery(QueryType.OuGroupsUsers, CurrentScope);
         }
 
         private async void ExecuteGetOuUsers()
         {
-            await RunQuery(OuUsers, CurrentScope);
+            await RunQuery(QueryType.OuUsers, CurrentScope);
         }
 
         private async void ExecuteGetOuUsersDirectReports()
         {
-            await RunQuery(OuUsersDirectReports, CurrentScope);
+            await RunQuery(QueryType.OuUsersDirectReports, CurrentScope);
         }
 
         private async void ExecuteGetOuUsersGroups()
         {
-            await RunQuery(OuUsersGroups, CurrentScope);
+            await RunQuery(QueryType.OuUsersGroups, CurrentScope);
         }
 
         private async void ExecuteGetUsersDirectReports()
         {
             await RunQuery(
-                UsersDirectReports,
+                QueryType.UsersDirectReports,
                 CurrentScope,
                 GetUsersDistinguishedNames());
         }
@@ -901,7 +899,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetUsersGroups()
         {
             await RunQuery(
-                UsersGroups,
+                QueryType.UsersGroups,
                 CurrentScope,
                 GetUsersDistinguishedNames());
         }
@@ -909,7 +907,7 @@ namespace ActiveDirectoryTool
         private async void ExecuteGetUsersSummaries()
         {
             await RunQuery(
-                UsersSummaries,
+                QueryType.UsersSummaries,
                 CurrentScope,
                 GetUsersDistinguishedNames());
         }
@@ -967,12 +965,12 @@ namespace ActiveDirectoryTool
         {
             var computerContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
-            if (queryType != ComputersGroups)
+            if (queryType != QueryType.ComputersGroups)
             {
                 computerContextMenuItems.Add(MenuItemGetComputersGroups);
             }
 
-            if (queryType != ComputersSummaries)
+            if (queryType != QueryType.ComputersSummaries)
             {
                 computerContextMenuItems.Add(MenuItemGetComputersSummaries);
             }
@@ -1038,27 +1036,27 @@ namespace ActiveDirectoryTool
         {
             var groupContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
-            if (queryType != GroupsComputers)
+            if (queryType != QueryType.GroupsComputers)
             {
                 groupContextMenuItems.Add(GetGroupsComputers);
             }
 
-            if (queryType != GroupsSummaries)
+            if (queryType != QueryType.GroupsSummaries)
             {
                 groupContextMenuItems.Add(GetGroupsSummaries);
             }
 
-            if (queryType != GroupsUsers)
+            if (queryType != QueryType.GroupsUsers)
             {
                 groupContextMenuItems.Add(GetGroupsUsers);
             }
 
-            if (queryType != GroupsUsersDirectReports)
+            if (queryType != QueryType.GroupsUsersDirectReports)
             {
                 groupContextMenuItems.Add(GetGroupsUsersDirectReports);
             }
 
-            if (queryType != GroupsUsersGroups)
+            if (queryType != QueryType.GroupsUsersGroups)
             {
                 groupContextMenuItems.Add(GetGroupsUsersGroups);
             }
@@ -1086,17 +1084,17 @@ namespace ActiveDirectoryTool
         {
             var userContextMenuItems = new List<MenuItem>();
             var queryType = Queries.Peek().QueryType;
-            if (queryType != UsersDirectReports)
+            if (queryType != QueryType.UsersDirectReports)
             {
                 userContextMenuItems.Add(GetUsersDirectReports);
             }
 
-            if (queryType != UsersGroups)
+            if (queryType != QueryType.UsersGroups)
             {
                 userContextMenuItems.Add(GetUsersGroups);
             }
 
-            if (queryType != UsersSummaries)
+            if (queryType != QueryType.UsersSummaries)
             {
                 userContextMenuItems.Add(GetUsersSummaries);
             }
@@ -1157,15 +1155,15 @@ namespace ActiveDirectoryTool
         {
             if (ComputerSearchIsChecked)
             {
-                return SearchComputer;
+                return QueryType.SearchComputer;
             }
 
             if (GroupSearchIsChecked)
             {
-                return SearchGroup;
+                return QueryType.SearchGroup;
             }
 
-            return UserSearchIsChecked ? SearchUser : None;
+            return UserSearchIsChecked ? QueryType.SearchUser : QueryType.None;
         }
 
         private IEnumerable<string> GetUsersDistinguishedNames()
@@ -1262,7 +1260,7 @@ namespace ActiveDirectoryTool
 
             try
             {
-                Version = CurrentDeployment.CurrentVersion.ToString();
+                Version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
             }
             catch (InvalidDeploymentException)
             {

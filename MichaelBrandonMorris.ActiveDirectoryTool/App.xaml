@@ -1,9 +1,9 @@
-﻿<Application x:Class="ActiveDirectoryTool.App"
+﻿<Application x:Class="MichaelBrandonMorris.ActiveDirectoryTool.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ActiveDirectoryTool"
+             xmlns:activeDirectoryTool="clr-namespace:MichaelBrandonMorris.ActiveDirectoryTool"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:ViewModel x:Key="MainViewModel"/>
+        <activeDirectoryTool:ViewModel x:Key="MainViewModel"/>
     </Application.Resources>
 </Application>

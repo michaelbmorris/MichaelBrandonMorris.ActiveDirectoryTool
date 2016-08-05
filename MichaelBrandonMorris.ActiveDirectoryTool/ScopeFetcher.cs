@@ -2,7 +2,7 @@
 using System.DirectoryServices;
 using System.DirectoryServices.AccountManagement;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     internal class ScopeFetcher
     {

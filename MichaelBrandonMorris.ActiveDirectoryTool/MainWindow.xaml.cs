@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Extensions.PrimitiveExtensions;
 
-namespace ActiveDirectoryTool
+namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     public partial class MainWindow
     {
