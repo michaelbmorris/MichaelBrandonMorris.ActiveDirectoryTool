@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Extensions.PrimitiveExtensions;
+using MichaelBrandonMorris.Extensions.PrimitiveExtensions;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {

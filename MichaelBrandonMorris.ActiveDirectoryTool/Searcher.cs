@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
-using Extensions.PrincipalExtensions;
+using MichaelBrandonMorris.Extensions.PrincipalExtensions;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {

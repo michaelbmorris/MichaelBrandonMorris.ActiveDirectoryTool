@@ -2,7 +2,7 @@
 using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
-using Extensions.PrincipalExtensions;
+using MichaelBrandonMorris.Extensions.PrincipalExtensions;
 using ActiveDirectoryPropertyMapping = System.Collections.Generic.Dictionary
     <MichaelBrandonMorris.ActiveDirectoryTool.ActiveDirectoryProperty, System.Action>;
 

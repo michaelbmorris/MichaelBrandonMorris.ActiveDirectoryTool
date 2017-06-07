@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Extensions.PrimitiveExtensions;
+using MichaelBrandonMorris.Extensions.PrimitiveExtensions;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
