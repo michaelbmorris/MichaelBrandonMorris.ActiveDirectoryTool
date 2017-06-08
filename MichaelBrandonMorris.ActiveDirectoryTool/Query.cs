@@ -45,12 +45,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             SearchText = searchText;
         }
 
-        public IEnumerable<ExpandoObject> Data
-        {
-            get;
-            private set;
-        }
-
         public QueryType QueryType
         {
             get;
@@ -61,8 +55,19 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             get;
         }
 
+        public IEnumerable<ExpandoObject> Data
+        {
+            get;
+            private set;
+        }
+
         private CancellationToken CancellationToken
-            => _cancellationTokenSource.Token;
+        {
+            get
+            {
+                return _cancellationTokenSource.Token;
+            }
+        }
 
         private IList<string> DistinguishedNames
         {

@@ -830,6 +830,15 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 {
                     result.UserGuid = userPrincipal.Guid;
                 },
+                [ActiveDirectoryProperty.UserEmployeeNumber] = () =>
+                {
+                    result.EmployeeNumber = userPrincipal.GetEmployeeNumber();
+                },
+                [ActiveDirectoryProperty.UserEmployeeNumberHash] = () =>
+                {
+                    result.EmployeeNumberHash =
+                        userPrincipal.GetEmployeeNumberHash();
+                },
                 [ActiveDirectoryProperty.UserHomeAddress] = () =>
                 {
                     result.UserHomeAddress = userPrincipal.GetHomeAddress();

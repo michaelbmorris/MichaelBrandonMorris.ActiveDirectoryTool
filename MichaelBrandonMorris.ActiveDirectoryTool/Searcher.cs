@@ -124,6 +124,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 ActiveDirectoryProperty.UserVoip,
                 ActiveDirectoryProperty.UserSip,
                 ActiveDirectoryProperty.UserUserPrincipalName,
+                ActiveDirectoryProperty.UserEmployeeNumber,
+                ActiveDirectoryProperty.UserEmployeeNumberHash,
                 ActiveDirectoryProperty.UserDistinguishedName,
                 ActiveDirectoryProperty.ManagerDistinguishedName
             };

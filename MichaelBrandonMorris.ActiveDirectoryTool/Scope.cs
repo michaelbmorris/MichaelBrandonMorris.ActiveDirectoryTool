@@ -16,20 +16,45 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             Children = new List<Scope>();
         }
 
-        public List<Scope> Children { get; set; }
-        internal string Context => Path.Remove(LdapPrefix);
+        public List<Scope> Children
+        {
+            get;
+            set;
+        }
+
+        internal string Context
+        {
+            get
+            {
+                return Path.Remove(LdapPrefix);
+            }
+        }
 
         internal string Domain
-            => Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)
-                .Remove(DomainComponentPrefix)
-                .Replace(Comma, Period);
+        {
+            get
+            {
+                return Path.SubstringAtIndexOfOrdinal(DomainComponentPrefix)
+                    .Remove(DomainComponentPrefix)
+                    .Replace(Comma, Period);
+            }
+        }
 
-        internal string Name { get; set; }
-        internal string Path { get; set; }
+        internal string Name
+        {
+            get;
+            set;
+        }
+
+        internal string Path
+        {
+            get;
+            set;
+        }
 
         public bool Equals(Scope other)
         {
-            return Name == other.Name;
+            return other != null && Name == other.Name;
         }
 
         public override string ToString()
@@ -40,8 +65,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         internal void AddDirectoryScope(OrganizationalUnit organizationalUnit)
         {
             var organizationalUnitLevels = organizationalUnit.Split();
-            if (organizationalUnitLevels == null ||
-                organizationalUnitLevels.Length < 1)
+            if (organizationalUnitLevels == null
+                || organizationalUnitLevels.Length < 1)
             {
                 throw new ArgumentException(
                     "The organizational units array is null or empty!");

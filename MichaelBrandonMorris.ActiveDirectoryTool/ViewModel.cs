@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using MichaelBrandonMorris.Extensions.CollectionExtensions;
 using MichaelBrandonMorris.Extensions.PrimitiveExtensions;
-using GalaSoft.MvvmLight.CommandWpf;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
@@ -76,6 +76,149 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             Queries = new Stack<Query>();
         }
 
+        public ICommand CancelCommand
+        {
+            get
+            {
+                return new RelayCommand(ExecuteCancel);
+            }
+        }
+
+        public ICommand GetOuComputersCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuComputers,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand GetOuGroupsCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuGroups,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand GetOuGroupsUsersCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuGroupsUsers,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand GetOuUsersCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuUsers,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand GetOuUsersDirectReportsCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuUsersDirectReports,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand GetOuUsersGroupsCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteGetOuUsersGroups,
+                    CanExecuteOuCommand);
+            }
+        }
+
+        public ICommand OpenAboutWindow
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteOpenAboutWindow);
+            }
+        }
+
+        public ICommand OpenHelpWindow
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteOpenHelpWindow);
+            }
+        }
+
+        public Scope RootScope
+        {
+            get;
+        }
+
+        public ICommand RunPreviousQuery
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteRunPreviousQuery,
+                    CanExecuteRunPreviousQuery);
+            }
+        }
+
+        public ICommand Search
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteSearch,
+                    CanExecuteSearch);
+            }
+        }
+
+        public ICommand SearchOu
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteSearchOu,
+                    CanExecuteSearchOu);
+            }
+        }
+
+        public ICommand SelectionChangedCommand
+        {
+            get
+            {
+                return new RelayCommand<IList>(
+                    items =>
+                    {
+                        SelectedDataRowViews = items;
+                    });
+            }
+        }
+
+        public ICommand WriteToFileCommand
+        {
+            get
+            {
+                return new RelayCommand(
+                    ExecuteWriteToFile,
+                    CanExecuteWriteToFile);
+            }
+        }
+
         public Visibility CancelButtonVisibility
         {
             get
@@ -92,8 +235,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 NotifyPropertyChanged();
             }
         }
-
-        public ICommand CancelCommand => new RelayCommand(ExecuteCancel);
 
         public bool ComputerSearchIsChecked
         {
@@ -177,24 +318,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        public ICommand GetOuComputersCommand => new RelayCommand(
-            ExecuteGetOuComputers, CanExecuteOuCommand);
-
-        public ICommand GetOuGroupsCommand => new RelayCommand(
-            ExecuteGetOuGroups, CanExecuteOuCommand);
-
-        public ICommand GetOuGroupsUsersCommand => new RelayCommand(
-            ExecuteGetOuGroupsUsers, CanExecuteOuCommand);
-
-        public ICommand GetOuUsersCommand => new RelayCommand(
-            ExecuteGetOuUsers, CanExecuteOuCommand);
-
-        public ICommand GetOuUsersDirectReportsCommand => new RelayCommand(
-            ExecuteGetOuUsersDirectReports, CanExecuteOuCommand);
-
-        public ICommand GetOuUsersGroupsCommand => new RelayCommand(
-            ExecuteGetOuUsersGroups, CanExecuteOuCommand);
-
         public bool GroupSearchIsChecked
         {
             get
@@ -249,12 +372,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        public ICommand OpenAboutWindow => new RelayCommand(
-            ExecuteOpenAboutWindow);
-
-        public ICommand OpenHelpWindow => new RelayCommand(
-            ExecuteOpenHelpWindow);
-
         public Visibility ProgressBarVisibility
         {
             get
@@ -291,20 +408,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        public Scope RootScope
-        {
-            get;
-        }
-
-        public ICommand RunPreviousQuery => new RelayCommand(
-            ExecuteRunPreviousQuery, CanExecuteRunPreviousQuery);
-
-        public ICommand Search => new RelayCommand(
-            ExecuteSearch, CanExecuteSearch);
-
-        public ICommand SearchOu => new RelayCommand(
-            ExecuteSearchOu, CanExecuteSearchOu);
-
         public string SearchText
         {
             get
@@ -322,12 +425,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 NotifyPropertyChanged();
             }
         }
-
-        public ICommand SelectionChangedCommand => new RelayCommand<IList>(
-            items =>
-            {
-                SelectedDataRowViews = items;
-            });
 
         public bool ShowDistinguishedNames
         {
@@ -389,9 +486,6 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        public ICommand WriteToFileCommand => new RelayCommand(
-            ExecuteWriteToFile, CanExecuteWriteToFile);
-
         private AboutWindow AboutWindow
         {
             get
@@ -405,176 +499,341 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        private MenuItem GetContainerGroupsComputers => new MenuItem
+        private MenuItem GetContainerGroupsComputers
         {
-            Header = "Container Groups - Get Computers",
-            Command = new RelayCommand(ExecuteGetContainerGroupsComputers)
-        };
-
-        private MenuItem GetContainerGroupsManagedByDirectReports =>
-            new MenuItem
+            get
             {
-                Header = "Container Group - Get Managed By's Direct Reports",
-                Command = new RelayCommand(
-                    ExecuteGetContainerGroupsManagedByDirectReports)
-            };
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Computers",
+                    Command =
+                        new RelayCommand(ExecuteGetContainerGroupsComputers)
+                };
+            }
+        }
 
-        private MenuItem GetContainerGroupsManagedByGroups => new MenuItem
+        private MenuItem GetContainerGroupsManagedByDirectReports
         {
-            Header = "Container Groups - Get Managed By's Groups",
-            Command = new RelayCommand(
-                ExecuteGetContainerGroupsManagedByGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header =
+                        "Container Group - Get Managed By's Direct Reports",
+                    Command = new RelayCommand(
+                        ExecuteGetContainerGroupsManagedByDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetContainerGroupsManagedBySummaries => new MenuItem
+        private MenuItem GetContainerGroupsManagedByGroups
         {
-            Header = "Container Groups - Get Managed By's Summaries",
-            Command = new RelayCommand(
-                ExecuteGetContainerGroupsManagedBySummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Managed By's Groups",
+                    Command = new RelayCommand(
+                        ExecuteGetContainerGroupsManagedByGroups)
+                };
+            }
+        }
 
-        private MenuItem GetContainerGroupsSummaries => new MenuItem
+        private MenuItem GetContainerGroupsManagedBySummaries
         {
-            Header = "Container Groups - Get Summaries",
-            Command = new RelayCommand(ExecuteGetContainerGroupsSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Managed By's Summaries",
+                    Command = new RelayCommand(
+                        ExecuteGetContainerGroupsManagedBySummaries)
+                };
+            }
+        }
 
-        private MenuItem GetContainerGroupsUsers => new MenuItem
+        private MenuItem GetContainerGroupsSummaries
         {
-            Header = "Container Groups - Get Users",
-            Command = new RelayCommand(ExecuteGetContainerGroupsUsers)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Summaries",
+                    Command =
+                        new RelayCommand(ExecuteGetContainerGroupsSummaries)
+                };
+            }
+        }
 
-        private MenuItem GetContainerGroupsUsersDirectReports => new MenuItem
+        private MenuItem GetContainerGroupsUsers
         {
-            Header = "Container Groups - Get Users' Direct Reports",
-            Command = new RelayCommand(
-                ExecuteGetContainerGroupsUsersDirectReports)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Users",
+                    Command = new RelayCommand(ExecuteGetContainerGroupsUsers)
+                };
+            }
+        }
 
-        private MenuItem GetDirectReportsDirectReports => new MenuItem
+        private MenuItem GetContainerGroupsUsersDirectReports
         {
-            Header = "Direct Reports - Get Direct Reports",
-            Command = new RelayCommand(ExecuteGetDirectReportsDirectReports)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Users' Direct Reports",
+                    Command = new RelayCommand(
+                        ExecuteGetContainerGroupsUsersDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetDirectReportsGroups => new MenuItem
+        private MenuItem GetDirectReportsDirectReports
         {
-            Header = "Direct Reports - Get Groups",
-            Command = new RelayCommand(ExecuteGetDirectReportsGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Direct Reports - Get Direct Reports",
+                    Command =
+                        new RelayCommand(ExecuteGetDirectReportsDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetDirectReportsSummaries => new MenuItem
+        private MenuItem GetDirectReportsGroups
         {
-            Header = "Direct Reports - Get Summaries",
-            Command = new RelayCommand(ExecuteGetDirectReportsSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Direct Reports - Get Groups",
+                    Command = new RelayCommand(ExecuteGetDirectReportsGroups)
+                };
+            }
+        }
 
-        private MenuItem GetGroupsComputers => new MenuItem
+        private MenuItem GetDirectReportsSummaries
         {
-            Header = "Groups - Get Computers",
-            Command = new RelayCommand(ExecuteGetGroupsComputers)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Direct Reports - Get Summaries",
+                    Command = new RelayCommand(ExecuteGetDirectReportsSummaries)
+                };
+            }
+        }
 
-        private MenuItem GetGroupsSummaries => new MenuItem
+        private MenuItem GetGroupsComputers
         {
-            Header = "Groups - Get Summaries",
-            Command = new RelayCommand(ExecuteGetGroupsSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Groups - Get Computers",
+                    Command = new RelayCommand(ExecuteGetGroupsComputers)
+                };
+            }
+        }
 
-        private MenuItem GetGroupsUsers => new MenuItem
+        private MenuItem GetGroupsSummaries
         {
-            Header = "Groups - Get Users",
-            Command = new RelayCommand(ExecuteGetGroupsUsers)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Groups - Get Summaries",
+                    Command = new RelayCommand(ExecuteGetGroupsSummaries)
+                };
+            }
+        }
 
-        private MenuItem GetGroupsUsersDirectReports => new MenuItem
+        private MenuItem GetGroupsUsers
         {
-            Header = "Groups - Get Users' Direct Reports",
-            Command = new RelayCommand(ExecuteGetGroupsUsersDirectReports)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Groups - Get Users",
+                    Command = new RelayCommand(ExecuteGetGroupsUsers)
+                };
+            }
+        }
 
-        private MenuItem GetGroupsUsersGroups => new MenuItem
+        private MenuItem GetGroupsUsersDirectReports
         {
-            Header = "Groups - Get Users' Groups",
-            Command = new RelayCommand(ExecuteGetGroupsUsersGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Groups - Get Users' Direct Reports",
+                    Command =
+                        new RelayCommand(ExecuteGetGroupsUsersDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetManagersDirectReports => new MenuItem
+        private MenuItem GetGroupsUsersGroups
         {
-            Header = "Managers - Get Direct Reports",
-            Command = new RelayCommand(ExecuteGetManagersDirectReports)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Groups - Get Users' Groups",
+                    Command = new RelayCommand(ExecuteGetGroupsUsersGroups)
+                };
+            }
+        }
 
-        private MenuItem GetManagersGroups => new MenuItem
+        private MenuItem GetManagersDirectReports
         {
-            Header = "Managers - Get Groups",
-            Command = new RelayCommand(ExecuteGetManagersGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Managers - Get Direct Reports",
+                    Command = new RelayCommand(ExecuteGetManagersDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetManagersSummaries => new MenuItem
+        private MenuItem GetManagersGroups
         {
-            Header = "Managers - Get Summaries",
-            Command = new RelayCommand(ExecuteGetManagersSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Managers - Get Groups",
+                    Command = new RelayCommand(ExecuteGetManagersGroups)
+                };
+            }
+        }
 
-        private MenuItem GetUsersDirectReports => new MenuItem
+        private MenuItem GetManagersSummaries
         {
-            Header = "Users - Get Direct Reports",
-            Command = new RelayCommand(ExecuteGetUsersDirectReports)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Managers - Get Summaries",
+                    Command = new RelayCommand(ExecuteGetManagersSummaries)
+                };
+            }
+        }
 
-        private MenuItem GetUsersGroups => new MenuItem
+        private MenuItem GetUsersDirectReports
         {
-            Header = "Users - Get Groups",
-            Command = new RelayCommand(ExecuteGetUsersGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Users - Get Direct Reports",
+                    Command = new RelayCommand(ExecuteGetUsersDirectReports)
+                };
+            }
+        }
 
-        private MenuItem GetUsersSummaries => new MenuItem
+        private MenuItem GetUsersGroups
         {
-            Header = "Users - Get Summaries",
-            Command = new RelayCommand(ExecuteGetUsersSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Users - Get Groups",
+                    Command = new RelayCommand(ExecuteGetUsersGroups)
+                };
+            }
+        }
 
-        private MenuItem MenuItemGetComputersGroups => new MenuItem
+        private MenuItem GetUsersSummaries
         {
-            Header = "Computers - Get Groups",
-            Command = new RelayCommand(ExecuteGetComputersGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Users - Get Summaries",
+                    Command = new RelayCommand(ExecuteGetUsersSummaries)
+                };
+            }
+        }
 
-        private MenuItem MenuItemGetComputersSummaries => new MenuItem
+        private MenuItem MenuItemGetComputersGroups
         {
-            Header = "Computers - Get Summaries",
-            Command = new RelayCommand(ExecuteGetComputersSummaries)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Computers - Get Groups",
+                    Command = new RelayCommand(ExecuteGetComputersGroups)
+                };
+            }
+        }
 
-        private MenuItem MenuItemGetContainerGroupsUsersGroups => new MenuItem
+        private MenuItem MenuItemGetComputersSummaries
         {
-            Header = "Container Groups - Get Users' Groups",
-            Command = new RelayCommand(ExecuteGetContainerGroupsUsersGroups)
-        };
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Computers - Get Summaries",
+                    Command = new RelayCommand(ExecuteGetComputersSummaries)
+                };
+            }
+        }
+
+        private MenuItem MenuItemGetContainerGroupsUsersGroups
+        {
+            get
+            {
+                return new MenuItem
+                {
+                    Header = "Container Groups - Get Users' Groups",
+                    Command =
+                        new RelayCommand(ExecuteGetContainerGroupsUsersGroups)
+                };
+            }
+        }
 
         private MenuItem MenuItemGetGroupsManagedByDirectReports
-            => new MenuItem
+        {
+            get
             {
-                Header = "Group - Get Managed By's Direct Reports",
-                Command = new RelayCommand(
-                    ExecuteGetGroupsManagedByDirectReports)
-            };
+                return new MenuItem
+                {
+                    Header = "Group - Get Managed By's Direct Reports",
+                    Command = new RelayCommand(
+                        ExecuteGetGroupsManagedByDirectReports)
+                };
+            }
+        }
 
         private MenuItem MenuItemGetGroupsManagedByGroups
-            => new MenuItem
+        {
+            get
             {
-                Header = "Group - Get Managed By's Groups",
-                Command = new RelayCommand(ExecuteGetGroupsManagedByGroups)
-            };
+                return new MenuItem
+                {
+                    Header = "Group - Get Managed By's Groups",
+                    Command = new RelayCommand(ExecuteGetGroupsManagedByGroups)
+                };
+            }
+        }
 
         private MenuItem MenuItemGetGroupsManagedBySummaries
-            => new MenuItem
+        {
+            get
             {
-                Header = "Groups - Get Managed By Summaries",
-                Command = new RelayCommand(ExecuteGetGroupsManagedBySummaries)
-            };
+                return new MenuItem
+                {
+                    Header = "Groups - Get Managed By Summaries",
+                    Command =
+                        new RelayCommand(ExecuteGetGroupsManagedBySummaries)
+                };
+            }
+        }
 
         private IList SelectedDataRowViews
         {
@@ -584,8 +843,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void ExecuteOpenHelpWindow() => Process.Start(
-            HelpFile);
+        private static void ExecuteOpenHelpWindow()
+        {
+            Process.Start(
+                HelpFile);
+        }
 
         private static string GetComputerDistinguishedName(
             DataRowView dataRowView)
@@ -932,7 +1194,9 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         private async void ExecuteSearchOu()
         {
             await RunQuery(
-                GetSearchQueryType(), CurrentScope, searchText: SearchText);
+                GetSearchQueryType(),
+                CurrentScope,
+                searchText: SearchText);
         }
 
         private async void ExecuteWriteToFile()
@@ -981,7 +1245,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
-            if (Queries.Peek() == null) return null;
+            if (Queries.Peek() == null)
+            {
+                return null;
+            }
             if (Data.Table.Columns.Contains(ComputerDistinguishedName))
             {
                 contextMenuItems.AddRange(GenerateComputerContextMenuItems());
@@ -1104,8 +1371,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
         private IEnumerable<string> GetComputersDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetComputerDistinguishedName).Where(
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetComputerDistinguishedName)
+                .Where(
                     c => !c.IsNullOrWhiteSpace());
         }
 
@@ -1119,35 +1388,45 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         private IEnumerable<string>
             GetContainerGroupsManagedByDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetContainerGroupManagedByDistinguishedName).Where(
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetContainerGroupManagedByDistinguishedName)
+                .Where(
                     s => !s.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetDirectReportDistinguishedName).Where(
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetDirectReportDistinguishedName)
+                .Where(
                     d => !d.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetGroupsDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetGroupDistinguishedName).Where(g => !g.IsNullOrWhiteSpace());
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetGroupDistinguishedName)
+                .Where(g => !g.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetGroupsManagedByDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetGroupManagedByDistinguishedName).Where(
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetGroupManagedByDistinguishedName)
+                .Where(
                     s => !s.IsNullOrWhiteSpace());
         }
 
         private IEnumerable<string> GetManagersDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetManagerDistinguishedName).Where(
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetManagerDistinguishedName)
+                .Where(
                     m => !m.IsNullOrWhiteSpace());
         }
 
@@ -1168,8 +1447,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
         private IEnumerable<string> GetUsersDistinguishedNames()
         {
-            return SelectedDataRowViews.Cast<DataRowView>().Select(
-                GetUserDistinguishedName).Where(u => !u.IsNullOrWhiteSpace());
+            return SelectedDataRowViews.Cast<DataRowView>()
+                .Select(
+                    GetUserDistinguishedName)
+                .Where(u => !u.IsNullOrWhiteSpace());
         }
 
         private void HideMessage()
@@ -1211,6 +1492,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         private async Task RunQuery(Query query)
         {
             StartTask();
+
             try
             {
                 Queries.Push(query);
@@ -1232,6 +1514,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             {
                 ShowMessage(
                     "No results of desired type found in selected context.");
+
                 ResetQuery();
             }
             catch (OutOfMemoryException)
@@ -1245,9 +1528,9 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
         private bool SearchTypeIsChecked()
         {
-            return ComputerSearchIsChecked ||
-                   GroupSearchIsChecked ||
-                   UserSearchIsChecked;
+            return ComputerSearchIsChecked
+                   || GroupSearchIsChecked
+                   || UserSearchIsChecked;
         }
 
         private void SetViewVariables()
@@ -1260,7 +1543,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
             try
             {
-                Version = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                Version = ApplicationDeployment.CurrentDeployment.CurrentVersion
+                    .ToString();
             }
             catch (InvalidDeploymentException)
             {
