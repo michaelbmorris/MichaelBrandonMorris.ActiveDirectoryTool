@@ -3,23 +3,60 @@ using System.DirectoryServices.AccountManagement;
 using System.Dynamic;
 using System.Threading;
 using MichaelBrandonMorris.Extensions.PrincipalExtensions;
-using ActiveDirectoryPropertyMapping = System.Collections.Generic.Dictionary
-    <MichaelBrandonMorris.ActiveDirectoryTool.ActiveDirectoryProperty, System.Action>;
+using ActiveDirectoryPropertyMapping =
+    System.Collections.Generic.Dictionary<MichaelBrandonMorris.
+        ActiveDirectoryTool.ActiveDirectoryProperty, System.Action>;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
+    /// <summary>
+    ///     Class DataPreparer.
+    /// </summary>
+    /// TODO Edit XML Comment Template for DataPreparer
     internal class DataPreparer
     {
-        private CancellationToken CancellationToken
-        {
-            get;
-        }
-
+        /// <summary>
+        ///     Initializes a new instance of the
+        ///     <see cref="DataPreparer" /> class.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// TODO Edit XML Comment Template for #ctor
         internal DataPreparer(CancellationToken cancellationToken)
         {
             CancellationToken = cancellationToken;
         }
 
+        /// <summary>
+        ///     Gets the cancellation token.
+        /// </summary>
+        /// <value>The cancellation token.</value>
+        /// TODO Edit XML Comment Template for CancellationToken
+        private CancellationToken CancellationToken
+        {
+            get;
+        }
+
+        /// <summary>
+        ///     Prepares the data.
+        /// </summary>
+        /// <param name="properties">The properties.</param>
+        /// <param name="computerPrincipal">The computer principal.</param>
+        /// <param name="groupPrincipal">The group principal.</param>
+        /// <param name="containerGroupPrincipal">
+        ///     The container group
+        ///     principal.
+        /// </param>
+        /// <param name="directReportUserPrincipal">
+        ///     The direct report
+        ///     user principal.
+        /// </param>
+        /// <param name="managerUserPrincipal">
+        ///     The manager user
+        ///     principal.
+        /// </param>
+        /// <param name="userPrincipal">The user principal.</param>
+        /// <returns>dynamic.</returns>
+        /// TODO Edit XML Comment Template for PrepareData
         internal dynamic PrepareData(
             IEnumerable<ActiveDirectoryProperty> properties,
             ComputerPrincipal computerPrincipal = null,
@@ -34,26 +71,28 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             {
                 CancellationToken.ThrowIfCancellationRequested();
 
-                if (AddComputerProperty(
-                    computerPrincipal, property, result))
+                if (AddComputerProperty(computerPrincipal, property, result))
                 {
                     continue;
                 }
 
                 if (AddContainerGroupProperty(
-                    containerGroupPrincipal, property, result))
+                    containerGroupPrincipal,
+                    property,
+                    result))
                 {
                     continue;
                 }
 
                 if (AddDirectReportProperty(
-                    directReportUserPrincipal, property, result))
+                    directReportUserPrincipal,
+                    property,
+                    result))
                 {
                     continue;
                 }
 
-                if (AddGroupProperty(
-                    groupPrincipal, property, result))
+                if (AddGroupProperty(groupPrincipal, property, result))
                 {
                     continue;
                 }
@@ -64,6 +103,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return result;
         }
 
+        /// <summary>
+        ///     Adds the computer property.
+        /// </summary>
+        /// <param name="computerPrincipal">The computer principal.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// TODO Edit XML Comment Template for AddComputerProperty
         private static bool AddComputerProperty(
             ComputerPrincipal computerPrincipal,
             ActiveDirectoryProperty property,
@@ -73,19 +120,19 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             {
                 [ActiveDirectoryProperty.ComputerAccountExpirationDate] = () =>
                 {
-                    result.ComputerAccountExpirationDate =
-                        computerPrincipal?.AccountExpirationDate;
+                    result.ComputerAccountExpirationDate = computerPrincipal
+                        ?.AccountExpirationDate;
                 },
                 [ActiveDirectoryProperty.ComputerAccountLockoutTime] = () =>
                 {
                     result.ComputerAccountLockoutTime =
                         computerPrincipal?.AccountLockoutTime;
                 },
-                [ActiveDirectoryProperty.ComputerAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty
+                    .ComputerAllowReversiblePasswordEncryption] = () =>
                 {
                     result.ComputerAllowReversiblePasswordEncryption =
-                        computerPrincipal?
-                            .AllowReversiblePasswordEncryption;
+                        computerPrincipal?.AllowReversiblePasswordEncryption;
                 },
                 [ActiveDirectoryProperty.ComputerBadLogonCount] = () =>
                 {
@@ -103,8 +150,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerContextType] = () =>
                 {
-                    result.ComputerContextType =
-                        computerPrincipal?.ContextType;
+                    result.ComputerContextType = computerPrincipal?.ContextType;
                 },
                 [ActiveDirectoryProperty.ComputerDelegationPermitted] = () =>
                 {
@@ -113,13 +159,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerDescription] = () =>
                 {
-                    result.ComputerDescription =
-                        computerPrincipal?.Description;
+                    result.ComputerDescription = computerPrincipal?.Description;
                 },
                 [ActiveDirectoryProperty.ComputerDisplayName] = () =>
                 {
-                    result.ComputerDisplayName =
-                        computerPrincipal?.DisplayName;
+                    result.ComputerDisplayName = computerPrincipal?.DisplayName;
                 },
                 [ActiveDirectoryProperty.ComputerDistinguishedName] = () =>
                 {
@@ -141,23 +185,20 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerHomeDrive] = () =>
                 {
-                    result.ComputerHomeDrive =
-                        computerPrincipal?.HomeDrive;
+                    result.ComputerHomeDrive = computerPrincipal?.HomeDrive;
                 },
                 [ActiveDirectoryProperty.ComputerLastBadPasswordAttempt] = () =>
                 {
-                    result.ComputerLastBadPasswordAttempt =
-                        computerPrincipal?.LastBadPasswordAttempt;
+                    result.ComputerLastBadPasswordAttempt = computerPrincipal
+                        ?.LastBadPasswordAttempt;
                 },
                 [ActiveDirectoryProperty.ComputerLastLogon] = () =>
                 {
-                    result.ComputerLastLogon =
-                        computerPrincipal?.LastLogon;
+                    result.ComputerLastLogon = computerPrincipal?.LastLogon;
                 },
                 [ActiveDirectoryProperty.ComputerLastPasswordSet] = () =>
                 {
-                    result.LastPasswordSet =
-                        computerPrincipal?.LastPasswordSet;
+                    result.LastPasswordSet = computerPrincipal?.LastPasswordSet;
                 },
                 [ActiveDirectoryProperty.ComputerName] = () =>
                 {
@@ -180,8 +221,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerPermittedWorkstations] = () =>
                 {
-                    result.ComputerPermittedWorkstations =
-                        computerPrincipal?.PermittedWorkstations;
+                    result.ComputerPermittedWorkstations = computerPrincipal
+                        ?.PermittedWorkstations;
                 },
                 [ActiveDirectoryProperty.ComputerSamAccountName] = () =>
                 {
@@ -190,8 +231,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerScriptPath] = () =>
                 {
-                    result.ComputerScriptPath =
-                        computerPrincipal?.ScriptPath;
+                    result.ComputerScriptPath = computerPrincipal?.ScriptPath;
                 },
                 [ActiveDirectoryProperty.ComputerServicePrincipalNames] = () =>
                 {
@@ -204,18 +244,19 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ComputerSmartcardLogonRequired] = () =>
                 {
-                    result.ComputerSmartcardLogonRequired =
-                        computerPrincipal?.SmartcardLogonRequired;
+                    result.ComputerSmartcardLogonRequired = computerPrincipal
+                        ?.SmartcardLogonRequired;
                 },
                 [ActiveDirectoryProperty.ComputerStructuralObjectClass] = () =>
                 {
-                    result.ComputerStructuralObjectClass =
-                        computerPrincipal?.StructuralObjectClass;
+                    result.ComputerStructuralObjectClass = computerPrincipal
+                        ?.StructuralObjectClass;
                 },
-                [ActiveDirectoryProperty.ComputerUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.ComputerUserCannotChangePassword] =
+                () =>
                 {
-                    result.ComputerUserCannotChangePassword =
-                        computerPrincipal?.UserCannotChangePassword;
+                    result.ComputerUserCannotChangePassword = computerPrincipal
+                        ?.UserCannotChangePassword;
                 },
                 [ActiveDirectoryProperty.ComputerUserPrincipalName] = () =>
                 {
@@ -224,11 +265,26 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 }
             };
 
-            if (!propertyMapping.ContainsKey(property)) return false;
+            if (!propertyMapping.ContainsKey(property))
+            {
+                return false;
+            }
+
             propertyMapping[property]();
             return true;
         }
 
+        /// <summary>
+        ///     Adds the container group property.
+        /// </summary>
+        /// <param name="containerGroupPrincipal">
+        ///     The container group
+        ///     principal.
+        /// </param>
+        /// <param name="property">The property.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// TODO Edit XML Comment Template for AddContainerGroupProperty
         private static bool AddContainerGroupProperty(
             GroupPrincipal containerGroupPrincipal,
             ActiveDirectoryProperty property,
@@ -256,7 +312,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.ContainerGroupDisplayName =
                         containerGroupPrincipal?.DisplayName;
                 },
-                [ActiveDirectoryProperty.ContainerGroupDistinguishedName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupDistinguishedName] =
+                () =>
                 {
                     result.ContainerGroupDistinguishedName =
                         containerGroupPrincipal?.DistinguishedName;
@@ -270,10 +327,12 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.ContainerGroupIsSecurityGroup =
                         containerGroupPrincipal?.IsSecurityGroup;
                 },
-                [ActiveDirectoryProperty.ContainerGroupManagedByDistinguishedName] = () =>
+                [ActiveDirectoryProperty
+                    .ContainerGroupManagedByDistinguishedName] = () =>
                 {
                     result.ContainerGroupManagedByDistinguishedName =
-                        containerGroupPrincipal?.GetManagedByDistinguishedName();
+                        containerGroupPrincipal
+                            ?.GetManagedByDistinguishedName();
                 },
                 [ActiveDirectoryProperty.ContainerGroupManagedByName] = () =>
                 {
@@ -298,12 +357,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 {
                     result.ContainerGroupSid = containerGroupPrincipal?.Sid;
                 },
-                [ActiveDirectoryProperty.ContainerGroupStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.ContainerGroupStructuralObjectClass] =
+                () =>
                 {
                     result.ContainerGroupStructuralObjectClass =
                         containerGroupPrincipal?.StructuralObjectClass;
                 },
-                [ActiveDirectoryProperty.ContainerGroupUserPrincipalName] = () =>
+                [ActiveDirectoryProperty.ContainerGroupUserPrincipalName] =
+                () =>
                 {
                     result.ContainerGroupUserPrincipalName =
                         containerGroupPrincipal?.UserPrincipalName;
@@ -315,11 +376,26 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 }
             };
 
-            if (!propertyMapping.ContainsKey(property)) return false;
+            if (!propertyMapping.ContainsKey(property))
+            {
+                return false;
+            }
+
             propertyMapping[property]();
             return true;
         }
 
+        /// <summary>
+        ///     Adds the direct report property.
+        /// </summary>
+        /// <param name="directReportUserPrincipal">
+        ///     The direct report
+        ///     user principal.
+        /// </param>
+        /// <param name="property">The property.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// TODO Edit XML Comment Template for AddDirectReportProperty
         private static bool AddDirectReportProperty(
             UserPrincipal directReportUserPrincipal,
             ActiveDirectoryProperty property,
@@ -332,7 +408,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportAccountControl =
                         directReportUserPrincipal.GetUserAccountControl();
                 },
-                [ActiveDirectoryProperty.DirectReportAccountExpirationDate] = () =>
+                [ActiveDirectoryProperty.DirectReportAccountExpirationDate] =
+                () =>
                 {
                     result.DirectReportAccountExpirationDate =
                         directReportUserPrincipal.AccountExpirationDate;
@@ -342,7 +419,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportAccountLockoutTime =
                         directReportUserPrincipal.AccountLockoutTime;
                 },
-                [ActiveDirectoryProperty.DirectReportAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty
+                    .DirectReportAllowReversiblePasswordEncryption] = () =>
                 {
                     result.DirectReportAllowReversiblePasswordEncryption =
                         directReportUserPrincipal
@@ -393,7 +471,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportCountry =
                         directReportUserPrincipal.GetCountry();
                 },
-                [ActiveDirectoryProperty.DirectReportDelegationPermitted] = () =>
+                [ActiveDirectoryProperty.DirectReportDelegationPermitted] =
+                () =>
                 {
                     result.DirectReportDelegationPermitted =
                         directReportUserPrincipal.DelegationPermitted;
@@ -440,8 +519,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.DirectReportFax] = () =>
                 {
-                    result.DirectReportFax =
-                        directReportUserPrincipal.GetFax();
+                    result.DirectReportFax = directReportUserPrincipal.GetFax();
                 },
                 [ActiveDirectoryProperty.DirectReportSuffix] = () =>
                 {
@@ -455,8 +533,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.DirectReportGuid] = () =>
                 {
-                    result.DirectReportGuid =
-                        directReportUserPrincipal.Guid;
+                    result.DirectReportGuid = directReportUserPrincipal.Guid;
                 },
                 [ActiveDirectoryProperty.DirectReportHomeAddress] = () =>
                 {
@@ -493,7 +570,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportIsActive =
                         directReportUserPrincipal.IsActive();
                 },
-                [ActiveDirectoryProperty.DirectReportLastBadPasswordAttempt] = () =>
+                [ActiveDirectoryProperty.DirectReportLastBadPasswordAttempt] =
+                () =>
                 {
                     result.DirectReportLastBadPasswordAttempt =
                         directReportUserPrincipal.LastBadPasswordAttempt;
@@ -520,8 +598,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.DirectReportName] = () =>
                 {
-                    result.DirectReportName =
-                        directReportUserPrincipal?.Name;
+                    result.DirectReportName = directReportUserPrincipal?.Name;
                 },
                 [ActiveDirectoryProperty.DirectReportNotes] = () =>
                 {
@@ -533,22 +610,26 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportPager =
                         directReportUserPrincipal.GetPager();
                 },
-                [ActiveDirectoryProperty.DirectReportPasswordNeverExpires] = () =>
+                [ActiveDirectoryProperty.DirectReportPasswordNeverExpires] =
+                () =>
                 {
                     result.DirectReportPasswordNeverExpires =
                         directReportUserPrincipal.PasswordNeverExpires;
                 },
-                [ActiveDirectoryProperty.DirectReportPasswordNotRequired] = () =>
+                [ActiveDirectoryProperty.DirectReportPasswordNotRequired] =
+                () =>
                 {
                     result.DirectReportPasswordNotRequired =
                         directReportUserPrincipal.PasswordNotRequired;
                 },
-                [ActiveDirectoryProperty.DirectReportPermittedLogonTimes] = () =>
+                [ActiveDirectoryProperty.DirectReportPermittedLogonTimes] =
+                () =>
                 {
                     result.DirectReportPermittedLogonTimes =
                         directReportUserPrincipal.PermittedLogonTimes;
                 },
-                [ActiveDirectoryProperty.DirectReportPermittedWorkstations] = () =>
+                [ActiveDirectoryProperty.DirectReportPermittedWorkstations] =
+                () =>
                 {
                     result.DirectReportPermittedWorkstations =
                         directReportUserPrincipal.PermittedWorkstations;
@@ -569,10 +650,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.DirectReportSip] = () =>
                 {
-                    result.DirectReportSip =
-                        directReportUserPrincipal.GetSip();
+                    result.DirectReportSip = directReportUserPrincipal.GetSip();
                 },
-                [ActiveDirectoryProperty.DirectReportSmartcardLogonRequired] = () =>
+                [ActiveDirectoryProperty.DirectReportSmartcardLogonRequired] =
+                () =>
                 {
                     result.DirectReportSmartcardLogonRequired =
                         directReportUserPrincipal.SmartcardLogonRequired;
@@ -584,10 +665,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.DirectReportStreetAddress] = () =>
                 {
-                    result.DirectReportStreetAddress =
-                        directReportUserPrincipal.GetStreetAddress();
+                    result.DirectReportStreetAddress = directReportUserPrincipal
+                        .GetStreetAddress();
                 },
-                [ActiveDirectoryProperty.DirectReportStructuralObjectClass] = () =>
+                [ActiveDirectoryProperty.DirectReportStructuralObjectClass] =
+                () =>
                 {
                     result.DirectReportStructuralObjectClass =
                         directReportUserPrincipal.StructuralObjectClass;
@@ -602,7 +684,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportTitle =
                         directReportUserPrincipal.GetTitle();
                 },
-                [ActiveDirectoryProperty.DirectReportUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.DirectReportUserCannotChangePassword] =
+                () =>
                 {
                     result.DirectReportUserCannotChangePassword =
                         directReportUserPrincipal.UserCannotChangePassword;
@@ -612,7 +695,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.DirectReportdirectReportUserPrincipalName =
                         directReportUserPrincipal.UserPrincipalName;
                 },
-                [ActiveDirectoryProperty.DirectReportVoiceTelephoneNumber] = () =>
+                [ActiveDirectoryProperty.DirectReportVoiceTelephoneNumber] =
+                () =>
                 {
                     result.DirectReportVoiceTelephoneNumber =
                         directReportUserPrincipal.VoiceTelephoneNumber;
@@ -624,11 +708,23 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 }
             };
 
-            if (!propertyMapping.ContainsKey(property)) return false;
+            if (!propertyMapping.ContainsKey(property))
+            {
+                return false;
+            }
+
             propertyMapping[property]();
             return true;
         }
 
+        /// <summary>
+        ///     Adds the group property.
+        /// </summary>
+        /// <param name="groupPrincipal">The group principal.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="result">The result.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// TODO Edit XML Comment Template for AddGroupProperty
         private static bool AddGroupProperty(
             GroupPrincipal groupPrincipal,
             ActiveDirectoryProperty property,
@@ -637,9 +733,9 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             var propertyMapping = new ActiveDirectoryPropertyMapping
             {
                 [ActiveDirectoryProperty.GroupContext] = () =>
-                    {
-                        result.GroupContext = groupPrincipal.Context;
-                    },
+                {
+                    result.GroupContext = groupPrincipal.Context;
+                },
                 [ActiveDirectoryProperty.GroupContextType] = () =>
                 {
                     result.GroupContextType = groupPrincipal.ContextType;
@@ -666,10 +762,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.GroupIsSecurityGroup =
                         groupPrincipal.IsSecurityGroup;
                 },
-                [ActiveDirectoryProperty.GroupManagedByDistinguishedName] = () =>
+                [ActiveDirectoryProperty.GroupManagedByDistinguishedName] =
+                () =>
                 {
-                    result.GroupManagedByDistinguishedName = 
-                        groupPrincipal.GetManagedByDistinguishedName();
+                    result.GroupManagedByDistinguishedName = groupPrincipal
+                        .GetManagedByDistinguishedName();
                 },
                 [ActiveDirectoryProperty.GroupManagedByName] = () =>
                 {
@@ -708,11 +805,22 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 }
             };
 
-            if (!propertyMapping.ContainsKey(property)) return false;
+            if (!propertyMapping.ContainsKey(property))
+            {
+                return false;
+            }
+
             propertyMapping[property]();
             return true;
         }
 
+        /// <summary>
+        ///     Adds the user property.
+        /// </summary>
+        /// <param name="userPrincipal">The user principal.</param>
+        /// <param name="property">The property.</param>
+        /// <param name="result">The result.</param>
+        /// TODO Edit XML Comment Template for AddUserProperty
         private static void AddUserProperty(
             UserPrincipal userPrincipal,
             ActiveDirectoryProperty property,
@@ -735,10 +843,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     result.UserAccountLockoutTime =
                         userPrincipal.AccountLockoutTime;
                 },
-                [ActiveDirectoryProperty.UserAllowReversiblePasswordEncryption] = () =>
+                [ActiveDirectoryProperty
+                    .UserAllowReversiblePasswordEncryption] = () =>
                 {
-                    result.UserAllowReversiblePasswordEncryption =
-                        userPrincipal.AllowReversiblePasswordEncryption;
+                    result.UserAllowReversiblePasswordEncryption = userPrincipal
+                        .AllowReversiblePasswordEncryption;
                 },
                 [ActiveDirectoryProperty.UserAssistant] = () =>
                 {
@@ -883,8 +992,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.ManagerDistinguishedName] = () =>
                 {
-                    result.ManagerDistinguishedName = userPrincipal
-                        .GetManagerDistinguishedName();
+                    result.ManagerDistinguishedName =
+                        userPrincipal.GetManagerDistinguishedName();
                 },
                 [ActiveDirectoryProperty.ManagerName] = () =>
                 {
@@ -957,8 +1066,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 },
                 [ActiveDirectoryProperty.UserStreetAddress] = () =>
                 {
-                    result.UserStreetAddress =
-                        userPrincipal.GetStreetAddress();
+                    result.UserStreetAddress = userPrincipal.GetStreetAddress();
                 },
                 [ActiveDirectoryProperty.UserStructuralObjectClass] = () =>
                 {
@@ -994,7 +1102,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 }
             };
 
-            if (!propertyMapping.ContainsKey(property)) return;
+            if (!propertyMapping.ContainsKey(property))
+            {
+                return;
+            }
+
             propertyMapping[property]();
         }
     }

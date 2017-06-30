@@ -1,0 +1,1229 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<title>MichaelBrandonMorris.ActiveDirectoryTool - Table of Content</title>
+<link rel="stylesheet" href="TOC.css">
+<link rel="shortcut icon" href="favicon.ico"/>
+<script type="text/javascript" src="TOC.js"></script>
+</head>
+
+<body onload="javascript: Initialize('.aspx');" onresize="javascript: ResizeTree();">
+<form id="IndexForm" runat="server">
+
+<div id="TOCDiv" class="TOCDiv">
+
+<div id="divSearchOpts" class="SearchOpts" style="height: 90px; display: none;">
+	<img class="TOCLink" onclick="javascript: ShowHideSearch(false);"
+		src="Close.png" height="24" width="24" alt="Hide Search" title="Hide Search" style="float: right;"/>
+	<span class="Title">Keyword(s) to search:</span>
+	<input id="txtSearchText" type="text" style="width: 100%;" 
+		onkeypress="javascript: return OnSearchTextKeyPress(event);" /><br />
+	<input id="chkSortByTitle" type="checkbox" /><label for="chkSortByTitle">&nbsp;Sort results by title</label>
+	<input type="button" value="Search" onclick="javascript: return PerformSearch();" style="float: right;" />
+</div>
+
+<div id="divIndexOpts" class="IndexOpts" style="height: 28px; display: none;">
+	<img class="TOCLink" onclick="javascript: ShowHideIndex(false);"
+		src="Close.png" height="24" width="24" alt="Hide Keyword Index" title="Hide Keyword Index" style="float: right;"/>
+	<span class="Title">Keyword Index</span>
+</div>
+
+<div id="divNavOpts" class="NavOpts" style="height: 28px;">
+    <img class="TOCLink" onclick="javascript: SyncTOC();" src="SyncTOC.png"
+        height="24" width="24" alt="Sync to TOC" title="Sync to TOC" />
+    <img class="TOCLink" onclick="javascript: ExpandOrCollapseAll(true);"
+        src="ExpandAll.png" height="24" width="24" alt="Expand all" title="Expand all" />
+    <img class="TOCLink" onclick="javascript: ExpandOrCollapseAll(false);"
+        src="CollapseAll.png" height="24" width="24" alt="Collapse all" title="Collapse all" />
+    <img class="TOCLink" onclick="javascript: ShowDirectLink();"
+        src="Link.png" height="24" width="24" alt="Get direct link to the displayed topic" title="Get direct link to the displayed topic" />
+    <a href="#" onclick="javascript: TopicContent.history.go(-1); return false;">
+		<img class="TOCLink" style="float: right;" 
+        src="Back.png" height="24" width="24" alt="Previous page" title="Previous page" /></a>
+</div>
+
+<div class="Tree" id="divSearchResults" style="display: none;"
+    onselectstart="javascript: return false;">
+</div>
+
+<div class="Tree" id="divIndexResults" style="display: none;"
+    onselectstart="javascript: return false;">
+</div>
+
+<div class="Tree" id="divTree" onselectstart="javascript: return false;">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/N-MichaelBrandonMorris.ActiveDirectoryTool.htm" target="TopicContent">MichaelBrandonMorris.ActiveDirectoryTool Namespace</a>
+<div class="Hidden">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" target="TopicContent">AboutWindow Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" target="TopicContent">AboutWindow Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.-ctor.htm" target="TopicContent">AboutWindow Constructor </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" target="TopicContent">AboutWindow Methods</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" target="TopicContent">AboutWindow Properties</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" target="TopicContent">AboutWindow Events</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ActiveDirectoryProperty.htm" target="TopicContent">ActiveDirectoryProperty Enumeration</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" target="TopicContent">App Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" target="TopicContent">App Methods</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" target="TopicContent">App Properties</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" target="TopicContent">App Events</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.SelectedItemProperty.htm" target="TopicContent">SelectedItemProperty Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnAttached.htm" target="TopicContent">OnAttached Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnDetaching.htm" target="TopicContent">OnDetaching Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnSelectedItemChanged.htm" target="TopicContent">OnSelectedItemChanged Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnTreeViewSelectedItemChanged.htm" target="TopicContent">OnTreeViewSelectedItemChanged Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.SelectedItem.htm" target="TopicContent">SelectedItem Property </a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" target="TopicContent">BindableSelectedItemBehavior Events</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" target="TopicContent">DataFileWriter Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" target="TopicContent">DataFileWriter Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" target="TopicContent">DataFileWriter Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Comma.htm" target="TopicContent">Comma Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.CsvExtension.htm" target="TopicContent">CsvExtension Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DateTimeFormat.htm" target="TopicContent">DateTimeFormat Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DcPrefix.htm" target="TopicContent">DcPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DoubleHyphen.htm" target="TopicContent">DoubleHyphen Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Hyphen.htm" target="TopicContent">Hyphen Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.OuPrefix.htm" target="TopicContent">OuPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.OutputDirectoryPath.htm" target="TopicContent">OutputDirectoryPath Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" target="TopicContent">DataFileWriter Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.WriteToCsv.htm" target="TopicContent">WriteToCsv Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" target="TopicContent">DataFileWriter Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Data.htm" target="TopicContent">Data Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.QueryType.htm" target="TopicContent">QueryType Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Scope.htm" target="TopicContent">Scope Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm" target="TopicContent">DataPreparer Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm" target="TopicContent">DataPreparer Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.-ctor.htm" target="TopicContent">DataPreparer Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm" target="TopicContent">DataPreparer Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddComputerProperty.htm" target="TopicContent">AddComputerProperty Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddContainerGroupProperty.htm" target="TopicContent">AddContainerGroupProperty Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddDirectReportProperty.htm" target="TopicContent">AddDirectReportProperty Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddGroupProperty.htm" target="TopicContent">AddGroupProperty Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddUserProperty.htm" target="TopicContent">AddUserProperty Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.PrepareData.htm" target="TopicContent">PrepareData Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm" target="TopicContent">DataPreparer Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.CancellationToken.htm" target="TopicContent">CancellationToken Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm" target="TopicContent">MainWindow Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm" target="TopicContent">MainWindow Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm" target="TopicContent">MainWindow Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.DataGrid_AutoGeneratingColumn.htm" target="TopicContent">DataGrid_AutoGeneratingColumn Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.Label_MouseDoubleClick.htm" target="TopicContent">Label_MouseDoubleClick Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.ShowDistinguishedNamesCheckbox_OnChecked.htm" target="TopicContent">ShowDistinguishedNamesCheckbox_OnChecked Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.ShowDistinguishedNamesCheckbox_OnUnchecked.htm" target="TopicContent">ShowDistinguishedNamesCheckbox_OnUnchecked Method </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" target="TopicContent">OrganizationalUnit Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" target="TopicContent">OrganizationalUnit Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" target="TopicContent">OrganizationalUnit Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Comma.htm" target="TopicContent">Comma Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.DomainComponentPrefix.htm" target="TopicContent">DomainComponentPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.LdapProtocol.htm" target="TopicContent">LdapProtocol Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.OrganizationalUnitPrefix.htm" target="TopicContent">OrganizationalUnitPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.StringStartIndex.htm" target="TopicContent">StringStartIndex Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" target="TopicContent">OrganizationalUnit Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Split.htm" target="TopicContent">Split Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" target="TopicContent">OrganizationalUnit Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Path.htm" target="TopicContent">Path Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" target="TopicContent">Query Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" target="TopicContent">Query Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.-ctor.htm" target="TopicContent">Query Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" target="TopicContent">Query Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Query._cancellationTokenSource.htm" target="TopicContent">_cancellationTokenSource Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" target="TopicContent">Query Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.Cancel.htm" target="TopicContent">Cancel Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.DisposeData.htm" target="TopicContent">DisposeData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.Execute.htm" target="TopicContent">Execute Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.ToString.htm" target="TopicContent">ToString Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" target="TopicContent">Query Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.CancellationToken.htm" target="TopicContent">CancellationToken Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.Data.htm" target="TopicContent">Data Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.DistinguishedNames.htm" target="TopicContent">DistinguishedNames Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.QueryType.htm" target="TopicContent">QueryType Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.Scope.htm" target="TopicContent">Scope Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.SearchText.htm" target="TopicContent">SearchText Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.QueryType.htm" target="TopicContent">QueryType Enumeration</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" target="TopicContent">Scope Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" target="TopicContent">Scope Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.-ctor.htm" target="TopicContent">Scope Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" target="TopicContent">Scope Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Comma.htm" target="TopicContent">Comma Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.DomainComponentPrefix.htm" target="TopicContent">DomainComponentPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.LdapPrefix.htm" target="TopicContent">LdapPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Period.htm" target="TopicContent">Period Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" target="TopicContent">Scope Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.AddDirectoryScope.htm" target="TopicContent">AddDirectoryScope Method </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Overload-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Equals.htm" target="TopicContent">Equals Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Equals.htm" target="TopicContent">Equals Method </a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.ToString.htm" target="TopicContent">ToString Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" target="TopicContent">Scope Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Children.htm" target="TopicContent">Children Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Context.htm" target="TopicContent">Context Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Domain.htm" target="TopicContent">Domain Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Name.htm" target="TopicContent">Name Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Path.htm" target="TopicContent">Path Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" target="TopicContent">ScopeFetcher Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" target="TopicContent">ScopeFetcher Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.-ctor.htm" target="TopicContent">ScopeFetcher Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" target="TopicContent">ScopeFetcher Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.DirectorySearcherOuFilter.htm" target="TopicContent">DirectorySearcherOuFilter Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.LdapPrefix.htm" target="TopicContent">LdapPrefix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.PageSize.htm" target="TopicContent">PageSize Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" target="TopicContent">ScopeFetcher Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.FetchScopeList.htm" target="TopicContent">FetchScopeList Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" target="TopicContent">ScopeFetcher Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.Scope.htm" target="TopicContent">Scope Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" target="TopicContent">Searcher Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" target="TopicContent">Searcher Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.-ctor.htm" target="TopicContent">Searcher Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" target="TopicContent">Searcher Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.Asterix.htm" target="TopicContent">Asterix Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultComputerGroupsProperties.htm" target="TopicContent">DefaultComputerGroupsProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultComputerProperties.htm" target="TopicContent">DefaultComputerProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupComputersProperties.htm" target="TopicContent">DefaultGroupComputersProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupProperties.htm" target="TopicContent">DefaultGroupProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersDirectReportsProperties.htm" target="TopicContent">DefaultGroupUsersDirectReportsProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersGroupsProperties.htm" target="TopicContent">DefaultGroupUsersGroupsProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersProperties.htm" target="TopicContent">DefaultGroupUsersProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserDirectReportsProperties.htm" target="TopicContent">DefaultUserDirectReportsProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserGroupsProperties.htm" target="TopicContent">DefaultUserGroupsProperties Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserProperties.htm" target="TopicContent">DefaultUserProperties Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" target="TopicContent">Searcher Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetComputersGroupsData.htm" target="TopicContent">GetComputersGroupsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetComputersSummariesData.htm" target="TopicContent">GetComputersSummariesData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetData.htm" target="TopicContent">GetData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsComputersData.htm" target="TopicContent">GetGroupsComputersData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsSummariesData.htm" target="TopicContent">GetGroupsSummariesData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersData.htm" target="TopicContent">GetGroupsUsersData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersDirectReportsData.htm" target="TopicContent">GetGroupsUsersDirectReportsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersGroupsData.htm" target="TopicContent">GetGroupsUsersGroupsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuComputersData.htm" target="TopicContent">GetOuComputersData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuGroupsData.htm" target="TopicContent">GetOuGroupsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuGroupsUsersData.htm" target="TopicContent">GetOuGroupsUsersData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersData.htm" target="TopicContent">GetOuUsersData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersDirectReportsData.htm" target="TopicContent">GetOuUsersDirectReportsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersGroupsData.htm" target="TopicContent">GetOuUsersGroupsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetPrincipalContext.htm" target="TopicContent">GetPrincipalContext Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchComputerData.htm" target="TopicContent">GetSearchComputerData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchGroupData.htm" target="TopicContent">GetSearchGroupData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchUserData.htm" target="TopicContent">GetSearchUserData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersDirectReportsData.htm" target="TopicContent">GetUsersDirectReportsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersGroupsData.htm" target="TopicContent">GetUsersGroupsData Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersSummariesData.htm" target="TopicContent">GetUsersSummariesData Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" target="TopicContent">Searcher Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.CancellationToken.htm" target="TopicContent">CancellationToken Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DataPreparer.htm" target="TopicContent">DataPreparer Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DistinguishedNames.htm" target="TopicContent">DistinguishedNames Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.QueryType.htm" target="TopicContent">QueryType Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.Scope.htm" target="TopicContent">Scope Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.SearchText.htm" target="TopicContent">SearchText Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.-ctor.htm" target="TopicContent">ViewModel Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._aboutWindow.htm" target="TopicContent">_aboutWindow Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._cancelButtonVisibility.htm" target="TopicContent">_cancelButtonVisibility Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._computerSearchIsChecked.htm" target="TopicContent">_computerSearchIsChecked Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._contextMenuItems.htm" target="TopicContent">_contextMenuItems Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._contextMenuVisibility.htm" target="TopicContent">_contextMenuVisibility Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._data.htm" target="TopicContent">_data Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._groupSearchIsChecked.htm" target="TopicContent">_groupSearchIsChecked Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._messageContent.htm" target="TopicContent">_messageContent Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._messageVisibility.htm" target="TopicContent">_messageVisibility Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._progressBarVisibility.htm" target="TopicContent">_progressBarVisibility Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._queries.htm" target="TopicContent">_queries Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._searchText.htm" target="TopicContent">_searchText Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._showDistinguishedNames.htm" target="TopicContent">_showDistinguishedNames Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._userSearchIsChecked.htm" target="TopicContent">_userSearchIsChecked Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._viewIsEnabled.htm" target="TopicContent">_viewIsEnabled Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ComputerDistinguishedName.htm" target="TopicContent">ComputerDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContainerGroupDistinguishedName.htm" target="TopicContent">ContainerGroupDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContainerGroupManagedByDistinguishedName.htm" target="TopicContent">ContainerGroupManagedByDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.DirectReportDistinguishedName.htm" target="TopicContent">DirectReportDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupDistinguishedName.htm" target="TopicContent">GroupDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupManagedByDistinguishedName.htm" target="TopicContent">GroupManagedByDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.HelpFile.htm" target="TopicContent">HelpFile Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ManagerDistinguishedName.htm" target="TopicContent">ManagerDistinguishedName Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.UserDistinguishedName.htm" target="TopicContent">UserDistinguishedName Field</a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Methods</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteOuCommand.htm" target="TopicContent">CanExecuteOuCommand Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteRunPreviousQuery.htm" target="TopicContent">CanExecuteRunPreviousQuery Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteSearch.htm" target="TopicContent">CanExecuteSearch Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteSearchOu.htm" target="TopicContent">CanExecuteSearchOu Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteWriteToFile.htm" target="TopicContent">CanExecuteWriteToFile Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteCancel.htm" target="TopicContent">ExecuteCancel Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetComputersGroups.htm" target="TopicContent">ExecuteGetComputersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetComputersSummaries.htm" target="TopicContent">ExecuteGetComputersSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsComputers.htm" target="TopicContent">ExecuteGetContainerGroupsComputers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedByDirectReports.htm" target="TopicContent">ExecuteGetContainerGroupsManagedByDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedByGroups.htm" target="TopicContent">ExecuteGetContainerGroupsManagedByGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedBySummaries.htm" target="TopicContent">ExecuteGetContainerGroupsManagedBySummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsSummaries.htm" target="TopicContent">ExecuteGetContainerGroupsSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsers.htm" target="TopicContent">ExecuteGetContainerGroupsUsers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsersDirectReports.htm" target="TopicContent">ExecuteGetContainerGroupsUsersDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsersGroups.htm" target="TopicContent">ExecuteGetContainerGroupsUsersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsDirectReports.htm" target="TopicContent">ExecuteGetDirectReportsDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsGroups.htm" target="TopicContent">ExecuteGetDirectReportsGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsSummaries.htm" target="TopicContent">ExecuteGetDirectReportsSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsComputers.htm" target="TopicContent">ExecuteGetGroupsComputers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedByDirectReports.htm" target="TopicContent">ExecuteGetGroupsManagedByDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedByGroups.htm" target="TopicContent">ExecuteGetGroupsManagedByGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedBySummaries.htm" target="TopicContent">ExecuteGetGroupsManagedBySummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsSummaries.htm" target="TopicContent">ExecuteGetGroupsSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsers.htm" target="TopicContent">ExecuteGetGroupsUsers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsersDirectReports.htm" target="TopicContent">ExecuteGetGroupsUsersDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsersGroups.htm" target="TopicContent">ExecuteGetGroupsUsersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersDirectReports.htm" target="TopicContent">ExecuteGetManagersDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersGroups.htm" target="TopicContent">ExecuteGetManagersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersSummaries.htm" target="TopicContent">ExecuteGetManagersSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuComputers.htm" target="TopicContent">ExecuteGetOuComputers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuGroups.htm" target="TopicContent">ExecuteGetOuGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuGroupsUsers.htm" target="TopicContent">ExecuteGetOuGroupsUsers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsers.htm" target="TopicContent">ExecuteGetOuUsers Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsersDirectReports.htm" target="TopicContent">ExecuteGetOuUsersDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsersGroups.htm" target="TopicContent">ExecuteGetOuUsersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersDirectReports.htm" target="TopicContent">ExecuteGetUsersDirectReports Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersGroups.htm" target="TopicContent">ExecuteGetUsersGroups Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersSummaries.htm" target="TopicContent">ExecuteGetUsersSummaries Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteOpenAboutWindow.htm" target="TopicContent">ExecuteOpenAboutWindow Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteOpenHelpWindow.htm" target="TopicContent">ExecuteOpenHelpWindow Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteRunPreviousQuery.htm" target="TopicContent">ExecuteRunPreviousQuery Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteSearch.htm" target="TopicContent">ExecuteSearch Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteSearchOu.htm" target="TopicContent">ExecuteSearchOu Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteWriteToFile.htm" target="TopicContent">ExecuteWriteToFile Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.FinishTask.htm" target="TopicContent">FinishTask Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateComputerContextMenuItems.htm" target="TopicContent">GenerateComputerContextMenuItems Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateContextMenuItems.htm" target="TopicContent">GenerateContextMenuItems Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateGroupContextMenuItems.htm" target="TopicContent">GenerateGroupContextMenuItems Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateGroupManagedByContextMenuItems.htm" target="TopicContent">GenerateGroupManagedByContextMenuItems Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateUserContextMenuItems.htm" target="TopicContent">GenerateUserContextMenuItems Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetComputerDistinguishedName.htm" target="TopicContent">GetComputerDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetComputersDistinguishedNames.htm" target="TopicContent">GetComputersDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupDistinguishedName.htm" target="TopicContent">GetContainerGroupDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupManagedByDistinguishedName.htm" target="TopicContent">GetContainerGroupManagedByDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsDistinguishedNames.htm" target="TopicContent">GetContainerGroupsDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByDistinguishedNames.htm" target="TopicContent">GetContainerGroupsManagedByDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportDistinguishedName.htm" target="TopicContent">GetDirectReportDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsDistinguishedNames.htm" target="TopicContent">GetDirectReportsDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupDistinguishedName.htm" target="TopicContent">GetGroupDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupManagedByDistinguishedName.htm" target="TopicContent">GetGroupManagedByDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsDistinguishedNames.htm" target="TopicContent">GetGroupsDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsManagedByDistinguishedNames.htm" target="TopicContent">GetGroupsManagedByDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagerDistinguishedName.htm" target="TopicContent">GetManagerDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersDistinguishedNames.htm" target="TopicContent">GetManagersDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetSearchQueryType.htm" target="TopicContent">GetSearchQueryType Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUserDistinguishedName.htm" target="TopicContent">GetUserDistinguishedName Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersDistinguishedNames.htm" target="TopicContent">GetUsersDistinguishedNames Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.HideMessage.htm" target="TopicContent">HideMessage Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.NotifyPropertyChanged.htm" target="TopicContent">NotifyPropertyChanged Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ResetQuery.htm" target="TopicContent">ResetQuery Method </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Overload-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery.htm" target="TopicContent">RunQuery Method </a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery.htm" target="TopicContent">RunQuery Method (QueryType, Scope, IEnumerable(String), String)</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery_1.htm" target="TopicContent">RunQuery Method (Query)</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchTypeIsChecked.htm" target="TopicContent">SearchTypeIsChecked Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SetViewVariables.htm" target="TopicContent">SetViewVariables Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ShowMessage.htm" target="TopicContent">ShowMessage Method </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.StartTask.htm" target="TopicContent">StartTask Method </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.AboutWindow.htm" target="TopicContent">AboutWindow Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CancelButtonVisibility.htm" target="TopicContent">CancelButtonVisibility Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CancelCommand.htm" target="TopicContent">CancelCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ComputerSearchIsChecked.htm" target="TopicContent">ComputerSearchIsChecked Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContextMenuItems.htm" target="TopicContent">ContextMenuItems Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContextMenuVisibility.htm" target="TopicContent">ContextMenuVisibility Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CurrentScope.htm" target="TopicContent">CurrentScope Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Data.htm" target="TopicContent">Data Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsComputers.htm" target="TopicContent">GetContainerGroupsComputers Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByDirectReports.htm" target="TopicContent">GetContainerGroupsManagedByDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByGroups.htm" target="TopicContent">GetContainerGroupsManagedByGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedBySummaries.htm" target="TopicContent">GetContainerGroupsManagedBySummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsSummaries.htm" target="TopicContent">GetContainerGroupsSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsUsers.htm" target="TopicContent">GetContainerGroupsUsers Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsUsersDirectReports.htm" target="TopicContent">GetContainerGroupsUsersDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsDirectReports.htm" target="TopicContent">GetDirectReportsDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsGroups.htm" target="TopicContent">GetDirectReportsGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsSummaries.htm" target="TopicContent">GetDirectReportsSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsComputers.htm" target="TopicContent">GetGroupsComputers Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsSummaries.htm" target="TopicContent">GetGroupsSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsers.htm" target="TopicContent">GetGroupsUsers Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsersDirectReports.htm" target="TopicContent">GetGroupsUsersDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsersGroups.htm" target="TopicContent">GetGroupsUsersGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersDirectReports.htm" target="TopicContent">GetManagersDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersGroups.htm" target="TopicContent">GetManagersGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersSummaries.htm" target="TopicContent">GetManagersSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuComputersCommand.htm" target="TopicContent">GetOuComputersCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuGroupsCommand.htm" target="TopicContent">GetOuGroupsCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuGroupsUsersCommand.htm" target="TopicContent">GetOuGroupsUsersCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersCommand.htm" target="TopicContent">GetOuUsersCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersDirectReportsCommand.htm" target="TopicContent">GetOuUsersDirectReportsCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersGroupsCommand.htm" target="TopicContent">GetOuUsersGroupsCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersDirectReports.htm" target="TopicContent">GetUsersDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersGroups.htm" target="TopicContent">GetUsersGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersSummaries.htm" target="TopicContent">GetUsersSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupSearchIsChecked.htm" target="TopicContent">GroupSearchIsChecked Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetComputersGroups.htm" target="TopicContent">MenuItemGetComputersGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetComputersSummaries.htm" target="TopicContent">MenuItemGetComputersSummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetContainerGroupsUsersGroups.htm" target="TopicContent">MenuItemGetContainerGroupsUsersGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedByDirectReports.htm" target="TopicContent">MenuItemGetGroupsManagedByDirectReports Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedByGroups.htm" target="TopicContent">MenuItemGetGroupsManagedByGroups Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedBySummaries.htm" target="TopicContent">MenuItemGetGroupsManagedBySummaries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MessageContent.htm" target="TopicContent">MessageContent Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MessageVisibility.htm" target="TopicContent">MessageVisibility Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.OpenAboutWindow.htm" target="TopicContent">OpenAboutWindow Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.OpenHelpWindow.htm" target="TopicContent">OpenHelpWindow Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ProgressBarVisibility.htm" target="TopicContent">ProgressBarVisibility Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Queries.htm" target="TopicContent">Queries Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RootScope.htm" target="TopicContent">RootScope Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunPreviousQuery.htm" target="TopicContent">RunPreviousQuery Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Search.htm" target="TopicContent">Search Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchOu.htm" target="TopicContent">SearchOu Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchText.htm" target="TopicContent">SearchText Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SelectedDataRowViews.htm" target="TopicContent">SelectedDataRowViews Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SelectionChangedCommand.htm" target="TopicContent">SelectionChangedCommand Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ShowDistinguishedNames.htm" target="TopicContent">ShowDistinguishedNames Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.UserSearchIsChecked.htm" target="TopicContent">UserSearchIsChecked Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Version.htm" target="TopicContent">Version Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ViewIsEnabled.htm" target="TopicContent">ViewIsEnabled Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.WriteToFileCommand.htm" target="TopicContent">WriteToFileCommand Property </a>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" target="TopicContent">ViewModel Events</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/E-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.PropertyChanged.htm" target="TopicContent">PropertyChanged Event</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/N-MichaelBrandonMorris.ActiveDirectoryTool.Properties.htm" target="TopicContent">MichaelBrandonMorris.ActiveDirectoryTool.Properties Namespace</a>
+<div class="Hidden">
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" target="TopicContent">Resources Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" target="TopicContent">Resources Members</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.-ctor.htm" target="TopicContent">Resources Constructor </a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" target="TopicContent">Resources Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.resourceCulture.htm" target="TopicContent">resourceCulture Field</a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.resourceMan.htm" target="TopicContent">resourceMan Field</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" target="TopicContent">Resources Methods</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" target="TopicContent">Resources Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.Culture.htm" target="TopicContent">Culture Property </a>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.ResourceManager.htm" target="TopicContent">ResourceManager Property </a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Class</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Members</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Fields</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.defaultInstance.htm" target="TopicContent">defaultInstance Field</a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Methods</a>
+</div>
+<div class="TreeNode">
+<img class="TreeNodeImg" onclick="javascript: Toggle(this);" src="Collapsed.png"/><a class="UnselectedNode" onclick="javascript: return Expand(this);" href="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Properties</a>
+<div class="Hidden">
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.Default.htm" target="TopicContent">Default Property </a>
+</div>
+</div>
+</div>
+<div class="TreeItem">
+<img src="Item.gif"/><a class="UnselectedNode" onclick="javascript: return SelectNode(this);" href="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" target="TopicContent">Settings Events</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div id="TOCSizer" class="TOCSizer" onmousedown="OnMouseDown(event)" onselectstart="javascript: return false;"></div>
+
+<iframe id="TopicContent" name="TopicContent" class="TopicContent" src="html/n-michaelbrandonmorris.activedirectorytool.htm">
+This page uses an IFRAME but your browser does not support it.
+</iframe>
+
+</form>
+
+</body>
+
+</html>

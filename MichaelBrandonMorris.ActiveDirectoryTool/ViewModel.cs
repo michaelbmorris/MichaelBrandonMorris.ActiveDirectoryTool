@@ -18,48 +18,169 @@ using MichaelBrandonMorris.Extensions.PrimitiveExtensions;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
+    /// <summary>
+    ///     Class ViewModel.
+    /// </summary>
+    /// <seealso
+    ///     cref="System.ComponentModel.INotifyPropertyChanged" />
+    /// TODO Edit XML Comment Template for ViewModel
     internal class ViewModel : INotifyPropertyChanged
     {
+        /// <summary>
+        ///     The computer distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for ComputerDistinguishedName
         private const string ComputerDistinguishedName =
             "ComputerDistinguishedName";
 
+        /// <summary>
+        ///     The container group distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for ContainerGroupDistinguishedName
         private const string ContainerGroupDistinguishedName =
             "ContainerGroupDistinguishedName";
 
+        /// <summary>
+        ///     The container group managed by distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for ContainerGroupManagedByDistinguishedName
         private const string ContainerGroupManagedByDistinguishedName =
             "ContainerGroupManagedByDistinguishedName";
 
+        /// <summary>
+        ///     The direct report distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for DirectReportDistinguishedName
         private const string DirectReportDistinguishedName =
             "DirectReportDistinguishedName";
 
+        /// <summary>
+        ///     The group distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for GroupDistinguishedName
         private const string GroupDistinguishedName = "GroupDistinguishedName";
 
+        /// <summary>
+        ///     The group managed by distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for GroupManagedByDistinguishedName
         private const string GroupManagedByDistinguishedName =
             "GroupManagedByDistinguishedName";
 
+        /// <summary>
+        ///     The help file
+        /// </summary>
+        /// TODO Edit XML Comment Template for HelpFile
         private const string HelpFile = "ActiveDirectoryToolHelp.chm";
 
+        /// <summary>
+        ///     The manager distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for ManagerDistinguishedName
         private const string ManagerDistinguishedName =
             "ManagerDistinguishedName";
 
+        /// <summary>
+        ///     The user distinguished name
+        /// </summary>
+        /// TODO Edit XML Comment Template for UserDistinguishedName
         private const string UserDistinguishedName = "UserDistinguishedName";
 
+        /// <summary>
+        ///     The about window
+        /// </summary>
+        /// TODO Edit XML Comment Template for _aboutWindow
         private AboutWindow _aboutWindow;
+
+        /// <summary>
+        ///     The cancel button visibility
+        /// </summary>
+        /// TODO Edit XML Comment Template for _cancelButtonVisibility
         private Visibility _cancelButtonVisibility;
+
+        /// <summary>
+        ///     The computer search is checked
+        /// </summary>
+        /// TODO Edit XML Comment Template for _computerSearchIsChecked
         private bool _computerSearchIsChecked;
+
+        /// <summary>
+        ///     The context menu items
+        /// </summary>
+        /// TODO Edit XML Comment Template for _contextMenuItems
         private List<MenuItem> _contextMenuItems;
+
+        /// <summary>
+        ///     The context menu visibility
+        /// </summary>
+        /// TODO Edit XML Comment Template for _contextMenuVisibility
         private Visibility _contextMenuVisibility;
+
+        /// <summary>
+        ///     The data
+        /// </summary>
+        /// TODO Edit XML Comment Template for _data
         private DataView _data;
+
+        /// <summary>
+        ///     The group search is checked
+        /// </summary>
+        /// TODO Edit XML Comment Template for _groupSearchIsChecked
         private bool _groupSearchIsChecked;
+
+        /// <summary>
+        ///     The message content
+        /// </summary>
+        /// TODO Edit XML Comment Template for _messageContent
         private string _messageContent;
+
+        /// <summary>
+        ///     The message visibility
+        /// </summary>
+        /// TODO Edit XML Comment Template for _messageVisibility
         private Visibility _messageVisibility;
+
+        /// <summary>
+        ///     The progress bar visibility
+        /// </summary>
+        /// TODO Edit XML Comment Template for _progressBarVisibility
         private Visibility _progressBarVisibility;
+
+        /// <summary>
+        ///     The queries
+        /// </summary>
+        /// TODO Edit XML Comment Template for _queries
         private Stack<Query> _queries;
+
+        /// <summary>
+        ///     The search text
+        /// </summary>
+        /// TODO Edit XML Comment Template for _searchText
         private string _searchText;
+
+        /// <summary>
+        ///     The show distinguished names
+        /// </summary>
+        /// TODO Edit XML Comment Template for _showDistinguishedNames
         private bool _showDistinguishedNames;
+
+        /// <summary>
+        ///     The user search is checked
+        /// </summary>
+        /// TODO Edit XML Comment Template for _userSearchIsChecked
         private bool _userSearchIsChecked;
+
+        /// <summary>
+        ///     The view is enabled
+        /// </summary>
+        /// TODO Edit XML Comment Template for _viewIsEnabled
         private bool _viewIsEnabled;
 
+        /// <summary>
+        ///     Initializes a new instance of the
+        ///     <see cref="ViewModel" /> class.
+        /// </summary>
+        /// TODO Edit XML Comment Template for #ctor
         public ViewModel()
         {
             SetViewVariables();
@@ -76,127 +197,125 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             Queries = new Stack<Query>();
         }
 
-        public ICommand CancelCommand
-        {
-            get
-            {
-                return new RelayCommand(ExecuteCancel);
-            }
-        }
+        /// <summary>
+        ///     Gets the cancel command.
+        /// </summary>
+        /// <value>The cancel command.</value>
+        /// TODO Edit XML Comment Template for CancelCommand
+        public ICommand CancelCommand => new RelayCommand(ExecuteCancel);
 
-        public ICommand GetOuComputersCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuComputers,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou computers command.
+        /// </summary>
+        /// <value>The get ou computers command.</value>
+        /// TODO Edit XML Comment Template for GetOuComputersCommand
+        public ICommand GetOuComputersCommand => new RelayCommand(
+            ExecuteGetOuComputers,
+            CanExecuteOuCommand);
 
-        public ICommand GetOuGroupsCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuGroups,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou groups command.
+        /// </summary>
+        /// <value>The get ou groups command.</value>
+        /// TODO Edit XML Comment Template for GetOuGroupsCommand
+        public ICommand GetOuGroupsCommand => new RelayCommand(
+            ExecuteGetOuGroups,
+            CanExecuteOuCommand);
 
-        public ICommand GetOuGroupsUsersCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuGroupsUsers,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou groups users command.
+        /// </summary>
+        /// <value>The get ou groups users command.</value>
+        /// TODO Edit XML Comment Template for GetOuGroupsUsersCommand
+        public ICommand GetOuGroupsUsersCommand => new RelayCommand(
+            ExecuteGetOuGroupsUsers,
+            CanExecuteOuCommand);
 
-        public ICommand GetOuUsersCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuUsers,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou users command.
+        /// </summary>
+        /// <value>The get ou users command.</value>
+        /// TODO Edit XML Comment Template for GetOuUsersCommand
+        public ICommand GetOuUsersCommand => new RelayCommand(
+            ExecuteGetOuUsers,
+            CanExecuteOuCommand);
 
-        public ICommand GetOuUsersDirectReportsCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuUsersDirectReports,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou users direct reports command.
+        /// </summary>
+        /// <value>The get ou users direct reports command.</value>
+        /// TODO Edit XML Comment Template for GetOuUsersDirectReportsCommand
+        public ICommand GetOuUsersDirectReportsCommand => new RelayCommand(
+            ExecuteGetOuUsersDirectReports,
+            CanExecuteOuCommand);
 
-        public ICommand GetOuUsersGroupsCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteGetOuUsersGroups,
-                    CanExecuteOuCommand);
-            }
-        }
+        /// <summary>
+        ///     Gets the get ou users groups command.
+        /// </summary>
+        /// <value>The get ou users groups command.</value>
+        /// TODO Edit XML Comment Template for GetOuUsersGroupsCommand
+        public ICommand GetOuUsersGroupsCommand => new RelayCommand(
+            ExecuteGetOuUsersGroups,
+            CanExecuteOuCommand);
 
-        public ICommand OpenAboutWindow
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteOpenAboutWindow);
-            }
-        }
+        /// <summary>
+        ///     Gets the open about window.
+        /// </summary>
+        /// <value>The open about window.</value>
+        /// TODO Edit XML Comment Template for OpenAboutWindow
+        public ICommand OpenAboutWindow => new RelayCommand(
+            ExecuteOpenAboutWindow);
 
-        public ICommand OpenHelpWindow
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteOpenHelpWindow);
-            }
-        }
+        /// <summary>
+        ///     Gets the open help window.
+        /// </summary>
+        /// <value>The open help window.</value>
+        /// TODO Edit XML Comment Template for OpenHelpWindow
+        public ICommand OpenHelpWindow => new RelayCommand(
+            ExecuteOpenHelpWindow);
 
+        /// <summary>
+        ///     Gets the root scope.
+        /// </summary>
+        /// <value>The root scope.</value>
+        /// TODO Edit XML Comment Template for RootScope
         public Scope RootScope
         {
             get;
         }
 
-        public ICommand RunPreviousQuery
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteRunPreviousQuery,
-                    CanExecuteRunPreviousQuery);
-            }
-        }
+        /// <summary>
+        ///     Gets the run previous query.
+        /// </summary>
+        /// <value>The run previous query.</value>
+        /// TODO Edit XML Comment Template for RunPreviousQuery
+        public ICommand RunPreviousQuery => new RelayCommand(
+            ExecuteRunPreviousQuery,
+            CanExecuteRunPreviousQuery);
 
-        public ICommand Search
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteSearch,
-                    CanExecuteSearch);
-            }
-        }
+        /// <summary>
+        ///     Gets the search.
+        /// </summary>
+        /// <value>The search.</value>
+        /// TODO Edit XML Comment Template for Search
+        public ICommand Search => new RelayCommand(
+            ExecuteSearch,
+            CanExecuteSearch);
 
-        public ICommand SearchOu
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteSearchOu,
-                    CanExecuteSearchOu);
-            }
-        }
+        /// <summary>
+        ///     Gets the search ou.
+        /// </summary>
+        /// <value>The search ou.</value>
+        /// TODO Edit XML Comment Template for SearchOu
+        public ICommand SearchOu => new RelayCommand(
+            ExecuteSearchOu,
+            CanExecuteSearchOu);
 
+        /// <summary>
+        ///     Gets the selection changed command.
+        /// </summary>
+        /// <value>The selection changed command.</value>
+        /// TODO Edit XML Comment Template for SelectionChangedCommand
         public ICommand SelectionChangedCommand
         {
             get
@@ -209,56 +328,67 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        public ICommand WriteToFileCommand
-        {
-            get
-            {
-                return new RelayCommand(
-                    ExecuteWriteToFile,
-                    CanExecuteWriteToFile);
-            }
-        }
+        /// <summary>
+        ///     Gets the write to file command.
+        /// </summary>
+        /// <value>The write to file command.</value>
+        /// TODO Edit XML Comment Template for WriteToFileCommand
+        public ICommand WriteToFileCommand => new RelayCommand(
+            ExecuteWriteToFile,
+            CanExecuteWriteToFile);
 
+        /// <summary>
+        ///     Gets or sets the cancel button visibility.
+        /// </summary>
+        /// <value>The cancel button visibility.</value>
+        /// TODO Edit XML Comment Template for CancelButtonVisibility
         public Visibility CancelButtonVisibility
         {
-            get
-            {
-                return _cancelButtonVisibility;
-            }
+            get => _cancelButtonVisibility;
             set
             {
                 if (_cancelButtonVisibility == value)
                 {
                     return;
                 }
+
                 _cancelButtonVisibility = value;
                 NotifyPropertyChanged();
             }
         }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether [computer
+        ///     search is checked].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [computer search is checked];
+        ///     otherwise, <c>false</c>.
+        /// </value>
+        /// TODO Edit XML Comment Template for ComputerSearchIsChecked
         public bool ComputerSearchIsChecked
         {
-            get
-            {
-                return _computerSearchIsChecked;
-            }
+            get => _computerSearchIsChecked;
             set
             {
                 if (_computerSearchIsChecked == value)
                 {
                     return;
                 }
+
                 _computerSearchIsChecked = value;
                 NotifyPropertyChanged();
             }
         }
 
+        /// <summary>
+        ///     Gets the context menu items.
+        /// </summary>
+        /// <value>The context menu items.</value>
+        /// TODO Edit XML Comment Template for ContextMenuItems
         public List<MenuItem> ContextMenuItems
         {
-            get
-            {
-                return _contextMenuItems;
-            }
+            get => _contextMenuItems;
             private set
             {
                 if (_contextMenuItems == value)
@@ -276,12 +406,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the context menu visibility.
+        /// </summary>
+        /// <value>The context menu visibility.</value>
+        /// TODO Edit XML Comment Template for ContextMenuVisibility
         public Visibility ContextMenuVisibility
         {
-            get
-            {
-                return _contextMenuVisibility;
-            }
+            get => _contextMenuVisibility;
             set
             {
                 if (_contextMenuVisibility == value)
@@ -294,18 +426,25 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the current scope.
+        /// </summary>
+        /// <value>The current scope.</value>
+        /// TODO Edit XML Comment Template for CurrentScope
         public Scope CurrentScope
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///     Gets the data.
+        /// </summary>
+        /// <value>The data.</value>
+        /// TODO Edit XML Comment Template for Data
         public DataView Data
         {
-            get
-            {
-                return _data;
-            }
+            get => _data;
             private set
             {
                 if (_data == value)
@@ -318,12 +457,18 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether [group search
+        ///     is checked].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [group search is checked]; otherwise,
+        ///     <c>false</c>.
+        /// </value>
+        /// TODO Edit XML Comment Template for GroupSearchIsChecked
         public bool GroupSearchIsChecked
         {
-            get
-            {
-                return _groupSearchIsChecked;
-            }
+            get => _groupSearchIsChecked;
             set
             {
                 if (_groupSearchIsChecked == value)
@@ -336,12 +481,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the content of the message.
+        /// </summary>
+        /// <value>The content of the message.</value>
+        /// TODO Edit XML Comment Template for MessageContent
         public string MessageContent
         {
-            get
-            {
-                return _messageContent;
-            }
+            get => _messageContent;
             set
             {
                 if (_messageContent == value)
@@ -354,12 +501,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the message visibility.
+        /// </summary>
+        /// <value>The message visibility.</value>
+        /// TODO Edit XML Comment Template for MessageVisibility
         public Visibility MessageVisibility
         {
-            get
-            {
-                return _messageVisibility;
-            }
+            get => _messageVisibility;
             set
             {
                 if (_messageVisibility == value)
@@ -372,12 +521,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the progress bar visibility.
+        /// </summary>
+        /// <value>The progress bar visibility.</value>
+        /// TODO Edit XML Comment Template for ProgressBarVisibility
         public Visibility ProgressBarVisibility
         {
-            get
-            {
-                return _progressBarVisibility;
-            }
+            get => _progressBarVisibility;
             set
             {
                 if (_progressBarVisibility == value)
@@ -390,12 +541,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the queries.
+        /// </summary>
+        /// <value>The queries.</value>
+        /// TODO Edit XML Comment Template for Queries
         public Stack<Query> Queries
         {
-            get
-            {
-                return _queries;
-            }
+            get => _queries;
             set
             {
                 if (_queries == value)
@@ -408,12 +561,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets the search text.
+        /// </summary>
+        /// <value>The search text.</value>
+        /// TODO Edit XML Comment Template for SearchText
         public string SearchText
         {
-            get
-            {
-                return _searchText;
-            }
+            get => _searchText;
             set
             {
                 if (_searchText == value)
@@ -426,12 +581,18 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether [show
+        ///     distinguished names].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [show distinguished names];
+        ///     otherwise, <c>false</c>.
+        /// </value>
+        /// TODO Edit XML Comment Template for ShowDistinguishedNames
         public bool ShowDistinguishedNames
         {
-            get
-            {
-                return _showDistinguishedNames;
-            }
+            get => _showDistinguishedNames;
             set
             {
                 if (_showDistinguishedNames == value)
@@ -444,12 +605,18 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets or sets a value indicating whether [user search is
+        ///     checked].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [user search is checked]; otherwise,
+        ///     <c>false</c>.
+        /// </value>
+        /// TODO Edit XML Comment Template for UserSearchIsChecked
         public bool UserSearchIsChecked
         {
-            get
-            {
-                return _userSearchIsChecked;
-            }
+            get => _userSearchIsChecked;
             set
             {
                 if (_userSearchIsChecked == value)
@@ -462,18 +629,28 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets the version.
+        /// </summary>
+        /// <value>The version.</value>
+        /// TODO Edit XML Comment Template for Version
         public string Version
         {
             get;
             private set;
         }
 
+        /// <summary>
+        ///     Gets a value indicating whether [view is enabled].
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if [view is enabled]; otherwise,
+        ///     <c>false</c>.
+        /// </value>
+        /// TODO Edit XML Comment Template for ViewIsEnabled
         public bool ViewIsEnabled
         {
-            get
-            {
-                return _viewIsEnabled;
-            }
+            get => _viewIsEnabled;
             private set
             {
                 if (_viewIsEnabled == value)
@@ -486,11 +663,17 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Gets the about window.
+        /// </summary>
+        /// <value>The about window.</value>
+        /// TODO Edit XML Comment Template for AboutWindow
         private AboutWindow AboutWindow
         {
             get
             {
-                if (_aboutWindow == null || !_aboutWindow.IsVisible)
+                if (_aboutWindow == null
+                    || !_aboutWindow.IsVisible)
                 {
                     _aboutWindow = new AboutWindow();
                 }
@@ -499,368 +682,368 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
-        private MenuItem GetContainerGroupsComputers
+        /// <summary>
+        ///     Gets the get container groups computers.
+        /// </summary>
+        /// <value>The get container groups computers.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsComputers
+        private MenuItem GetContainerGroupsComputers => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Computers",
-                    Command =
-                        new RelayCommand(ExecuteGetContainerGroupsComputers)
-                };
-            }
-        }
+            Header = "Container Groups - Get Computers",
+            Command = new RelayCommand(ExecuteGetContainerGroupsComputers)
+        };
 
-        private MenuItem GetContainerGroupsManagedByDirectReports
+        /// <summary>
+        ///     Gets the get container groups managed by direct
+        ///     reports.
+        /// </summary>
+        /// <value>The get container groups managed by direct reports.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsManagedByDirectReports
+        private MenuItem GetContainerGroupsManagedByDirectReports => new
+            MenuItem
+            {
+                Header = "Container Group - Get Managed By's Direct Reports",
+                Command = new RelayCommand(
+                    ExecuteGetContainerGroupsManagedByDirectReports)
+            };
+
+        /// <summary>
+        ///     Gets the get container groups managed by groups.
+        /// </summary>
+        /// <value>The get container groups managed by groups.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsManagedByGroups
+        private MenuItem GetContainerGroupsManagedByGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header =
-                        "Container Group - Get Managed By's Direct Reports",
-                    Command = new RelayCommand(
-                        ExecuteGetContainerGroupsManagedByDirectReports)
-                };
-            }
-        }
+            Header = "Container Groups - Get Managed By's Groups",
+            Command = new RelayCommand(ExecuteGetContainerGroupsManagedByGroups)
+        };
 
-        private MenuItem GetContainerGroupsManagedByGroups
+        /// <summary>
+        ///     Gets the get container groups managed by summaries.
+        /// </summary>
+        /// <value>The get container groups managed by summaries.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsManagedBySummaries
+        private MenuItem GetContainerGroupsManagedBySummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Managed By's Groups",
-                    Command = new RelayCommand(
-                        ExecuteGetContainerGroupsManagedByGroups)
-                };
-            }
-        }
+            Header = "Container Groups - Get Managed By's Summaries",
+            Command = new RelayCommand(
+                ExecuteGetContainerGroupsManagedBySummaries)
+        };
 
-        private MenuItem GetContainerGroupsManagedBySummaries
+        /// <summary>
+        ///     Gets the get container groups summaries.
+        /// </summary>
+        /// <value>The get container groups summaries.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsSummaries
+        private MenuItem GetContainerGroupsSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Managed By's Summaries",
-                    Command = new RelayCommand(
-                        ExecuteGetContainerGroupsManagedBySummaries)
-                };
-            }
-        }
+            Header = "Container Groups - Get Summaries",
+            Command = new RelayCommand(ExecuteGetContainerGroupsSummaries)
+        };
 
-        private MenuItem GetContainerGroupsSummaries
+        /// <summary>
+        ///     Gets the get container groups users.
+        /// </summary>
+        /// <value>The get container groups users.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsUsers
+        private MenuItem GetContainerGroupsUsers => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Summaries",
-                    Command =
-                        new RelayCommand(ExecuteGetContainerGroupsSummaries)
-                };
-            }
-        }
+            Header = "Container Groups - Get Users",
+            Command = new RelayCommand(ExecuteGetContainerGroupsUsers)
+        };
 
-        private MenuItem GetContainerGroupsUsers
+        /// <summary>
+        ///     Gets the get container groups users direct reports.
+        /// </summary>
+        /// <value>The get container groups users direct reports.</value>
+        /// TODO Edit XML Comment Template for GetContainerGroupsUsersDirectReports
+        private MenuItem GetContainerGroupsUsersDirectReports => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Users",
-                    Command = new RelayCommand(ExecuteGetContainerGroupsUsers)
-                };
-            }
-        }
+            Header = "Container Groups - Get Users' Direct Reports",
+            Command = new RelayCommand(
+                ExecuteGetContainerGroupsUsersDirectReports)
+        };
 
-        private MenuItem GetContainerGroupsUsersDirectReports
+        /// <summary>
+        ///     Gets the get direct reports direct reports.
+        /// </summary>
+        /// <value>The get direct reports direct reports.</value>
+        /// TODO Edit XML Comment Template for GetDirectReportsDirectReports
+        private MenuItem GetDirectReportsDirectReports => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Users' Direct Reports",
-                    Command = new RelayCommand(
-                        ExecuteGetContainerGroupsUsersDirectReports)
-                };
-            }
-        }
+            Header = "Direct Reports - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetDirectReportsDirectReports)
+        };
 
-        private MenuItem GetDirectReportsDirectReports
+        /// <summary>
+        ///     Gets the get direct reports groups.
+        /// </summary>
+        /// <value>The get direct reports groups.</value>
+        /// TODO Edit XML Comment Template for GetDirectReportsGroups
+        private MenuItem GetDirectReportsGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Direct Reports - Get Direct Reports",
-                    Command =
-                        new RelayCommand(ExecuteGetDirectReportsDirectReports)
-                };
-            }
-        }
+            Header = "Direct Reports - Get Groups",
+            Command = new RelayCommand(ExecuteGetDirectReportsGroups)
+        };
 
-        private MenuItem GetDirectReportsGroups
+        /// <summary>
+        ///     Gets the get direct reports summaries.
+        /// </summary>
+        /// <value>The get direct reports summaries.</value>
+        /// TODO Edit XML Comment Template for GetDirectReportsSummaries
+        private MenuItem GetDirectReportsSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Direct Reports - Get Groups",
-                    Command = new RelayCommand(ExecuteGetDirectReportsGroups)
-                };
-            }
-        }
+            Header = "Direct Reports - Get Summaries",
+            Command = new RelayCommand(ExecuteGetDirectReportsSummaries)
+        };
 
-        private MenuItem GetDirectReportsSummaries
+        /// <summary>
+        ///     Gets the get groups computers.
+        /// </summary>
+        /// <value>The get groups computers.</value>
+        /// TODO Edit XML Comment Template for GetGroupsComputers
+        private MenuItem GetGroupsComputers => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Direct Reports - Get Summaries",
-                    Command = new RelayCommand(ExecuteGetDirectReportsSummaries)
-                };
-            }
-        }
+            Header = "Groups - Get Computers",
+            Command = new RelayCommand(ExecuteGetGroupsComputers)
+        };
 
-        private MenuItem GetGroupsComputers
+        /// <summary>
+        ///     Gets the get groups summaries.
+        /// </summary>
+        /// <value>The get groups summaries.</value>
+        /// TODO Edit XML Comment Template for GetGroupsSummaries
+        private MenuItem GetGroupsSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Computers",
-                    Command = new RelayCommand(ExecuteGetGroupsComputers)
-                };
-            }
-        }
+            Header = "Groups - Get Summaries",
+            Command = new RelayCommand(ExecuteGetGroupsSummaries)
+        };
 
-        private MenuItem GetGroupsSummaries
+        /// <summary>
+        ///     Gets the get groups users.
+        /// </summary>
+        /// <value>The get groups users.</value>
+        /// TODO Edit XML Comment Template for GetGroupsUsers
+        private MenuItem GetGroupsUsers => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Summaries",
-                    Command = new RelayCommand(ExecuteGetGroupsSummaries)
-                };
-            }
-        }
+            Header = "Groups - Get Users",
+            Command = new RelayCommand(ExecuteGetGroupsUsers)
+        };
 
-        private MenuItem GetGroupsUsers
+        /// <summary>
+        ///     Gets the get groups users direct reports.
+        /// </summary>
+        /// <value>The get groups users direct reports.</value>
+        /// TODO Edit XML Comment Template for GetGroupsUsersDirectReports
+        private MenuItem GetGroupsUsersDirectReports => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Users",
-                    Command = new RelayCommand(ExecuteGetGroupsUsers)
-                };
-            }
-        }
+            Header = "Groups - Get Users' Direct Reports",
+            Command = new RelayCommand(ExecuteGetGroupsUsersDirectReports)
+        };
 
-        private MenuItem GetGroupsUsersDirectReports
+        /// <summary>
+        ///     Gets the get groups users groups.
+        /// </summary>
+        /// <value>The get groups users groups.</value>
+        /// TODO Edit XML Comment Template for GetGroupsUsersGroups
+        private MenuItem GetGroupsUsersGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Users' Direct Reports",
-                    Command =
-                        new RelayCommand(ExecuteGetGroupsUsersDirectReports)
-                };
-            }
-        }
+            Header = "Groups - Get Users' Groups",
+            Command = new RelayCommand(ExecuteGetGroupsUsersGroups)
+        };
 
-        private MenuItem GetGroupsUsersGroups
+        /// <summary>
+        ///     Gets the get managers direct reports.
+        /// </summary>
+        /// <value>The get managers direct reports.</value>
+        /// TODO Edit XML Comment Template for GetManagersDirectReports
+        private MenuItem GetManagersDirectReports => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Users' Groups",
-                    Command = new RelayCommand(ExecuteGetGroupsUsersGroups)
-                };
-            }
-        }
+            Header = "Managers - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetManagersDirectReports)
+        };
 
-        private MenuItem GetManagersDirectReports
+        /// <summary>
+        ///     Gets the get managers groups.
+        /// </summary>
+        /// <value>The get managers groups.</value>
+        /// TODO Edit XML Comment Template for GetManagersGroups
+        private MenuItem GetManagersGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Managers - Get Direct Reports",
-                    Command = new RelayCommand(ExecuteGetManagersDirectReports)
-                };
-            }
-        }
+            Header = "Managers - Get Groups",
+            Command = new RelayCommand(ExecuteGetManagersGroups)
+        };
 
-        private MenuItem GetManagersGroups
+        /// <summary>
+        ///     Gets the get managers summaries.
+        /// </summary>
+        /// <value>The get managers summaries.</value>
+        /// TODO Edit XML Comment Template for GetManagersSummaries
+        private MenuItem GetManagersSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Managers - Get Groups",
-                    Command = new RelayCommand(ExecuteGetManagersGroups)
-                };
-            }
-        }
+            Header = "Managers - Get Summaries",
+            Command = new RelayCommand(ExecuteGetManagersSummaries)
+        };
 
-        private MenuItem GetManagersSummaries
+        /// <summary>
+        ///     Gets the get users direct reports.
+        /// </summary>
+        /// <value>The get users direct reports.</value>
+        /// TODO Edit XML Comment Template for GetUsersDirectReports
+        private MenuItem GetUsersDirectReports => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Managers - Get Summaries",
-                    Command = new RelayCommand(ExecuteGetManagersSummaries)
-                };
-            }
-        }
+            Header = "Users - Get Direct Reports",
+            Command = new RelayCommand(ExecuteGetUsersDirectReports)
+        };
 
-        private MenuItem GetUsersDirectReports
+        /// <summary>
+        ///     Gets the get users groups.
+        /// </summary>
+        /// <value>The get users groups.</value>
+        /// TODO Edit XML Comment Template for GetUsersGroups
+        private MenuItem GetUsersGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Users - Get Direct Reports",
-                    Command = new RelayCommand(ExecuteGetUsersDirectReports)
-                };
-            }
-        }
+            Header = "Users - Get Groups",
+            Command = new RelayCommand(ExecuteGetUsersGroups)
+        };
 
-        private MenuItem GetUsersGroups
+        /// <summary>
+        ///     Gets the get users summaries.
+        /// </summary>
+        /// <value>The get users summaries.</value>
+        /// TODO Edit XML Comment Template for GetUsersSummaries
+        private MenuItem GetUsersSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Users - Get Groups",
-                    Command = new RelayCommand(ExecuteGetUsersGroups)
-                };
-            }
-        }
+            Header = "Users - Get Summaries",
+            Command = new RelayCommand(ExecuteGetUsersSummaries)
+        };
 
-        private MenuItem GetUsersSummaries
+        /// <summary>
+        ///     Gets the menu item get computers groups.
+        /// </summary>
+        /// <value>The menu item get computers groups.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetComputersGroups
+        private MenuItem MenuItemGetComputersGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Users - Get Summaries",
-                    Command = new RelayCommand(ExecuteGetUsersSummaries)
-                };
-            }
-        }
+            Header = "Computers - Get Groups",
+            Command = new RelayCommand(ExecuteGetComputersGroups)
+        };
 
-        private MenuItem MenuItemGetComputersGroups
+        /// <summary>
+        ///     Gets the menu item get computers summaries.
+        /// </summary>
+        /// <value>The menu item get computers summaries.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetComputersSummaries
+        private MenuItem MenuItemGetComputersSummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Computers - Get Groups",
-                    Command = new RelayCommand(ExecuteGetComputersGroups)
-                };
-            }
-        }
+            Header = "Computers - Get Summaries",
+            Command = new RelayCommand(ExecuteGetComputersSummaries)
+        };
 
-        private MenuItem MenuItemGetComputersSummaries
+        /// <summary>
+        ///     Gets the menu item get container groups users groups.
+        /// </summary>
+        /// <value>The menu item get container groups users groups.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetContainerGroupsUsersGroups
+        private MenuItem MenuItemGetContainerGroupsUsersGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Computers - Get Summaries",
-                    Command = new RelayCommand(ExecuteGetComputersSummaries)
-                };
-            }
-        }
+            Header = "Container Groups - Get Users' Groups",
+            Command = new RelayCommand(ExecuteGetContainerGroupsUsersGroups)
+        };
 
-        private MenuItem MenuItemGetContainerGroupsUsersGroups
+        /// <summary>
+        ///     Gets the menu item get groups managed by direct
+        ///     reports.
+        /// </summary>
+        /// <value>The menu item get groups managed by direct reports.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetGroupsManagedByDirectReports
+        private MenuItem MenuItemGetGroupsManagedByDirectReports => new
+            MenuItem
+            {
+                Header = "Group - Get Managed By's Direct Reports",
+                Command =
+                    new RelayCommand(ExecuteGetGroupsManagedByDirectReports)
+            };
+
+        /// <summary>
+        ///     Gets the menu item get groups managed by groups.
+        /// </summary>
+        /// <value>The menu item get groups managed by groups.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetGroupsManagedByGroups
+        private MenuItem MenuItemGetGroupsManagedByGroups => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Container Groups - Get Users' Groups",
-                    Command =
-                        new RelayCommand(ExecuteGetContainerGroupsUsersGroups)
-                };
-            }
-        }
+            Header = "Group - Get Managed By's Groups",
+            Command = new RelayCommand(ExecuteGetGroupsManagedByGroups)
+        };
 
-        private MenuItem MenuItemGetGroupsManagedByDirectReports
+        /// <summary>
+        ///     Gets the menu item get groups managed by summaries.
+        /// </summary>
+        /// <value>The menu item get groups managed by summaries.</value>
+        /// TODO Edit XML Comment Template for MenuItemGetGroupsManagedBySummaries
+        private MenuItem MenuItemGetGroupsManagedBySummaries => new MenuItem
         {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Group - Get Managed By's Direct Reports",
-                    Command = new RelayCommand(
-                        ExecuteGetGroupsManagedByDirectReports)
-                };
-            }
-        }
+            Header = "Groups - Get Managed By Summaries",
+            Command = new RelayCommand(ExecuteGetGroupsManagedBySummaries)
+        };
 
-        private MenuItem MenuItemGetGroupsManagedByGroups
-        {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Group - Get Managed By's Groups",
-                    Command = new RelayCommand(ExecuteGetGroupsManagedByGroups)
-                };
-            }
-        }
-
-        private MenuItem MenuItemGetGroupsManagedBySummaries
-        {
-            get
-            {
-                return new MenuItem
-                {
-                    Header = "Groups - Get Managed By Summaries",
-                    Command =
-                        new RelayCommand(ExecuteGetGroupsManagedBySummaries)
-                };
-            }
-        }
-
+        /// <summary>
+        ///     Gets or sets the selected data row views.
+        /// </summary>
+        /// <value>The selected data row views.</value>
+        /// TODO Edit XML Comment Template for SelectedDataRowViews
         private IList SelectedDataRowViews
         {
             get;
             set;
         }
 
+        /// <summary>
+        ///     Occurs when a property value changes.
+        /// </summary>
+        /// TODO Edit XML Comment Template for PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        ///     Executes the open help window.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteOpenHelpWindow
         private static void ExecuteOpenHelpWindow()
         {
-            Process.Start(
-                HelpFile);
+            Process.Start(HelpFile);
         }
 
+        /// <summary>
+        ///     Gets the name of the computer distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetComputerDistinguishedName
         private static string GetComputerDistinguishedName(
             DataRowView dataRowView)
         {
             return dataRowView[ComputerDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the container group distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetContainerGroupDistinguishedName
         private static string GetContainerGroupDistinguishedName(
             DataRowView dataRowView)
         {
             return dataRowView[ContainerGroupDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the container group managed by
+        ///     distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetContainerGroupManagedByDistinguishedName
         private static string GetContainerGroupManagedByDistinguishedName(
             DataRowView dataRowView)
         {
@@ -868,66 +1051,147 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 .ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the direct report distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetDirectReportDistinguishedName
         private static string GetDirectReportDistinguishedName(
             DataRowView dataRowView)
         {
             return dataRowView[DirectReportDistinguishedName].ToString();
         }
 
-        private static string GetGroupDistinguishedName(
-            DataRowView dataRowView)
+        /// <summary>
+        ///     Gets the name of the group distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetGroupDistinguishedName
+        private static string GetGroupDistinguishedName(DataRowView dataRowView)
         {
             return dataRowView[GroupDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the group managed by distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetGroupManagedByDistinguishedName
         private static string GetGroupManagedByDistinguishedName(
             DataRowView dataRowView)
         {
             return dataRowView[GroupManagedByDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the manager distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetManagerDistinguishedName
         private static string GetManagerDistinguishedName(
             DataRowView dataRowView)
         {
             return dataRowView[ManagerDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Gets the name of the user distinguished.
+        /// </summary>
+        /// <param name="dataRowView">The data row view.</param>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for GetUserDistinguishedName
         private static string GetUserDistinguishedName(DataRowView dataRowView)
         {
             return dataRowView[UserDistinguishedName].ToString();
         }
 
+        /// <summary>
+        ///     Determines whether this instance [can execute ou
+        ///     command].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if this instance [can execute ou
+        ///     command]; otherwise, <c>false</c>.
+        /// </returns>
+        /// TODO Edit XML Comment Template for CanExecuteOuCommand
         private bool CanExecuteOuCommand()
         {
             return CurrentScope != null;
         }
 
+        /// <summary>
+        ///     Determines whether this instance [can execute run
+        ///     previous query].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if this instance [can execute run previous
+        ///     query]; otherwise, <c>false</c>.
+        /// </returns>
+        /// TODO Edit XML Comment Template for CanExecuteRunPreviousQuery
         private bool CanExecuteRunPreviousQuery()
         {
             return Queries.Multiple();
         }
 
+        /// <summary>
+        ///     Determines whether this instance [can execute search].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if this instance [can execute search];
+        ///     otherwise, <c>false</c>.
+        /// </returns>
+        /// TODO Edit XML Comment Template for CanExecuteSearch
         private bool CanExecuteSearch()
         {
             return !SearchText.IsNullOrWhiteSpace() && SearchTypeIsChecked();
         }
 
+        /// <summary>
+        ///     Determines whether this instance [can execute search
+        ///     ou].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if this instance [can execute search
+        ///     ou]; otherwise, <c>false</c>.
+        /// </returns>
+        /// TODO Edit XML Comment Template for CanExecuteSearchOu
         private bool CanExecuteSearchOu()
         {
             return CanExecuteOuCommand() && CanExecuteSearch();
         }
 
+        /// <summary>
+        ///     Determines whether this instance [can execute write to
+        ///     file].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if this instance [can execute write to
+        ///     file]; otherwise, <c>false</c>.
+        /// </returns>
+        /// TODO Edit XML Comment Template for CanExecuteWriteToFile
         private bool CanExecuteWriteToFile()
         {
             return Data != null && Data.Count > 0;
         }
 
+        /// <summary>
+        ///     Executes the cancel.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteCancel
         private void ExecuteCancel()
         {
             Queries.Peek()?.Cancel();
             ResetQuery();
         }
 
+        /// <summary>
+        ///     Executes the get computers groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetComputersGroups
         private async void ExecuteGetComputersGroups()
         {
             await RunQuery(
@@ -936,6 +1200,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetComputersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get computers summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetComputersSummaries
         private async void ExecuteGetComputersSummaries()
         {
             await RunQuery(
@@ -944,6 +1212,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetComputersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups computers.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsComputers
         private async void ExecuteGetContainerGroupsComputers()
         {
             await RunQuery(
@@ -952,6 +1224,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups managed by direct
+        ///     reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsManagedByDirectReports
         private async void ExecuteGetContainerGroupsManagedByDirectReports()
         {
             await RunQuery(
@@ -960,6 +1237,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups managed by groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsManagedByGroups
         private async void ExecuteGetContainerGroupsManagedByGroups()
         {
             await RunQuery(
@@ -968,6 +1249,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups managed by summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsManagedBySummaries
         private async void ExecuteGetContainerGroupsManagedBySummaries()
         {
             await RunQuery(
@@ -976,6 +1261,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsSummaries
         private async void ExecuteGetContainerGroupsSummaries()
         {
             await RunQuery(
@@ -984,6 +1273,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups users.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsUsers
         private async void ExecuteGetContainerGroupsUsers()
         {
             await RunQuery(
@@ -992,6 +1285,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups users direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsUsersDirectReports
         private async void ExecuteGetContainerGroupsUsersDirectReports()
         {
             await RunQuery(
@@ -1000,6 +1297,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get container groups users groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetContainerGroupsUsersGroups
         private async void ExecuteGetContainerGroupsUsersGroups()
         {
             await RunQuery(
@@ -1008,6 +1309,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetContainerGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get direct reports direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetDirectReportsDirectReports
         private async void ExecuteGetDirectReportsDirectReports()
         {
             await RunQuery(
@@ -1016,6 +1321,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get direct reports groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetDirectReportsGroups
         private async void ExecuteGetDirectReportsGroups()
         {
             await RunQuery(
@@ -1024,6 +1333,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetDirectReportsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get direct reports summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetDirectReportsSummaries
         private async void ExecuteGetDirectReportsSummaries()
         {
             await RunQuery(
@@ -1032,6 +1345,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetDirectReportsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups computers.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsComputers
         private async void ExecuteGetGroupsComputers()
         {
             await RunQuery(
@@ -1040,6 +1357,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups managed by direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsManagedByDirectReports
         private async void ExecuteGetGroupsManagedByDirectReports()
         {
             await RunQuery(
@@ -1048,6 +1369,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups managed by groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsManagedByGroups
         private async void ExecuteGetGroupsManagedByGroups()
         {
             await RunQuery(
@@ -1056,6 +1381,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups managed by summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsManagedBySummaries
         private async void ExecuteGetGroupsManagedBySummaries()
         {
             await RunQuery(
@@ -1064,6 +1393,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsManagedByDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsSummaries
         private async void ExecuteGetGroupsSummaries()
         {
             await RunQuery(
@@ -1072,6 +1405,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups users.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsUsers
         private async void ExecuteGetGroupsUsers()
         {
             await RunQuery(
@@ -1080,6 +1417,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups users direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsUsersDirectReports
         private async void ExecuteGetGroupsUsersDirectReports()
         {
             await RunQuery(
@@ -1088,6 +1429,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get groups users groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetGroupsUsersGroups
         private async void ExecuteGetGroupsUsersGroups()
         {
             await RunQuery(
@@ -1096,6 +1441,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetGroupsDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get managers direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetManagersDirectReports
         private async void ExecuteGetManagersDirectReports()
         {
             await RunQuery(
@@ -1104,6 +1453,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetManagersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get managers groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetManagersGroups
         private async void ExecuteGetManagersGroups()
         {
             await RunQuery(
@@ -1112,6 +1465,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetManagersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get managers summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetManagersSummaries
         private async void ExecuteGetManagersSummaries()
         {
             await RunQuery(
@@ -1120,36 +1477,64 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetManagersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get ou computers.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuComputers
         private async void ExecuteGetOuComputers()
         {
             await RunQuery(QueryType.OuComputers, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get ou groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuGroups
         private async void ExecuteGetOuGroups()
         {
             await RunQuery(QueryType.OuGroups, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get ou groups users.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuGroupsUsers
         private async void ExecuteGetOuGroupsUsers()
         {
             await RunQuery(QueryType.OuGroupsUsers, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get ou users.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuUsers
         private async void ExecuteGetOuUsers()
         {
             await RunQuery(QueryType.OuUsers, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get ou users direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuUsersDirectReports
         private async void ExecuteGetOuUsersDirectReports()
         {
             await RunQuery(QueryType.OuUsersDirectReports, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get ou users groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetOuUsersGroups
         private async void ExecuteGetOuUsersGroups()
         {
             await RunQuery(QueryType.OuUsersGroups, CurrentScope);
         }
 
+        /// <summary>
+        ///     Executes the get users direct reports.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetUsersDirectReports
         private async void ExecuteGetUsersDirectReports()
         {
             await RunQuery(
@@ -1158,6 +1543,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetUsersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get users groups.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetUsersGroups
         private async void ExecuteGetUsersGroups()
         {
             await RunQuery(
@@ -1166,6 +1555,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetUsersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the get users summaries.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteGetUsersSummaries
         private async void ExecuteGetUsersSummaries()
         {
             await RunQuery(
@@ -1174,23 +1567,39 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 GetUsersDistinguishedNames());
         }
 
+        /// <summary>
+        ///     Executes the open about window.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteOpenAboutWindow
         private void ExecuteOpenAboutWindow()
         {
             AboutWindow.Show();
             AboutWindow.Activate();
         }
 
+        /// <summary>
+        ///     Executes the run previous query.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteRunPreviousQuery
         private async void ExecuteRunPreviousQuery()
         {
             Queries.Pop();
             await RunQuery(Queries.Pop());
         }
 
+        /// <summary>
+        ///     Executes the search.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteSearch
         private async void ExecuteSearch()
         {
             await RunQuery(GetSearchQueryType(), searchText: SearchText);
         }
 
+        /// <summary>
+        ///     Executes the search ou.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteSearchOu
         private async void ExecuteSearchOu()
         {
             await RunQuery(
@@ -1199,6 +1608,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 searchText: SearchText);
         }
 
+        /// <summary>
+        ///     Executes the write to file.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ExecuteWriteToFile
         private async void ExecuteWriteToFile()
         {
             StartTask();
@@ -1218,6 +1631,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             FinishTask();
         }
 
+        /// <summary>
+        ///     Finishes the task.
+        /// </summary>
+        /// TODO Edit XML Comment Template for FinishTask
         private void FinishTask()
         {
             ProgressBarVisibility = Visibility.Hidden;
@@ -1225,6 +1642,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             ViewIsEnabled = true;
         }
 
+        /// <summary>
+        ///     Generates the computer context menu items.
+        /// </summary>
+        /// <returns>IEnumerable&lt;MenuItem&gt;.</returns>
+        /// TODO Edit XML Comment Template for GenerateComputerContextMenuItems
         private IEnumerable<MenuItem> GenerateComputerContextMenuItems()
         {
             var computerContextMenuItems = new List<MenuItem>();
@@ -1242,6 +1664,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return computerContextMenuItems;
         }
 
+        /// <summary>
+        ///     Generates the context menu items.
+        /// </summary>
+        /// <returns>List&lt;MenuItem&gt;.</returns>
+        /// TODO Edit XML Comment Template for GenerateContextMenuItems
         private List<MenuItem> GenerateContextMenuItems()
         {
             var contextMenuItems = new List<MenuItem>();
@@ -1249,6 +1676,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             {
                 return null;
             }
+
             if (Data.Table.Columns.Contains(ComputerDistinguishedName))
             {
                 contextMenuItems.AddRange(GenerateComputerContextMenuItems());
@@ -1299,6 +1727,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return contextMenuItems;
         }
 
+        /// <summary>
+        ///     Generates the group context menu items.
+        /// </summary>
+        /// <returns>IEnumerable&lt;MenuItem&gt;.</returns>
+        /// TODO Edit XML Comment Template for GenerateGroupContextMenuItems
         private IEnumerable<MenuItem> GenerateGroupContextMenuItems()
         {
             var groupContextMenuItems = new List<MenuItem>();
@@ -1337,6 +1770,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return groupContextMenuItems;
         }
 
+        /// <summary>
+        ///     Generates the group managed by context menu items.
+        /// </summary>
+        /// <returns>IEnumerable&lt;MenuItem&gt;.</returns>
+        /// TODO Edit XML Comment Template for GenerateGroupManagedByContextMenuItems
         private IEnumerable<MenuItem> GenerateGroupManagedByContextMenuItems()
         {
             return new List<MenuItem>
@@ -1347,6 +1785,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             };
         }
 
+        /// <summary>
+        ///     Generates the user context menu items.
+        /// </summary>
+        /// <returns>IEnumerable&lt;MenuItem&gt;.</returns>
+        /// TODO Edit XML Comment Template for GenerateUserContextMenuItems
         private IEnumerable<MenuItem> GenerateUserContextMenuItems()
         {
             var userContextMenuItems = new List<MenuItem>();
@@ -1369,15 +1812,23 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return userContextMenuItems;
         }
 
+        /// <summary>
+        ///     Gets the computers distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetComputersDistinguishedNames
         private IEnumerable<string> GetComputersDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetComputerDistinguishedName)
-                .Where(
-                    c => !c.IsNullOrWhiteSpace());
+                .Select(GetComputerDistinguishedName)
+                .Where(c => !c.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the container groups distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetContainerGroupsDistinguishedNames
         private IEnumerable<string> GetContainerGroupsDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
@@ -1385,51 +1836,73 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 .Where(c => !c.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the container groups managed by distinguished
+        ///     names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetContainerGroupsManagedByDistinguishedNames
         private IEnumerable<string>
             GetContainerGroupsManagedByDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetContainerGroupManagedByDistinguishedName)
-                .Where(
-                    s => !s.IsNullOrWhiteSpace());
+                .Select(GetContainerGroupManagedByDistinguishedName)
+                .Where(s => !s.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the direct reports distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetDirectReportsDistinguishedNames
         private IEnumerable<string> GetDirectReportsDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetDirectReportDistinguishedName)
-                .Where(
-                    d => !d.IsNullOrWhiteSpace());
+                .Select(GetDirectReportDistinguishedName)
+                .Where(d => !d.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the groups distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetGroupsDistinguishedNames
         private IEnumerable<string> GetGroupsDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetGroupDistinguishedName)
+                .Select(GetGroupDistinguishedName)
                 .Where(g => !g.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the groups managed by distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetGroupsManagedByDistinguishedNames
         private IEnumerable<string> GetGroupsManagedByDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetGroupManagedByDistinguishedName)
-                .Where(
-                    s => !s.IsNullOrWhiteSpace());
+                .Select(GetGroupManagedByDistinguishedName)
+                .Where(s => !s.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the managers distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetManagersDistinguishedNames
         private IEnumerable<string> GetManagersDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetManagerDistinguishedName)
-                .Where(
-                    m => !m.IsNullOrWhiteSpace());
+                .Select(GetManagerDistinguishedName)
+                .Where(m => !m.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Gets the type of the search query.
+        /// </summary>
+        /// <returns>QueryType.</returns>
+        /// TODO Edit XML Comment Template for GetSearchQueryType
         private QueryType GetSearchQueryType()
         {
             if (ComputerSearchIsChecked)
@@ -1445,20 +1918,33 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             return UserSearchIsChecked ? QueryType.SearchUser : QueryType.None;
         }
 
+        /// <summary>
+        ///     Gets the users distinguished names.
+        /// </summary>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
+        /// TODO Edit XML Comment Template for GetUsersDistinguishedNames
         private IEnumerable<string> GetUsersDistinguishedNames()
         {
             return SelectedDataRowViews.Cast<DataRowView>()
-                .Select(
-                    GetUserDistinguishedName)
+                .Select(GetUserDistinguishedName)
                 .Where(u => !u.IsNullOrWhiteSpace());
         }
 
+        /// <summary>
+        ///     Hides the message.
+        /// </summary>
+        /// TODO Edit XML Comment Template for HideMessage
         private void HideMessage()
         {
             MessageContent = string.Empty;
             MessageVisibility = Visibility.Hidden;
         }
 
+        /// <summary>
+        ///     Notifies the property changed.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// TODO Edit XML Comment Template for NotifyPropertyChanged
         private void NotifyPropertyChanged(
             [CallerMemberName] string propertyName = "")
         {
@@ -1467,6 +1953,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        ///     Resets the query.
+        /// </summary>
+        /// TODO Edit XML Comment Template for ResetQuery
         private void ResetQuery()
         {
             if (Queries.Any())
@@ -1475,6 +1965,18 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Runs the query.
+        /// </summary>
+        /// <param name="queryType">Type of the query.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="selectedItemDistinguishedNames">
+        ///     The selected
+        ///     item distinguished names.
+        /// </param>
+        /// <param name="searchText">The search text.</param>
+        /// <returns>Task.</returns>
+        /// TODO Edit XML Comment Template for RunQuery
         private async Task RunQuery(
             QueryType queryType,
             Scope scope = null,
@@ -1489,6 +1991,12 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     searchText));
         }
 
+        /// <summary>
+        ///     Runs the query.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <returns>Task.</returns>
+        /// TODO Edit XML Comment Template for RunQuery
         private async Task RunQuery(Query query)
         {
             StartTask();
@@ -1526,6 +2034,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             FinishTask();
         }
 
+        /// <summary>
+        ///     Searches the type is checked.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// TODO Edit XML Comment Template for SearchTypeIsChecked
         private bool SearchTypeIsChecked()
         {
             return ComputerSearchIsChecked
@@ -1533,6 +2046,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                    || UserSearchIsChecked;
         }
 
+        /// <summary>
+        ///     Sets the view variables.
+        /// </summary>
+        /// TODO Edit XML Comment Template for SetViewVariables
         private void SetViewVariables()
         {
             ProgressBarVisibility = Visibility.Hidden;
@@ -1552,12 +2069,21 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
         }
 
+        /// <summary>
+        ///     Shows the message.
+        /// </summary>
+        /// <param name="messageContent">Content of the message.</param>
+        /// TODO Edit XML Comment Template for ShowMessage
         private void ShowMessage(string messageContent)
         {
             MessageContent = messageContent + "\n\nDouble-click to dismiss.";
             MessageVisibility = Visibility.Visible;
         }
 
+        /// <summary>
+        ///     Starts the task.
+        /// </summary>
+        /// TODO Edit XML Comment Template for StartTask
         private void StartTask()
         {
             HideMessage();

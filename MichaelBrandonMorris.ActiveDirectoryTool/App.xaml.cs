@@ -3,8 +3,10 @@
 namespace MichaelBrandonMorris.ActiveDirectoryTool
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Class App.
     /// </summary>
+    /// <seealso cref="Application" />
+    /// TODO Edit XML Comment Template for App
     public partial class App : Application
     {
     }

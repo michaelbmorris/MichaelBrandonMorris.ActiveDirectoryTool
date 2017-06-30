@@ -1,0 +1,407 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HelpTOC>
+
+  <HelpTOCNode Id="df88a763-65f8-47d4-8645-c3edf1819781" Title="MichaelBrandonMorris.ActiveDirectoryTool Namespace" Url="html/N-MichaelBrandonMorris.ActiveDirectoryTool.htm">
+    <HelpTOCNode Id="9df15751-c83b-4310-af3a-dd2f8da0c1cd" Title="AboutWindow Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm">
+      <HelpTOCNode Title="AboutWindow Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" />
+      <HelpTOCNode Title="AboutWindow Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.-ctor.htm" />
+      <HelpTOCNode Title="AboutWindow Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" />
+      <HelpTOCNode Title="AboutWindow Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" />
+      <HelpTOCNode Title="AboutWindow Events" Url="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.AboutWindow.htm" />
+    </HelpTOCNode>
+    <HelpTOCNode Title="ActiveDirectoryProperty Enumeration" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ActiveDirectoryProperty.htm" />
+    <HelpTOCNode Id="6496742d-a66d-4216-aba8-dd013c6dff92" Title="App Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm">
+      <HelpTOCNode Title="App Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" />
+      <HelpTOCNode Title="App Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" />
+      <HelpTOCNode Title="App Events" Url="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.App.htm" />
+    </HelpTOCNode>
+    <HelpTOCNode Id="9064c704-ced2-41b9-ac90-3ea20839f587" Title="BindableSelectedItemBehavior Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm">
+      <HelpTOCNode Title="BindableSelectedItemBehavior Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" />
+      <HelpTOCNode Id="cbca575c-28fe-488b-a0e0-5efca87de7a4" Title="BindableSelectedItemBehavior Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm">
+        <HelpTOCNode Title="SelectedItemProperty Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.SelectedItemProperty.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="acc97fc0-de40-461d-819b-b75f4db4d894" Title="BindableSelectedItemBehavior Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm">
+        <HelpTOCNode Title="OnAttached Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnAttached.htm" />
+        <HelpTOCNode Title="OnDetaching Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnDetaching.htm" />
+        <HelpTOCNode Title="OnSelectedItemChanged Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnSelectedItemChanged.htm" />
+        <HelpTOCNode Title="OnTreeViewSelectedItemChanged Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.OnTreeViewSelectedItemChanged.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="1fef187e-a139-4427-9113-ef8ce105050d" Title="BindableSelectedItemBehavior Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm">
+        <HelpTOCNode Title="SelectedItem Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.SelectedItem.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Title="BindableSelectedItemBehavior Events" Url="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.BindableSelectedItemBehavior.htm" />
+    </HelpTOCNode>
+    <HelpTOCNode Id="e97d4b48-caca-4450-b43b-c4c5bc91532d" Title="DataFileWriter Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm">
+      <HelpTOCNode Title="DataFileWriter Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm" />
+      <HelpTOCNode Id="694f2c54-1c80-40b3-a388-d8ada060062b" Title="DataFileWriter Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm">
+        <HelpTOCNode Title="Comma Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Comma.htm" />
+        <HelpTOCNode Title="CsvExtension Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.CsvExtension.htm" />
+        <HelpTOCNode Title="DateTimeFormat Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DateTimeFormat.htm" />
+        <HelpTOCNode Title="DcPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DcPrefix.htm" />
+        <HelpTOCNode Title="DoubleHyphen Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.DoubleHyphen.htm" />
+        <HelpTOCNode Title="Hyphen Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Hyphen.htm" />
+        <HelpTOCNode Title="OuPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.OuPrefix.htm" />
+        <HelpTOCNode Title="OutputDirectoryPath Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.OutputDirectoryPath.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="ee0b777f-74e1-40ca-8b80-56ad1e80d3ba" Title="DataFileWriter Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm">
+        <HelpTOCNode Title="WriteToCsv Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.WriteToCsv.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="07078b08-7caa-405d-a04b-4693376697cc" Title="DataFileWriter Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.htm">
+        <HelpTOCNode Title="Data Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Data.htm" />
+        <HelpTOCNode Title="QueryType Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.QueryType.htm" />
+        <HelpTOCNode Title="Scope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataFileWriter.Scope.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="da76218c-d261-47d7-9504-ceffdc7e3820" Title="DataPreparer Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm">
+      <HelpTOCNode Title="DataPreparer Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm" />
+      <HelpTOCNode Title="DataPreparer Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.-ctor.htm" />
+      <HelpTOCNode Id="01052f7c-1cfb-4709-8ae5-cd57b088ec38" Title="DataPreparer Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm">
+        <HelpTOCNode Title="AddComputerProperty Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddComputerProperty.htm" />
+        <HelpTOCNode Title="AddContainerGroupProperty Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddContainerGroupProperty.htm" />
+        <HelpTOCNode Title="AddDirectReportProperty Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddDirectReportProperty.htm" />
+        <HelpTOCNode Title="AddGroupProperty Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddGroupProperty.htm" />
+        <HelpTOCNode Title="AddUserProperty Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.AddUserProperty.htm" />
+        <HelpTOCNode Title="PrepareData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.PrepareData.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="b2566c4d-31a2-4840-ae70-fdaa60d06e4a" Title="DataPreparer Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.htm">
+        <HelpTOCNode Title="CancellationToken Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.DataPreparer.CancellationToken.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="70d9e90a-ed6a-4333-a3d5-aeb2d2420feb" Title="MainWindow Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm">
+      <HelpTOCNode Title="MainWindow Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm" />
+      <HelpTOCNode Id="64331555-9247-4149-9cec-bc82fd81fb22" Title="MainWindow Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.htm">
+        <HelpTOCNode Title="DataGrid_AutoGeneratingColumn Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.DataGrid_AutoGeneratingColumn.htm" />
+        <HelpTOCNode Title="Label_MouseDoubleClick Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.Label_MouseDoubleClick.htm" />
+        <HelpTOCNode Title="ShowDistinguishedNamesCheckbox_OnChecked Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.ShowDistinguishedNamesCheckbox_OnChecked.htm" />
+        <HelpTOCNode Title="ShowDistinguishedNamesCheckbox_OnUnchecked Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.MainWindow.ShowDistinguishedNamesCheckbox_OnUnchecked.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="d70ea7de-2ae2-4605-b2e4-bba502baee7f" Title="OrganizationalUnit Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm">
+      <HelpTOCNode Title="OrganizationalUnit Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm" />
+      <HelpTOCNode Id="1da03283-0f00-4311-8697-12fb8fe699be" Title="OrganizationalUnit Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm">
+        <HelpTOCNode Title="Comma Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Comma.htm" />
+        <HelpTOCNode Title="DomainComponentPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.DomainComponentPrefix.htm" />
+        <HelpTOCNode Title="LdapProtocol Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.LdapProtocol.htm" />
+        <HelpTOCNode Title="OrganizationalUnitPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.OrganizationalUnitPrefix.htm" />
+        <HelpTOCNode Title="StringStartIndex Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.StringStartIndex.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="18b83a95-70ef-43b9-a9d7-d8aa876e0240" Title="OrganizationalUnit Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm">
+        <HelpTOCNode Title="Split Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Split.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="2abedc88-4b9a-422e-a14c-59c3bdf4e2a5" Title="OrganizationalUnit Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.htm">
+        <HelpTOCNode Title="Path Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.OrganizationalUnit.Path.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="ec99bed1-9be8-40f0-b974-e84cfa38d0d9" Title="Query Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm">
+      <HelpTOCNode Title="Query Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm" />
+      <HelpTOCNode Title="Query Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.-ctor.htm" />
+      <HelpTOCNode Id="104a3575-1157-4da6-8bea-38a18bfc8570" Title="Query Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm">
+        <HelpTOCNode Title="_cancellationTokenSource Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Query._cancellationTokenSource.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="6951dde6-a08c-421a-b9d3-a83f246c42a2" Title="Query Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm">
+        <HelpTOCNode Title="Cancel Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.Cancel.htm" />
+        <HelpTOCNode Title="DisposeData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.DisposeData.htm" />
+        <HelpTOCNode Title="Execute Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.Execute.htm" />
+        <HelpTOCNode Title="ToString Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Query.ToString.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="3c8088df-63a4-4c19-afad-e0c659b2d196" Title="Query Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Query.htm">
+        <HelpTOCNode Title="CancellationToken Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.CancellationToken.htm" />
+        <HelpTOCNode Title="Data Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.Data.htm" />
+        <HelpTOCNode Title="DistinguishedNames Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.DistinguishedNames.htm" />
+        <HelpTOCNode Title="QueryType Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.QueryType.htm" />
+        <HelpTOCNode Title="Scope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.Scope.htm" />
+        <HelpTOCNode Title="SearchText Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Query.SearchText.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Title="QueryType Enumeration" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.QueryType.htm" />
+    <HelpTOCNode Id="95aa62b7-15e3-42f4-9e1b-ceb57de33239" Title="Scope Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm">
+      <HelpTOCNode Title="Scope Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm" />
+      <HelpTOCNode Title="Scope Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.-ctor.htm" />
+      <HelpTOCNode Id="d06f2c0b-45ff-443e-95cb-9565a6edf6aa" Title="Scope Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm">
+        <HelpTOCNode Title="Comma Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Comma.htm" />
+        <HelpTOCNode Title="DomainComponentPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.DomainComponentPrefix.htm" />
+        <HelpTOCNode Title="LdapPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.LdapPrefix.htm" />
+        <HelpTOCNode Title="Period Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Period.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="6f91f4f4-9a55-463b-a944-427997a5b587" Title="Scope Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm">
+        <HelpTOCNode Title="AddDirectoryScope Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.AddDirectoryScope.htm" />
+        <HelpTOCNode Id="4da10957-ac55-4c6a-b059-def540d8d1b3" Title="Equals Method " Url="html/Overload-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Equals.htm">
+          <HelpTOCNode Title="Equals Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Equals.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="ToString Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Scope.ToString.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="d1915174-9fee-4092-afea-312c5ceabd02" Title="Scope Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Scope.htm">
+        <HelpTOCNode Title="Children Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Children.htm" />
+        <HelpTOCNode Title="Context Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Context.htm" />
+        <HelpTOCNode Title="Domain Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Domain.htm" />
+        <HelpTOCNode Title="Name Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Name.htm" />
+        <HelpTOCNode Title="Path Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Scope.Path.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="d178b890-f3af-433a-8d32-cd4755599e33" Title="ScopeFetcher Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm">
+      <HelpTOCNode Title="ScopeFetcher Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm" />
+      <HelpTOCNode Title="ScopeFetcher Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.-ctor.htm" />
+      <HelpTOCNode Id="814fb46d-9570-4662-bb46-cd59e18ec77b" Title="ScopeFetcher Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm">
+        <HelpTOCNode Title="DirectorySearcherOuFilter Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.DirectorySearcherOuFilter.htm" />
+        <HelpTOCNode Title="LdapPrefix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.LdapPrefix.htm" />
+        <HelpTOCNode Title="PageSize Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.PageSize.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="c2490dc0-f0a1-4a92-bb12-b95ba80fbd70" Title="ScopeFetcher Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm">
+        <HelpTOCNode Title="FetchScopeList Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.FetchScopeList.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="aa2859f4-c4a6-418a-9a93-705cf87e005e" Title="ScopeFetcher Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.htm">
+        <HelpTOCNode Title="Scope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ScopeFetcher.Scope.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="b72974a2-24fc-4915-8caf-78c6d2665fdd" Title="Searcher Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm">
+      <HelpTOCNode Title="Searcher Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm" />
+      <HelpTOCNode Title="Searcher Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.-ctor.htm" />
+      <HelpTOCNode Id="bb6abc32-8611-44db-bfc2-639097431738" Title="Searcher Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm">
+        <HelpTOCNode Title="Asterix Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.Asterix.htm" />
+        <HelpTOCNode Title="DefaultComputerGroupsProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultComputerGroupsProperties.htm" />
+        <HelpTOCNode Title="DefaultComputerProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultComputerProperties.htm" />
+        <HelpTOCNode Title="DefaultGroupComputersProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupComputersProperties.htm" />
+        <HelpTOCNode Title="DefaultGroupProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupProperties.htm" />
+        <HelpTOCNode Title="DefaultGroupUsersDirectReportsProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersDirectReportsProperties.htm" />
+        <HelpTOCNode Title="DefaultGroupUsersGroupsProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersGroupsProperties.htm" />
+        <HelpTOCNode Title="DefaultGroupUsersProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultGroupUsersProperties.htm" />
+        <HelpTOCNode Title="DefaultUserDirectReportsProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserDirectReportsProperties.htm" />
+        <HelpTOCNode Title="DefaultUserGroupsProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserGroupsProperties.htm" />
+        <HelpTOCNode Title="DefaultUserProperties Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DefaultUserProperties.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="34ccff2c-9ebb-4481-a247-07a58865ca2e" Title="Searcher Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm">
+        <HelpTOCNode Title="GetComputersGroupsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetComputersGroupsData.htm" />
+        <HelpTOCNode Title="GetComputersSummariesData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetComputersSummariesData.htm" />
+        <HelpTOCNode Title="GetData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetData.htm" />
+        <HelpTOCNode Title="GetGroupsComputersData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsComputersData.htm" />
+        <HelpTOCNode Title="GetGroupsSummariesData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsSummariesData.htm" />
+        <HelpTOCNode Title="GetGroupsUsersData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersData.htm" />
+        <HelpTOCNode Title="GetGroupsUsersDirectReportsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersDirectReportsData.htm" />
+        <HelpTOCNode Title="GetGroupsUsersGroupsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetGroupsUsersGroupsData.htm" />
+        <HelpTOCNode Title="GetOuComputersData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuComputersData.htm" />
+        <HelpTOCNode Title="GetOuGroupsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuGroupsData.htm" />
+        <HelpTOCNode Title="GetOuGroupsUsersData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuGroupsUsersData.htm" />
+        <HelpTOCNode Title="GetOuUsersData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersData.htm" />
+        <HelpTOCNode Title="GetOuUsersDirectReportsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersDirectReportsData.htm" />
+        <HelpTOCNode Title="GetOuUsersGroupsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetOuUsersGroupsData.htm" />
+        <HelpTOCNode Title="GetPrincipalContext Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetPrincipalContext.htm" />
+        <HelpTOCNode Title="GetSearchComputerData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchComputerData.htm" />
+        <HelpTOCNode Title="GetSearchGroupData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchGroupData.htm" />
+        <HelpTOCNode Title="GetSearchUserData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetSearchUserData.htm" />
+        <HelpTOCNode Title="GetUsersDirectReportsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersDirectReportsData.htm" />
+        <HelpTOCNode Title="GetUsersGroupsData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersGroupsData.htm" />
+        <HelpTOCNode Title="GetUsersSummariesData Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.GetUsersSummariesData.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="3981438b-3616-4fd3-b31e-12662f330558" Title="Searcher Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.htm">
+        <HelpTOCNode Title="CancellationToken Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.CancellationToken.htm" />
+        <HelpTOCNode Title="DataPreparer Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DataPreparer.htm" />
+        <HelpTOCNode Title="DistinguishedNames Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.DistinguishedNames.htm" />
+        <HelpTOCNode Title="QueryType Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.QueryType.htm" />
+        <HelpTOCNode Title="Scope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.Scope.htm" />
+        <HelpTOCNode Title="SearchText Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Searcher.SearchText.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="aeb77aa0-7ac2-4b18-926a-df9b1bdcdb89" Title="ViewModel Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm">
+      <HelpTOCNode Title="ViewModel Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm" />
+      <HelpTOCNode Title="ViewModel Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.-ctor.htm" />
+      <HelpTOCNode Id="cb19b56a-ed17-4605-948c-13e639ab3de4" Title="ViewModel Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm">
+        <HelpTOCNode Title="_aboutWindow Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._aboutWindow.htm" />
+        <HelpTOCNode Title="_cancelButtonVisibility Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._cancelButtonVisibility.htm" />
+        <HelpTOCNode Title="_computerSearchIsChecked Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._computerSearchIsChecked.htm" />
+        <HelpTOCNode Title="_contextMenuItems Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._contextMenuItems.htm" />
+        <HelpTOCNode Title="_contextMenuVisibility Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._contextMenuVisibility.htm" />
+        <HelpTOCNode Title="_data Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._data.htm" />
+        <HelpTOCNode Title="_groupSearchIsChecked Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._groupSearchIsChecked.htm" />
+        <HelpTOCNode Title="_messageContent Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._messageContent.htm" />
+        <HelpTOCNode Title="_messageVisibility Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._messageVisibility.htm" />
+        <HelpTOCNode Title="_progressBarVisibility Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._progressBarVisibility.htm" />
+        <HelpTOCNode Title="_queries Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._queries.htm" />
+        <HelpTOCNode Title="_searchText Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._searchText.htm" />
+        <HelpTOCNode Title="_showDistinguishedNames Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._showDistinguishedNames.htm" />
+        <HelpTOCNode Title="_userSearchIsChecked Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._userSearchIsChecked.htm" />
+        <HelpTOCNode Title="_viewIsEnabled Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel._viewIsEnabled.htm" />
+        <HelpTOCNode Title="ComputerDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ComputerDistinguishedName.htm" />
+        <HelpTOCNode Title="ContainerGroupDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContainerGroupDistinguishedName.htm" />
+        <HelpTOCNode Title="ContainerGroupManagedByDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContainerGroupManagedByDistinguishedName.htm" />
+        <HelpTOCNode Title="DirectReportDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.DirectReportDistinguishedName.htm" />
+        <HelpTOCNode Title="GroupDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupDistinguishedName.htm" />
+        <HelpTOCNode Title="GroupManagedByDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupManagedByDistinguishedName.htm" />
+        <HelpTOCNode Title="HelpFile Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.HelpFile.htm" />
+        <HelpTOCNode Title="ManagerDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ManagerDistinguishedName.htm" />
+        <HelpTOCNode Title="UserDistinguishedName Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.UserDistinguishedName.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="40b6acaf-8b6b-4144-8607-d3ce8b7a5c0a" Title="ViewModel Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm">
+        <HelpTOCNode Title="CanExecuteOuCommand Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteOuCommand.htm" />
+        <HelpTOCNode Title="CanExecuteRunPreviousQuery Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteRunPreviousQuery.htm" />
+        <HelpTOCNode Title="CanExecuteSearch Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteSearch.htm" />
+        <HelpTOCNode Title="CanExecuteSearchOu Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteSearchOu.htm" />
+        <HelpTOCNode Title="CanExecuteWriteToFile Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CanExecuteWriteToFile.htm" />
+        <HelpTOCNode Title="ExecuteCancel Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteCancel.htm" />
+        <HelpTOCNode Title="ExecuteGetComputersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetComputersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetComputersSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetComputersSummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsComputers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsComputers.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsManagedByDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedByDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsManagedByGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedByGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsManagedBySummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsManagedBySummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsSummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsUsers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsers.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsUsersDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsersDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetContainerGroupsUsersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetContainerGroupsUsersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetDirectReportsDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetDirectReportsGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetDirectReportsSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetDirectReportsSummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsComputers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsComputers.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsManagedByDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedByDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsManagedByGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedByGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsManagedBySummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsManagedBySummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsSummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsUsers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsers.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsUsersDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsersDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetGroupsUsersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetGroupsUsersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetManagersDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetManagersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetManagersSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetManagersSummaries.htm" />
+        <HelpTOCNode Title="ExecuteGetOuComputers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuComputers.htm" />
+        <HelpTOCNode Title="ExecuteGetOuGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetOuGroupsUsers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuGroupsUsers.htm" />
+        <HelpTOCNode Title="ExecuteGetOuUsers Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsers.htm" />
+        <HelpTOCNode Title="ExecuteGetOuUsersDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsersDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetOuUsersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetOuUsersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetUsersDirectReports Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersDirectReports.htm" />
+        <HelpTOCNode Title="ExecuteGetUsersGroups Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersGroups.htm" />
+        <HelpTOCNode Title="ExecuteGetUsersSummaries Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteGetUsersSummaries.htm" />
+        <HelpTOCNode Title="ExecuteOpenAboutWindow Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteOpenAboutWindow.htm" />
+        <HelpTOCNode Title="ExecuteOpenHelpWindow Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteOpenHelpWindow.htm" />
+        <HelpTOCNode Title="ExecuteRunPreviousQuery Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteRunPreviousQuery.htm" />
+        <HelpTOCNode Title="ExecuteSearch Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteSearch.htm" />
+        <HelpTOCNode Title="ExecuteSearchOu Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteSearchOu.htm" />
+        <HelpTOCNode Title="ExecuteWriteToFile Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ExecuteWriteToFile.htm" />
+        <HelpTOCNode Title="FinishTask Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.FinishTask.htm" />
+        <HelpTOCNode Title="GenerateComputerContextMenuItems Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateComputerContextMenuItems.htm" />
+        <HelpTOCNode Title="GenerateContextMenuItems Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateContextMenuItems.htm" />
+        <HelpTOCNode Title="GenerateGroupContextMenuItems Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateGroupContextMenuItems.htm" />
+        <HelpTOCNode Title="GenerateGroupManagedByContextMenuItems Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateGroupManagedByContextMenuItems.htm" />
+        <HelpTOCNode Title="GenerateUserContextMenuItems Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GenerateUserContextMenuItems.htm" />
+        <HelpTOCNode Title="GetComputerDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetComputerDistinguishedName.htm" />
+        <HelpTOCNode Title="GetComputersDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetComputersDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetContainerGroupDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupDistinguishedName.htm" />
+        <HelpTOCNode Title="GetContainerGroupManagedByDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupManagedByDistinguishedName.htm" />
+        <HelpTOCNode Title="GetContainerGroupsDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetContainerGroupsManagedByDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetDirectReportDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportDistinguishedName.htm" />
+        <HelpTOCNode Title="GetDirectReportsDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetGroupDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupDistinguishedName.htm" />
+        <HelpTOCNode Title="GetGroupManagedByDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupManagedByDistinguishedName.htm" />
+        <HelpTOCNode Title="GetGroupsDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetGroupsManagedByDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsManagedByDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetManagerDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagerDistinguishedName.htm" />
+        <HelpTOCNode Title="GetManagersDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersDistinguishedNames.htm" />
+        <HelpTOCNode Title="GetSearchQueryType Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetSearchQueryType.htm" />
+        <HelpTOCNode Title="GetUserDistinguishedName Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUserDistinguishedName.htm" />
+        <HelpTOCNode Title="GetUsersDistinguishedNames Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersDistinguishedNames.htm" />
+        <HelpTOCNode Title="HideMessage Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.HideMessage.htm" />
+        <HelpTOCNode Title="NotifyPropertyChanged Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.NotifyPropertyChanged.htm" />
+        <HelpTOCNode Title="ResetQuery Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ResetQuery.htm" />
+        <HelpTOCNode Id="da1834db-2425-45d7-b33b-2ed0d1890492" Title="RunQuery Method " Url="html/Overload-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery.htm">
+          <HelpTOCNode Title="RunQuery Method (QueryType, Scope, IEnumerable(String), String)" Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery.htm" />
+          <HelpTOCNode Title="RunQuery Method (Query)" Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunQuery_1.htm" />
+        </HelpTOCNode>
+        <HelpTOCNode Title="SearchTypeIsChecked Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchTypeIsChecked.htm" />
+        <HelpTOCNode Title="SetViewVariables Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SetViewVariables.htm" />
+        <HelpTOCNode Title="ShowMessage Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ShowMessage.htm" />
+        <HelpTOCNode Title="StartTask Method " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.StartTask.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="dda1392e-1bac-45d5-a903-a526156d9d37" Title="ViewModel Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm">
+        <HelpTOCNode Title="AboutWindow Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.AboutWindow.htm" />
+        <HelpTOCNode Title="CancelButtonVisibility Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CancelButtonVisibility.htm" />
+        <HelpTOCNode Title="CancelCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CancelCommand.htm" />
+        <HelpTOCNode Title="ComputerSearchIsChecked Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ComputerSearchIsChecked.htm" />
+        <HelpTOCNode Title="ContextMenuItems Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContextMenuItems.htm" />
+        <HelpTOCNode Title="ContextMenuVisibility Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ContextMenuVisibility.htm" />
+        <HelpTOCNode Title="CurrentScope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.CurrentScope.htm" />
+        <HelpTOCNode Title="Data Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Data.htm" />
+        <HelpTOCNode Title="GetContainerGroupsComputers Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsComputers.htm" />
+        <HelpTOCNode Title="GetContainerGroupsManagedByDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByDirectReports.htm" />
+        <HelpTOCNode Title="GetContainerGroupsManagedByGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedByGroups.htm" />
+        <HelpTOCNode Title="GetContainerGroupsManagedBySummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsManagedBySummaries.htm" />
+        <HelpTOCNode Title="GetContainerGroupsSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsSummaries.htm" />
+        <HelpTOCNode Title="GetContainerGroupsUsers Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsUsers.htm" />
+        <HelpTOCNode Title="GetContainerGroupsUsersDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetContainerGroupsUsersDirectReports.htm" />
+        <HelpTOCNode Title="GetDirectReportsDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsDirectReports.htm" />
+        <HelpTOCNode Title="GetDirectReportsGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsGroups.htm" />
+        <HelpTOCNode Title="GetDirectReportsSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetDirectReportsSummaries.htm" />
+        <HelpTOCNode Title="GetGroupsComputers Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsComputers.htm" />
+        <HelpTOCNode Title="GetGroupsSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsSummaries.htm" />
+        <HelpTOCNode Title="GetGroupsUsers Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsers.htm" />
+        <HelpTOCNode Title="GetGroupsUsersDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsersDirectReports.htm" />
+        <HelpTOCNode Title="GetGroupsUsersGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetGroupsUsersGroups.htm" />
+        <HelpTOCNode Title="GetManagersDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersDirectReports.htm" />
+        <HelpTOCNode Title="GetManagersGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersGroups.htm" />
+        <HelpTOCNode Title="GetManagersSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetManagersSummaries.htm" />
+        <HelpTOCNode Title="GetOuComputersCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuComputersCommand.htm" />
+        <HelpTOCNode Title="GetOuGroupsCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuGroupsCommand.htm" />
+        <HelpTOCNode Title="GetOuGroupsUsersCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuGroupsUsersCommand.htm" />
+        <HelpTOCNode Title="GetOuUsersCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersCommand.htm" />
+        <HelpTOCNode Title="GetOuUsersDirectReportsCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersDirectReportsCommand.htm" />
+        <HelpTOCNode Title="GetOuUsersGroupsCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetOuUsersGroupsCommand.htm" />
+        <HelpTOCNode Title="GetUsersDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersDirectReports.htm" />
+        <HelpTOCNode Title="GetUsersGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersGroups.htm" />
+        <HelpTOCNode Title="GetUsersSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GetUsersSummaries.htm" />
+        <HelpTOCNode Title="GroupSearchIsChecked Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.GroupSearchIsChecked.htm" />
+        <HelpTOCNode Title="MenuItemGetComputersGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetComputersGroups.htm" />
+        <HelpTOCNode Title="MenuItemGetComputersSummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetComputersSummaries.htm" />
+        <HelpTOCNode Title="MenuItemGetContainerGroupsUsersGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetContainerGroupsUsersGroups.htm" />
+        <HelpTOCNode Title="MenuItemGetGroupsManagedByDirectReports Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedByDirectReports.htm" />
+        <HelpTOCNode Title="MenuItemGetGroupsManagedByGroups Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedByGroups.htm" />
+        <HelpTOCNode Title="MenuItemGetGroupsManagedBySummaries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MenuItemGetGroupsManagedBySummaries.htm" />
+        <HelpTOCNode Title="MessageContent Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MessageContent.htm" />
+        <HelpTOCNode Title="MessageVisibility Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.MessageVisibility.htm" />
+        <HelpTOCNode Title="OpenAboutWindow Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.OpenAboutWindow.htm" />
+        <HelpTOCNode Title="OpenHelpWindow Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.OpenHelpWindow.htm" />
+        <HelpTOCNode Title="ProgressBarVisibility Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ProgressBarVisibility.htm" />
+        <HelpTOCNode Title="Queries Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Queries.htm" />
+        <HelpTOCNode Title="RootScope Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RootScope.htm" />
+        <HelpTOCNode Title="RunPreviousQuery Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.RunPreviousQuery.htm" />
+        <HelpTOCNode Title="Search Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Search.htm" />
+        <HelpTOCNode Title="SearchOu Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchOu.htm" />
+        <HelpTOCNode Title="SearchText Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SearchText.htm" />
+        <HelpTOCNode Title="SelectedDataRowViews Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SelectedDataRowViews.htm" />
+        <HelpTOCNode Title="SelectionChangedCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.SelectionChangedCommand.htm" />
+        <HelpTOCNode Title="ShowDistinguishedNames Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ShowDistinguishedNames.htm" />
+        <HelpTOCNode Title="UserSearchIsChecked Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.UserSearchIsChecked.htm" />
+        <HelpTOCNode Title="Version Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.Version.htm" />
+        <HelpTOCNode Title="ViewIsEnabled Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.ViewIsEnabled.htm" />
+        <HelpTOCNode Title="WriteToFileCommand Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.WriteToFileCommand.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Id="d02f1dcc-e66a-4bc1-bec8-824f8ba07d13" Title="ViewModel Events" Url="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.htm">
+        <HelpTOCNode Title="PropertyChanged Event" Url="html/E-MichaelBrandonMorris.ActiveDirectoryTool.ViewModel.PropertyChanged.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+  </HelpTOCNode>
+  <HelpTOCNode Id="d8d906c8-3dd9-4b23-bbdd-287dd8fcdfbe" Title="MichaelBrandonMorris.ActiveDirectoryTool.Properties Namespace" Url="html/N-MichaelBrandonMorris.ActiveDirectoryTool.Properties.htm">
+    <HelpTOCNode Id="83a3b7c0-422d-4854-8336-14758579a9d6" Title="Resources Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm">
+      <HelpTOCNode Title="Resources Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" />
+      <HelpTOCNode Title="Resources Constructor " Url="html/M-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.-ctor.htm" />
+      <HelpTOCNode Id="6683ef1e-aaa8-413e-a80f-0d2b06305eb4" Title="Resources Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm">
+        <HelpTOCNode Title="resourceCulture Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.resourceCulture.htm" />
+        <HelpTOCNode Title="resourceMan Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.resourceMan.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Title="Resources Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm" />
+      <HelpTOCNode Id="668c554f-0e1e-4bfd-8bef-078df44a541b" Title="Resources Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.htm">
+        <HelpTOCNode Title="Culture Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.Culture.htm" />
+        <HelpTOCNode Title="ResourceManager Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Resources.ResourceManager.htm" />
+      </HelpTOCNode>
+    </HelpTOCNode>
+    <HelpTOCNode Id="8accdd06-26c9-400d-b303-226ce2ff56af" Title="Settings Class" Url="html/T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm">
+      <HelpTOCNode Title="Settings Members" Url="html/AllMembers.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" />
+      <HelpTOCNode Id="e0d342c6-8b74-4a09-9086-0800c30c56e3" Title="Settings Fields" Url="html/Fields.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm">
+        <HelpTOCNode Title="defaultInstance Field" Url="html/F-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.defaultInstance.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Title="Settings Methods" Url="html/Methods.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" />
+      <HelpTOCNode Id="2ce4927f-6ea4-4f37-9928-529ae9e71d53" Title="Settings Properties" Url="html/Properties.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm">
+        <HelpTOCNode Title="Default Property " Url="html/P-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.Default.htm" />
+      </HelpTOCNode>
+      <HelpTOCNode Title="Settings Events" Url="html/Events.T-MichaelBrandonMorris.ActiveDirectoryTool.Properties.Settings.htm" />
+    </HelpTOCNode>
+  </HelpTOCNode>
+</HelpTOC>
