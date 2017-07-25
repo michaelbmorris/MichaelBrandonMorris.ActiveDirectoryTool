@@ -7,8 +7,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
     /// <summary>
     ///     Class Scope.
     /// </summary>
-    /// <seealso
-    ///     cref="System.IEquatable{MichaelBrandonMorris.ActiveDirectoryTool.Scope}" />
+    /// <seealso cref="System.IEquatable{T}" />
+    /// <seealso cref="Scope" />
     /// TODO Edit XML Comment Template for Scope
     public class Scope : IEquatable<Scope>
     {

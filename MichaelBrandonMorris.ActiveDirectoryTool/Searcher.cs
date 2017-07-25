@@ -14,10 +14,10 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
     public class Searcher
     {
         /// <summary>
-        ///     The asterix
+        ///     The asterisk
         /// </summary>
-        /// TODO Edit XML Comment Template for Asterix
-        private const char Asterix = '*';
+        /// TODO Edit XML Comment Template for Asterisk
+        private const char Asterisk = '*';
 
         /// <summary>
         ///     The default computer groups properties
@@ -152,6 +152,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 ActiveDirectoryProperty.UserDisplayName,
                 ActiveDirectoryProperty.UserSamAccountName,
                 ActiveDirectoryProperty.UserIsActive,
+                ActiveDirectoryProperty.UserAccountExpirationDate,
                 ActiveDirectoryProperty.UserIsAccountLockedOut,
                 ActiveDirectoryProperty.UserLastLogon,
                 ActiveDirectoryProperty.UserDescription,
@@ -860,7 +861,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new ComputerPrincipal(principalContext))
             {
-                principal.Name = Asterix + SearchText + Asterix;
+                principal.Name = Asterisk + SearchText + Asterisk;
                 using (var principalSearcher = new PrincipalSearcher(principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
                 {
@@ -891,7 +892,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new GroupPrincipal(principalContext))
             {
-                principal.Name = Asterix + SearchText + Asterix;
+                principal.Name = Asterisk + SearchText + Asterisk;
                 using (var principalSearcher = new PrincipalSearcher(principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
                 {
@@ -922,7 +923,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             var data = new List<ExpandoObject>();
             using (var principal = new UserPrincipal(principalContext))
             {
-                principal.Name = Asterix + SearchText + Asterix;
+                principal.Name = Asterisk + SearchText + Asterisk;
                 using (var principalSearcher = new PrincipalSearcher(principal))
                 using (var principalSearchResult = principalSearcher.FindAll())
                 {
