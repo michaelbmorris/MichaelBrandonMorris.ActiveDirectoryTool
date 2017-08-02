@@ -1095,8 +1095,8 @@
         /// <summary>
         ///     The user user cannot change password
         /// </summary>
-        /// TODO Edit XML Comment Template for UserUserCannotChangePassword
-        UserUserCannotChangePassword,
+        /// TODO Edit XML Comment Template for UserCannotChangePassword
+        UserCannotChangePassword,
 
         /// <summary>
         ///     The user user principal name

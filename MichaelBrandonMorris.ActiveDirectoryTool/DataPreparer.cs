@@ -1081,9 +1081,9 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                 {
                     result.UserTitle = userPrincipal.GetTitle();
                 },
-                [ActiveDirectoryProperty.UserUserCannotChangePassword] = () =>
+                [ActiveDirectoryProperty.UserCannotChangePassword] = () =>
                 {
-                    result.UserUserCannotChangePassword =
+                    result.UserCannotChangePassword =
                         userPrincipal.UserCannotChangePassword;
                 },
                 [ActiveDirectoryProperty.UserUserPrincipalName] = () =>
