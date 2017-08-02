@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Script.Serialization;
 using MichaelBrandonMorris.Extensions.PrimitiveExtensions;
 
 namespace MichaelBrandonMorris.ActiveDirectoryTool
@@ -49,6 +50,8 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         /// </summary>
         /// TODO Edit XML Comment Template for Hyphen
         private const char Hyphen = '-';
+
+        private const string JsonExtension = ".json";
 
         /// <summary>
         ///     The ou prefix
@@ -105,6 +108,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         public string WriteToCsv()
         {
             string fileName;
+
             if (Scope == null)
             {
                 fileName = QueryType
@@ -124,12 +128,14 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     + DateTime.Now.ToString(DateTimeFormat)
                     + CsvExtension;
             }
+
             var fullFileName = Path.Combine(OutputDirectoryPath, fileName);
             var dataTable = Data.ToTable();
             var stringBuilder = new StringBuilder();
 
             var columnNames = dataTable.Columns.Cast<DataColumn>()
                 .Select(column => column.ColumnName);
+
             stringBuilder.AppendLine(string.Join(",", columnNames));
 
             foreach (DataRow row in dataTable.Rows)
@@ -144,6 +150,54 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
 
             Directory.CreateDirectory(OutputDirectoryPath);
             File.WriteAllText(fullFileName, stringBuilder.ToString());
+            Process.Start(fullFileName);
+            return fullFileName;
+        }
+
+        /// <summary>
+        /// Writes to json.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        /// TODO Edit XML Comment Template for WriteToJson
+        public string WriteToJson()
+        {
+            string fileName;
+
+            if (Scope == null)
+            {
+                fileName = QueryType
+                           + Hyphen
+                           + DateTime.Now.ToString(DateTimeFormat)
+                           + JsonExtension;
+            }
+            else
+            {
+                fileName =
+                    Scope.Context.Remove(OuPrefix)
+                        .Remove(DcPrefix)
+                        .Replace(Comma, Hyphen)
+                    + DoubleHyphen
+                    + QueryType
+                    + Hyphen
+                    + DateTime.Now.ToString(DateTimeFormat)
+                    + JsonExtension;
+            }
+
+            var fullFileName = Path.Combine(OutputDirectoryPath, fileName);
+            var dataTable = Data.ToTable();
+
+            var rows = from DataRow dataRow in dataTable.Rows
+                select dataTable.Columns.Cast<DataColumn>()
+                    .ToDictionary(
+                        dataColumn => dataColumn.ColumnName,
+                        dataColumn => dataRow[dataColumn]);
+
+            Directory.CreateDirectory(OutputDirectoryPath);
+
+            File.WriteAllText(
+                fullFileName,
+                new JavaScriptSerializer().Serialize(rows));
+
             Process.Start(fullFileName);
             return fullFileName;
         }

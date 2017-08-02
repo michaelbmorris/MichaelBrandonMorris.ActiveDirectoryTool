@@ -332,9 +332,13 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         ///     Gets the write to file command.
         /// </summary>
         /// <value>The write to file command.</value>
-        /// TODO Edit XML Comment Template for WriteToFileCommand
-        public ICommand WriteToFileCommand => new RelayCommand(
-            ExecuteWriteToFile,
+        /// TODO Edit XML Comment Template for WriteToCsvCommand
+        public ICommand WriteToCsvCommand => new RelayCommand(
+            ExecuteWriteToCsv,
+            CanExecuteWriteToFile);
+
+        public ICommand WriteToJsonCommand => new RelayCommand(
+            ExecuteWriteToJson,
             CanExecuteWriteToFile);
 
         /// <summary>
@@ -1611,10 +1615,11 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
         /// <summary>
         ///     Executes the write to file.
         /// </summary>
-        /// TODO Edit XML Comment Template for ExecuteWriteToFile
-        private async void ExecuteWriteToFile()
+        /// TODO Edit XML Comment Template for ExecuteWriteToCsv
+        private async void ExecuteWriteToCsv()
         {
             StartTask();
+
             await Task.Run(
                 () =>
                 {
@@ -1626,6 +1631,26 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
                     };
 
                     ShowMessage("Wrote data to:\n" + fileWriter.WriteToCsv());
+                });
+
+            FinishTask();
+        }
+
+        private async void ExecuteWriteToJson()
+        {
+            StartTask();
+
+            await Task.Run(
+                () =>
+                {
+                    var fileWriter = new DataFileWriter
+                    {
+                        Data = Data,
+                        Scope = Queries.First().Scope,
+                        QueryType = Queries.First().QueryType
+                    };
+
+                    ShowMessage("Wrote data to:\n" + fileWriter.WriteToJson());
                 });
 
             FinishTask();
@@ -2015,7 +2040,7 @@ namespace MichaelBrandonMorris.ActiveDirectoryTool
             }
             catch (OperationCanceledException)
             {
-                ShowMessage("Operation was cancelled.");
+                ShowMessage("Operation was canceled.");
                 ResetQuery();
             }
             catch (ArgumentNullException)

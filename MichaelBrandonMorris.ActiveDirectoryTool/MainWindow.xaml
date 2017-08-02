@@ -82,8 +82,12 @@
                                 Command="{Binding GetOuComputersCommand}"
                                 DockPanel.Dock="Left"
                                 Margin="5,0,0,5" />
-                        <Button Content="Write to File"
-                                Command="{Binding WriteToFileCommand}"
+                        <Button Content="To JSON"
+                                Command="{Binding WriteToJsonCommand}"
+                                DockPanel.Dock="Right"
+                                Margin="0,0,5,5" />
+                        <Button Content="To CSV"
+                                Command="{Binding WriteToCsvCommand}"
                                 DockPanel.Dock="Right"
                                 Margin="0,0,5,5" />
                     </DockPanel>
